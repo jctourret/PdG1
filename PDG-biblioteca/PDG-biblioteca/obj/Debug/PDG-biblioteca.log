@@ -1,0 +1,21 @@
+﻿  BaseGame.cpp
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\renderer.h(12): warning C4251: 'Renderer::_vertex': class 'std::vector<GLfloat,std::allocator<_Ty>>' necesita tener una interfaz DLL para que la utilicen los clientes de class 'Renderer'
+          with
+          [
+              _Ty=GLfloat
+          ]
+  c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\renderer.h(12): note: vea la declaración de 'std::vector<GLfloat,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=GLfloat
+          ]
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(6): warning C4273: 'BaseGame::BaseGame': vinculación de DLL incoherente
+  c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(10): note: vea la definición anterior de '{ctor}'
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(12): warning C4273: 'BaseGame::~BaseGame': vinculación de DLL incoherente
+  c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(11): note: vea la definición anterior de '{dtor}'
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(22): warning C4273: 'BaseGame::initBaseGame': vinculación de DLL incoherente
+  c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(12): note: vea la definición anterior de 'initBaseGame'
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(43): warning C4273: 'BaseGame::update': vinculación de DLL incoherente
+  c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(13): note: vea la definición anterior de 'update'
+  PDG-biblioteca.vcxproj -> C:\Users\Juan M. Tourret\Desktop\PdG1\PDG-biblioteca\PDG-biblioteca\bin\Debug\PDG-biblioteca.dll
+          1 archivo(s) copiado(s).

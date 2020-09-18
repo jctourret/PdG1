@@ -1,5 +1,5 @@
 ﻿  Game.cpp
-c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-ejecutable\game.h(2): fatal error C1083: No se puede abrir el archivo incluir: 'BaseGame.h': No such file or directory
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-ejecutable\game.h(2): fatal error C1083: No se puede abrir el archivo incluir: 'BaseGame.h': No such file or directory
   Main.cpp
-c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-ejecutable\game.h(2): fatal error C1083: No se puede abrir el archivo incluir: 'BaseGame.h': No such file or directory
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-ejecutable\game.h(2): fatal error C1083: No se puede abrir el archivo incluir: 'BaseGame.h': No such file or directory
   Generando código...

@@ -1,0 +1,7 @@
+﻿  BaseGame.cpp
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(83): fatal error C1010: final de archivo inesperado al buscar la directiva de encabezado precompilado. Compruebe si olvidó agregar '#include "stdafx.h"' al código fuente?
+  Renderer.cpp
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\renderer.cpp(63): fatal error C1010: final de archivo inesperado al buscar la directiva de encabezado precompilado. Compruebe si olvidó agregar '#include "stdafx.h"' al código fuente?
+  Window.cpp
+c:\users\juan m. tourret\desktop\pdg1\pdg-biblioteca\pdg-biblioteca\window.cpp(19): fatal error C1010: final de archivo inesperado al buscar la directiva de encabezado precompilado. Compruebe si olvidó agregar '#include "stdafx.h"' al código fuente?
+  Generando código...

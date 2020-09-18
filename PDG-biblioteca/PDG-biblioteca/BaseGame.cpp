@@ -1,6 +1,3 @@
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "BaseGame.h"
 #include <iostream>
 using namespace std;
@@ -8,11 +5,17 @@ using namespace std;
 BaseGame::BaseGame()
 {
 	window = new Window();
+	renderer = new Renderer();
 }
 
 BaseGame::~BaseGame()
 {
-	delete window;
+	if (window != NULL) {
+		delete window;
+	}
+	if (renderer != NULL) {
+		delete renderer;
+	}
 }
 
 void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title)
@@ -32,8 +35,8 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 	}
 	*/
 	glfwMakeContextCurrent(window->getWindow());
-	//glewExperimental = GL_TRUE;
-	//glewInit();
+	glewExperimental = GL_TRUE;
+	glewInit();
 }
 
 int BaseGame::update()
@@ -50,7 +53,16 @@ int BaseGame::update()
 	//	return -1;
 	//}
 
-	/* Make the window's context current */
+	renderer->addVertex(0.0f, 0.5f);
+	renderer->addVertex(0.5f, 0.5f);
+	renderer->addVertex(0.5f, -0.5f);
+	renderer->addVertex(-0.5f, -0.5f);
+
+	renderer->initBuffer();
+	renderer->initVertexShader();
+	renderer->initFragmentShader();
+	renderer->initShaderProgram();
+	renderer->setPosAttrib();
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window->getWindow()))
@@ -59,13 +71,17 @@ int BaseGame::update()
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		glDrawArrays(GL_QUADS, 0, 4);
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window->getWindow());
 
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
-
+	renderer->deleteShaderProgram();
+	renderer->deleteFragmentShader();
+	renderer->deleteVertexShader();
+	renderer->deleteBuffer();
 	glfwTerminate();
 
 	return 0;

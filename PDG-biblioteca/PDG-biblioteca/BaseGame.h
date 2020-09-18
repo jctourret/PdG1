@@ -1,10 +1,11 @@
 #pragma once
 #include "Exports.h"
-#include "Window.h"
+#include "Renderer.h"
 class SABASAENGINE_API BaseGame
 {
 private:
 	Window* window;
+	Renderer* renderer;
 public:
 	BaseGame();
 	~BaseGame();
