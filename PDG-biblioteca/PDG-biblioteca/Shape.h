@@ -1,11 +1,15 @@
 #pragma once
 #include "Entity2D.h"
-class Shape : Entity2D
+#include "glm/mat4x4.hpp"
+using namespace glm;
+
+class Shape : public Entity
 {
-private:
-	float defaultDistance;
+	unsigned int _geometry;
+	void createRectangle();
+	void createTriangle();
 public:
-	void createRec(vec2 position);
-	void createRec(vec2 position, float width, float height);
+	Shape(unsigned int geometry, Renderer* renderer);
+	void Draw();
 };
 

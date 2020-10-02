@@ -1,8 +1,9 @@
 #include "BaseGame.h"
 #include <iostream>
+#include "Shape.h"
+#include <glm/ext/matrix_clip_space.hpp>
 
 using namespace std;
-
 
 BaseGame::BaseGame()
 {
@@ -23,19 +24,7 @@ BaseGame::~BaseGame()
 void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title)
 {
 	glfwInit();
-	//if (!glfwInit()) hacer alguna manera de checkear que inicializó
-	//	return -1;
 	window->createWindow(screenWidth, screenHeight, title);
-	//checkear que se cree la window:
-	/*
-	if (!window->checkWindowCreation())
-	{
-		cout << "che no abrió, que onda?";
-		cin.get();
-		glfwTerminate();
-		return -1;
-	}
-	*/
 	glfwMakeContextCurrent(window->getWindow());
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -43,42 +32,141 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 
 int BaseGame::update()
 {
-	//GLFWwindow* window;
-
-	/* Create a windowed mode window and its OpenGL context */
-	//window = glfwCreateWindow(screenWidth, screenHeight, title, NULL, NULL);
-	//if (!window)
-	//{
-	//	cout << "esto tampoco abrio vieja";
-	//	cin.get();
-	//	glfwTerminate();
-	//	return -1;
-	//}
-
-	renderer->addVertex(0.0f, 0.5f);
-	renderer->addVertex(0.5f, 0.5f);
-	renderer->addVertex(0.5f, -0.5f);
-	renderer->addVertex(-0.5f, -0.5f);
-
-	renderer->initBuffer();
+	Shape* triangle = new Shape(GL_TRIANGLES,renderer);
+	
 	renderer->initVertexShader();
 	renderer->initFragmentShader();
 	renderer->initShaderProgram();
 	renderer->setPosAttrib();
-
+	//renderer->proy = mat4(1.0f);
+	//renderer->proy = ortho(-2.0f,2.0f,-1.5f,1.5f,-1.0f,1.0f);
+	//renderer->view = mat4(1.0f);
+	//renderer->view = lookAt(vec3(0.0f, 0.0f, -1.0f), vec3(0.0f, 0.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f));
+	float speedX = 0;
+	float speedY = 0;
+	float speedZ = 0;
+	float growSpeed = 0;
+	float rotXSpeed = 0;
+	float rotYSpeed = 0;
+	float rotZSpeed = 0;
+	float deltaTime = 0;
+	float lastTimer=glfwGetTime();
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window->getWindow()))
 	{
-		/* Render here */
+		//clear
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		deltaTime = glfwGetTime() - lastTimer;
+		lastTimer = glfwGetTime();
+		//input
+		if (glfwGetKey(window->getWindow(),GLFW_KEY_UP)==GLFW_PRESS)
+		{
+			speedY = 1;
+		}
+		else if (glfwGetKey(window->getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+		{
+			speedY = -1;
+		}
+		else
+		{
+			speedY = 0;
+		}
 
-		//glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, nullptr);
-		glDrawArrays(GL_QUADS, 0, 4);
-		/* Swap front and back buffers */
+		if (glfwGetKey(window->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+		{
+			speedX = 1;
+		}
+		else if (glfwGetKey(window->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+		{
+			speedX = -1;
+		}
+		else
+		{
+			speedX = 0;
+		}
+
+		if (glfwGetKey(window->getWindow(), GLFW_KEY_O) == GLFW_PRESS)
+		{
+			speedZ = 1;
+		}
+		else if (glfwGetKey(window->getWindow(), GLFW_KEY_L) == GLFW_PRESS)
+		{
+			speedZ = -1;
+		}
+		else
+		{
+			speedZ = 0;
+		}
+
+		if (glfwGetKey(window->getWindow(), GLFW_KEY_U) == GLFW_PRESS)
+		{
+			growSpeed = 1;
+		}
+		else if (glfwGetKey(window->getWindow(), GLFW_KEY_J) == GLFW_PRESS)
+		{
+			growSpeed = -1;
+		}
+		else
+		{
+			growSpeed = 0;
+		}
+
+		if (glfwGetKey(window->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
+		{
+			rotXSpeed = 1;
+		}
+		else if (glfwGetKey(window->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
+		{
+			rotXSpeed = -1;
+		}
+		else
+		{
+			rotXSpeed = 0;
+		}
+
+		if (glfwGetKey(window->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
+		{
+			rotYSpeed = 1;
+		}
+		else if (glfwGetKey(window->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
+		{
+			rotYSpeed = -1;
+		}
+		else
+		{
+			rotYSpeed = 0;
+		}
+
+		if (glfwGetKey(window->getWindow(), GLFW_KEY_Q) == GLFW_PRESS)
+		{
+			rotZSpeed = 1;
+		}
+		else if (glfwGetKey(window->getWindow(), GLFW_KEY_E) == GLFW_PRESS)
+		{
+			rotZSpeed = -1;
+		}
+		else
+		{
+			rotZSpeed = 0;
+		}
+		
+
+		vec3 newPos = triangle->getPosition() + vec3(speedX,speedY,speedZ) * deltaTime;
+		triangle->setPosition(newPos);
+		
+		vec3 newScale = triangle->getScale() + vec3(growSpeed, growSpeed, growSpeed)*deltaTime;
+		triangle->setScale(newScale);
+			
+		vec3 newRot = triangle->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*deltaTime;
+		triangle->setRotation(newRot);
+
+		//draw
+		triangle->Draw();
+
+		//swap
 		glfwSwapBuffers(window->getWindow());
-
-		/* Poll for and process events */
 		glfwPollEvents();
 	}
 	renderer->deleteShaderProgram();

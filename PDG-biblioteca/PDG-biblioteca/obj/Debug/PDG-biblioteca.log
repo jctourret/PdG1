@@ -1,20 +1,25 @@
-﻿     Creando biblioteca C:\Users\acer10\Desktop\Facultad\Image Campus\Segundo aNIo\Programacion de graficos 1\Versiones viejas\con entity no implementado\PdG1\PDG-biblioteca\Debug\PDG-biblioteca.lib y objeto C:\Users\acer10\Desktop\Facultad\Image Campus\Segundo aNIo\Programacion de graficos 1\Versiones viejas\con entity no implementado\PdG1\PDG-biblioteca\Debug\PDG-biblioteca.exp
-LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-LINK : warning LNK4098: la biblioteca predeterminada'LIBCMT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-BaseGame.obj : warning LNK4217: se importó el símbolo ?createWindow@Window@@QAEXHHPBD@Z (public: void __thiscall Window::createWindow(int,int,char const *)) definido localmente en la función "public: void __thiscall BaseGame::initBaseGame(int,int,char const *)" (?initBaseGame@BaseGame@@QAEXHHPBD@Z)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?getWindow@Window@@QAEPAUGLFWwindow@@XZ (public: struct GLFWwindow * __thiscall Window::getWindow(void)) definido localmente en la función "public: void __thiscall BaseGame::initBaseGame(int,int,char const *)" (?initBaseGame@BaseGame@@QAEXHHPBD@Z)
-BaseGame.obj : warning LNK4217: se importó el símbolo ??0Renderer@@QAE@XZ (public: __thiscall Renderer::Renderer(void)) definido localmente en la función "public: __thiscall BaseGame::BaseGame(void)" (??0BaseGame@@QAE@XZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ??1Renderer@@QAE@XZ (public: __thiscall Renderer::~Renderer(void)) definido localmente en la función "public: void * __thiscall Renderer::`scalar deleting destructor'(unsigned int)" (??_GRenderer@@QAEPAXI@Z)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?initBuffer@Renderer@@QAEXXZ (public: void __thiscall Renderer::initBuffer(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?initVertexShader@Renderer@@QAEXXZ (public: void __thiscall Renderer::initVertexShader(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?initFragmentShader@Renderer@@QAEXXZ (public: void __thiscall Renderer::initFragmentShader(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?initShaderProgram@Renderer@@QAEXXZ (public: void __thiscall Renderer::initShaderProgram(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?setPosAttrib@Renderer@@QAEXXZ (public: void __thiscall Renderer::setPosAttrib(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?addVertex@Renderer@@QAEXMM@Z (public: void __thiscall Renderer::addVertex(float,float)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?deleteShaderProgram@Renderer@@QAEXXZ (public: void __thiscall Renderer::deleteShaderProgram(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?deleteFragmentShader@Renderer@@QAEXXZ (public: void __thiscall Renderer::deleteFragmentShader(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?deleteVertexShader@Renderer@@QAEXXZ (public: void __thiscall Renderer::deleteVertexShader(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-BaseGame.obj : warning LNK4217: se importó el símbolo ?deleteBuffer@Renderer@@QAEXXZ (public: void __thiscall Renderer::deleteBuffer(void)) definido localmente en la función "public: int __thiscall BaseGame::update(void)" (?update@BaseGame@@QAEHXZ)
-glew32s.lib(glew.obj) : warning LNK4099: no se encontró PDB 'vc120.pdb' con 'glew32s.lib(glew.obj)' o en 'C:\Users\acer10\Desktop\Facultad\Image Campus\Segundo aNIo\Programacion de graficos 1\Versiones viejas\con entity no implementado\PdG1\PDG-biblioteca\Debug\vc120.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-  PDG-biblioteca.vcxproj -> C:\Users\acer10\Desktop\Facultad\Image Campus\Segundo aNIo\Programacion de graficos 1\Versiones viejas\con entity no implementado\PdG1\PDG-biblioteca\Debug\PDG-biblioteca.dll
+﻿  BaseGame.cpp
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\renderer.h(16): warning C4251: 'Renderer::_vertex': class 'std::vector<float,std::allocator<_Ty>>' necesita tener una interfaz DLL para que la utilicen los clientes de class 'Renderer'
+          with
+          [
+              _Ty=float
+          ]
+  c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\renderer.h(16): note: vea la declaración de 'std::vector<float,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=float
+          ]
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\entity.h(7): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(9): warning C4273: 'BaseGame::BaseGame': vinculación de DLL incoherente
+  c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(10): note: vea la definición anterior de '{ctor}'
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(15): warning C4273: 'BaseGame::~BaseGame': vinculación de DLL incoherente
+  c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(11): note: vea la definición anterior de '{dtor}'
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(25): warning C4273: 'BaseGame::initBaseGame': vinculación de DLL incoherente
+  c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(12): note: vea la definición anterior de 'initBaseGame'
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(34): warning C4273: 'BaseGame::update': vinculación de DLL incoherente
+  c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.h(13): note: vea la definición anterior de 'update'
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(61): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\acer10\desktop\facultad\image campus\segundo anio\programacion de graficos 1\pdg1\pdg-biblioteca\pdg-biblioteca\basegame.cpp(62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+  PDG-biblioteca.vcxproj -> C:\Users\acer10\Desktop\Facultad\Image Campus\Segundo aNIo\Programacion de graficos 1\PdG1\PDG-biblioteca\Debug\PDG-biblioteca.dll
           1 archivo(s) copiado(s).

@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PDG-biblioteca\libs\GLFW\include;$(SolutionDir)PDG-biblioteca\libs\GLEW\include;$(SolutionDir)PDG-biblioteca;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PDG-biblioteca\libs\GLM;$(SolutionDir)PDG-biblioteca\libs\GLFW\include;$(SolutionDir)PDG-biblioteca\libs\GLEW\include;$(SolutionDir)PDG-biblioteca;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)PDG-biblioteca\libs\GLFW\lib-vc2017;$(SolutionDir)PDG-biblioteca\libs\GLEW\lib\Release\Win32;$(SolutionDir)PDG-biblioteca\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

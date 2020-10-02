@@ -1,16 +1,19 @@
 #include "Renderer.h"
-#include "glm/mat4x4.hpp"
+#include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+using namespace std;
 using namespace glm;
 
 const GLchar* vertexSource = R"glsl(
-#version 150 core
-in vec2 position;
-in mat4 MVP;
+#version 330 core
+layout (location = 0) in vec3 position;
+uniform mat4 MVP;
 void main()
 {
-gl_Position = vec4(position, 0.0, 1.0);
+gl_Position = MVP * vec4(position, 1.0);
 }
 )glsl";
+
 const GLchar* fragmentSource = R"glsl(
 #version 150 core
 out vec4 outColor;
@@ -19,6 +22,7 @@ void main()
 outColor = vec4(1.0, 1.0, 0.0, 1.0);
 }
 )glsl";
+
 Renderer::Renderer() {
 	_vbo = new GLuint();
 }
@@ -27,12 +31,14 @@ Renderer::~Renderer() {
 	if (_vbo != NULL) {
 		delete _vbo;
 	}
+	glDeleteShader(_vertexShader);
+	glDeleteShader(_fragmentShader);
 }
 
 void Renderer::initBuffer() {
 	glGenBuffers(1, _vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, *_vbo);
-	glBufferData(GL_ARRAY_BUFFER, _vertex.size()*sizeof(GLfloat), &(_vertex[0]), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _vertex.size()*sizeof(GLfloat), &(_vertex[0]), GL_STATIC_DRAW);
 }
 
 void Renderer::initVertexShader() {
@@ -40,40 +46,69 @@ void Renderer::initVertexShader() {
 	glShaderSource(_vertexShader, 1, &vertexSource, NULL);
 	glCompileShader(_vertexShader);
 
-	//ACA HABRIA QUE CHECKEAR SI HAY ERROR CON EL SHADER https://youtu.be/71BLZwRGUJE?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&t=949
 }
 void Renderer::initFragmentShader() {
 	_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(_fragmentShader, 1, &fragmentSource, NULL);
 	glCompileShader(_fragmentShader);
-	//ACA HABRIA QUE CHECKEAR SI HAY ERROR CON EL SHADER https://youtu.be/71BLZwRGUJE?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&t=949
 }
+
 void Renderer::initShaderProgram() {
 	_shaderProgram = glCreateProgram();
 	glAttachShader(_shaderProgram, _vertexShader);
 	glAttachShader(_shaderProgram, _fragmentShader);
 	glLinkProgram(_shaderProgram);
-	//glValidateProgram(_shaderProgram); HABRIA QUE AGREGAR ESTO SEGUN MASTER CHERNO
+	glValidateProgram(_shaderProgram);
+	//unsigned int transformLoc = glGetUniformLocation(shader, "transform");
+	//unsigned int projectionLoc = glGetUniformLocation(shader, "projection");
+	//unsigned int viewLoc = glGetUniformLocation(shader, "view");
+	
 	glUseProgram(_shaderProgram);
+	//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, value_ptr(model));
+	//glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(proj));
+	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 }
+
 void Renderer::setPosAttrib() {
 	_posAttrib = glGetAttribLocation(_shaderProgram, "position");
-	glVertexAttribPointer(_posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(_posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(_posAttrib);
 }
-void Renderer::addVertex(GLfloat vertexX, GLfloat vertexY) {
-	_vertex.push_back(vertexX);
-	_vertex.push_back(vertexY);
+
+void Renderer::addVertexes(float* vertexDataArray, int arraySize)
+{
+	for (int i = 0; i < arraySize; i++)
+	{
+		_vertex.push_back(vertexDataArray[i]);
+	}
+	initBuffer();
 }
+
 void Renderer::deleteShaderProgram() {
 	glDeleteProgram(_shaderProgram);
 }
+
 void Renderer::deleteFragmentShader() {
 	glDeleteShader(_fragmentShader);
 }
+
 void Renderer::deleteVertexShader() {
 	glDeleteShader(_vertexShader);
 }
+
 void Renderer::deleteBuffer() {
 	glDeleteBuffers(1, _vbo);
+}
+
+void Renderer::drawShape()
+{
+	glBindVertexArray(_posAttrib);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glBindVertexArray(0);
+	//glUseProgram(0);
+}
+
+unsigned int Renderer::getShader()
+{
+	return _shaderProgram;
 }

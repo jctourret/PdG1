@@ -7,7 +7,7 @@ Entity::Entity(Renderer* renderer)
 
 	posVec = vec3(0.0f);
 	rotVec = vec3(0.0f);
-	scaleVec = vec3(0.0f);
+	scaleVec = vec3(1.0f);
 
 	translateMat = mat4(1.0f);
 	rotateXMat = mat4(1.0f);
@@ -64,6 +64,36 @@ void Entity::setRotationZ(float newRotZ)
 	rot = vec3(0.0f, 0.0f, 1.0f);
 	rotateZMat = rotate(mat4(1.0f), newRotZ, rotVec);
 	UpdateTRS();
+}
+
+void Entity::setRotation(vec3 newRot)
+{
+	vec3 rot;
+	if (newRot.x != rotVec.x)
+	{
+		rotVec.x = newRot.x;
+		rot = vec3(1.0f, 0.0f, 0.0f);
+		rotateXMat = rotate(mat4(1.0f), newRot.x, rotVec);
+		UpdateTRS();
+	}
+
+	if (newRot.y != rotVec.y)
+	{
+		rotVec.y = newRot.y;
+		rot;
+		rot = vec3(0.0f, 1.0f, 0.0f);
+		rotateYMat = rotate(mat4(1.0f), newRot.y, rotVec);
+		UpdateTRS();
+	}
+
+	if (newRot.z != rotVec.z)
+	{
+		rotVec.z = newRot.z;
+		rot;
+		rot = vec3(0.0f, 0.0f, 1.0f);
+		rotateZMat = rotate(mat4(1.0f), newRot.z, rotVec);
+		UpdateTRS();
+	}
 }
 
 vec3 Entity::getScale()

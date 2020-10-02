@@ -34,6 +34,7 @@ public:
 	void setRotationX(float x);	//despues crear una funcion para setear 
 	void setRotationY(float y);	//todas las rotaciones juntas
 	void setRotationZ(float z); //
+	void setRotation(vec3 newRot);
 	vec3 getScale();
 	void setScale(vec3 newScale);
 };
