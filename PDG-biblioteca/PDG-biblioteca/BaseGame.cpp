@@ -1,6 +1,8 @@
 #include "BaseGame.h"
 #include <iostream>
+
 using namespace std;
+
 
 BaseGame::BaseGame()
 {
@@ -71,6 +73,7 @@ int BaseGame::update()
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		//glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, nullptr);
 		glDrawArrays(GL_QUADS, 0, 4);
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window->getWindow());
