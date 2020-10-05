@@ -18,6 +18,13 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Game.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D36787F3-B97E-4395-B8C9-46A7B623F854}</ProjectGuid>
@@ -76,7 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PDG-biblioteca\libs\GLM;$(SolutionDir)PDG-biblioteca\libs\GLFW\include;$(SolutionDir)PDG-biblioteca\libs\GLEW\include;$(SolutionDir)PDG-biblioteca;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PDG-biblioteca\libs\GLM;$(SolutionDir)PDG-biblioteca\libs\GLFW\include;$(SolutionDir)PDG-biblioteca\libs\GLEW\include;$(SolutionDir)PDG-biblioteca\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)PDG-biblioteca\libs\GLFW\lib-vc2017;$(SolutionDir)PDG-biblioteca\libs\GLEW\lib\Release\Win32;$(SolutionDir)PDG-biblioteca\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -119,13 +126,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Game.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
