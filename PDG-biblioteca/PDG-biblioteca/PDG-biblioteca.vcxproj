@@ -102,7 +102,10 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)PDG-biblioteca.dll" "$(SolutionDir)PDG-ejecutable/src"</Command>
+      <Command>copy /Y "$(OutDir)PDG-biblioteca.dll" "$(SolutionDir)PDG-ejecutable\libs\PDG-biblioteca"
+copy /Y "$(OutDir)PDG-biblioteca.lib" "$(SolutionDir)PDG-ejecutable\libs\PDG-biblioteca"
+
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -11,5 +11,5 @@ public:
 	BaseGame();
 	~BaseGame();
 	void initBaseGame(int screenWidth, int screenHeight, const char* title);
-	int update();
+	int engineLoop();
 };

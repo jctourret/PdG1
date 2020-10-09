@@ -86,7 +86,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)PDG-biblioteca\libs\GLM;$(SolutionDir)PDG-biblioteca\libs\GLFW\include;$(SolutionDir)PDG-biblioteca\libs\GLEW\include;$(SolutionDir)PDG-biblioteca\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)PDG-biblioteca\libs\GLFW\lib-vc2017;$(SolutionDir)PDG-biblioteca\libs\GLEW\lib\Release\Win32;$(SolutionDir)PDG-biblioteca\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)PDG-biblioteca\libs\GLFW\lib-vc2017;$(SolutionDir)PDG-biblioteca\libs\GLEW\lib\Release\Win32;$(ProjectDir)libs\PDG-biblioteca;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>PDG-biblioteca.lib;glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

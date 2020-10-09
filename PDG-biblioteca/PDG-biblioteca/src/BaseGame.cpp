@@ -31,7 +31,7 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 	glewInit();
 }
 
-int BaseGame::update()
+int BaseGame::engineLoop()
 {
 	Shape* triangle = new Shape(GL_TRIANGLES,renderer);
 	
