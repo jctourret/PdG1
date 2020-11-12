@@ -33,12 +33,13 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 
 int BaseGame::engineLoop()
 {
-	Shape* triangle = new Shape(GL_TRIANGLES,renderer);
+	Shape* triangle = new Shape(GL_TRIANGLES, renderer);
 	
 	renderer->initVertexShader();
 	renderer->initFragmentShader();
 	renderer->initShaderProgram();
 	renderer->setPosAttrib();
+	renderer->setTextureAttrib();
 	//renderer->proy = mat4(1.0f);
 	//renderer->proy = ortho(-2.0f,2.0f,-1.5f,1.5f,-1.0f,1.0f);
 	//renderer->view = mat4(1.0f);

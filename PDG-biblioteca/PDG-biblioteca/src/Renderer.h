@@ -22,6 +22,7 @@ public:
 	void initFragmentShader();
 	void initShaderProgram();
 	void setPosAttrib();
+	void setTextureAttrib();
 	void addVertexes(float* vertexDataArray,int arraySize);
 	void deleteShaderProgram();
 	void deleteFragmentShader();
