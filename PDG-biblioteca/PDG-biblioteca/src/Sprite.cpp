@@ -124,13 +124,13 @@ void Sprite::draw() {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		rend->setTexture(texture);
-		rend->drawShape(GL_QUADS, TRS, vbo, ebo);
+		rend->drawSprite(GL_QUADS, TRS, vbo, ebo);
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
 	}
 	else {
 		rend->setTexture(texture);
-		rend->drawShape(GL_QUADS, TRS, vbo, ebo);
+		rend->drawSprite(GL_QUADS, TRS, vbo, ebo);
 		glDisable(GL_TEXTURE_2D);
 	}
 }

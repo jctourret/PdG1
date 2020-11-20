@@ -26,7 +26,7 @@ public:
 	void deleteShaderProgram();
 	void deleteFragmentShader();
 	void deleteVertexShader();
-	void drawShape(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo);
+	void drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo);
 	void setTexture(unsigned int texture);
 };
 

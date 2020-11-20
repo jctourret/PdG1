@@ -8,7 +8,6 @@ class SABASAENGINE_API BaseGame
 private:
 	Window* window;
 	Renderer* renderer;
-	Timer time;
 	CollisionManager collManager;
 	bool gameShouldClose;
 public:
@@ -16,4 +15,7 @@ public:
 	~BaseGame();
 	void initBaseGame(int screenWidth, int screenHeight, const char* title);
 	int engineLoop();
+	virtual void initGame() = 0;
+	virtual void updateGame() = 0;
+	virtual void destroyGame() = 0;
 };

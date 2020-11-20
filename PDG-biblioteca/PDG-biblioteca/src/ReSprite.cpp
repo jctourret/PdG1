@@ -38,5 +38,5 @@ void ReSprite::draw()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE0);
-	rend->drawShape(GL_QUADS, TRS, vbo, ebo);
+	rend->drawSprite(GL_QUADS, TRS, vbo, ebo);
 }

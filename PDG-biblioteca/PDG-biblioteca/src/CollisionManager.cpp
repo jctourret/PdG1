@@ -86,7 +86,7 @@ bool CollisionManager::CheckCollision(ReSprite* spriteA, ReSprite* spriteB)
 	return isColliding();
 }
 
-bool CollisionManager::CheckCollisionAndReact(Shape* shape, ReSprite* sprite, bool firstOneReacts)
+bool CollisionManager::CheckCollisionAndReact(Shape* shape, ReSprite* sprite, vec3 movement)
 {
 	a.width = shape->width;
 	a.height = shape->height;
@@ -100,7 +100,9 @@ bool CollisionManager::CheckCollisionAndReact(Shape* shape, ReSprite* sprite, bo
 
 	if (isColliding())
 	{
-		return true; //aca hacer un switch para ver a donde mover el shape
+		shape->setPosition(shape->getPosition() - movement / 2.0f);
+		sprite->setPosition(sprite->getPosition() + movement / 2.0f);
+		return true;
 	}
 }
 

@@ -1,7 +1,6 @@
 #include "BaseGame.h"
 #include <iostream>
 #include "Shape.h"
-#include "Sprite.h"
 #include "ReSprite.h"
 #include <glm/ext/matrix_clip_space.hpp>
 
@@ -38,18 +37,14 @@ int BaseGame::engineLoop()
 	Timer* timer = new Timer();
 	timer->start();
 	Shape* shapeA = new Shape(GL_QUADS, renderer);
-	ReSprite* test = new ReSprite(renderer, "../res/TRS.png");
-	//Sprite* sprite1 = new Sprite(renderer,true, "../res/TRS.png");
+	ReSprite* sprite1 = new ReSprite(renderer, "../res/TRS.png");
+	ReSprite* sprite2 = new ReSprite(renderer, "../res/Choclo.png");
 
 	renderer->initVertexShader();
 	renderer->initFragmentShader();
 	renderer->initShaderProgram();
 	renderer->setPosAttrib();
 	renderer->setTextureAttrib();
-	//renderer->proy = mat4(1.0f);
-	//renderer->proy = ortho(-2.0f,2.0f,-1.5f,1.5f,-1.0f,1.0f);
-	//renderer->view = mat4(1.0f);
-	//renderer->view = lookAt(vec3(0.0f, 0.0f, -1.0f), vec3(0.0f, 0.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f));
 	float speedX = 0;
 	float speedY = 0;
 	float speedZ = 0;
@@ -59,10 +54,11 @@ int BaseGame::engineLoop()
 	float rotZSpeed = 0;
 
 	shapeA->setPosition(vec3(shapeA->getPosition().x + shapeA->getScale().x * shapeA->width,0.0f,0.0f));
+	sprite2->setPosition(vec3(-0.75f, 0.5f, 0.0f));
 	cout << shapeA->getPosition().x << endl;
 	cout << shapeA->getPosition().y << endl;
 	cout << shapeA->getPosition().z << endl;
-	//shapeA->setPosition();
+
 	while (!glfwWindowShouldClose(window->getWindow()) && !gameShouldClose)
 	{
 		//clear
@@ -166,9 +162,9 @@ int BaseGame::engineLoop()
 			gameShouldClose = true;
 		}
 
-		cout << collManager.CheckCollision(shapeA, test);
+		vec3 movement = vec3(speedX, speedY, speedZ) * timer->getDT();
 
-		vec3 newPos = shapeA->getPosition() + vec3(speedX, speedY, speedZ) * timer->getDT();
+		vec3 newPos = shapeA->getPosition() + movement;
 		shapeA->setPosition(newPos);
 		
 		vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
@@ -177,11 +173,15 @@ int BaseGame::engineLoop()
 		vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
 		shapeA->setRotation(newRot);
 
+		if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
+		collManager.CheckCollisionAndReact(shapeA, sprite1, movement);
+		
 		timer->updateTimer();
 
 		//draw
 		shapeA->draw();
-		test->draw();
+		sprite1->draw();
+		sprite2->draw();
 
 		//swap
 		glfwSwapBuffers(window->getWindow());

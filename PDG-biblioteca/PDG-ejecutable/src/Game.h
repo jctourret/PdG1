@@ -6,4 +6,7 @@ public:
 	Game();
 	~Game();
 	void init();
+	void initGame() override;
+	void updateGame() override;
+	void destroyGame() override;
 };

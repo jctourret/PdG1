@@ -7,7 +7,7 @@ Game::Game()
 
 void Game::init()
 {
-	initBaseGame(1000, 500, "que onda mundo");
+	initBaseGame(1000, 500, "Awesome game");
 	engineLoop();
 }
 
@@ -15,4 +15,19 @@ void Game::init()
 Game ::~Game()
 {
 	
+}
+
+void Game::initGame()
+{
+	cout << "init" << endl;
+}
+void Game::updateGame()
+{
+	cout << "update" << endl;
+
+}
+void Game::destroyGame()
+{
+	cout << "destroy" << endl;
+
 }

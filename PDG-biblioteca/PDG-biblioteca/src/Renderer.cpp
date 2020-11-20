@@ -96,7 +96,7 @@ void Renderer::deleteVertexShader() {
 	glDeleteShader(_vertexShader);
 }
 
-void Renderer::drawShape(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo)
+void Renderer::drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo)
 {
 	glUseProgram(_shaderProgram);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -106,7 +106,6 @@ void Renderer::drawShape(unsigned int geometry, glm::mat4x4 trs, unsigned int vb
 
 	unsigned int uniformModel = glGetUniformLocation(_shaderProgram, "MVP");
 	glBindVertexArray(_posAttrib);
-
 
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(trs));
 	
