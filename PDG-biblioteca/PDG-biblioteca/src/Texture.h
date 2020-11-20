@@ -14,7 +14,7 @@ private:
 public:
 	Texture(const std::string texturePath);
 	~Texture();
-
+	unsigned int getTex();
 	void Bind(unsigned int slot);
 	void Unbind();
 };

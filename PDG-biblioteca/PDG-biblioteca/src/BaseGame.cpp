@@ -1,6 +1,8 @@
 #include "BaseGame.h"
 #include <iostream>
 #include "Shape.h"
+#include "Sprite.h"
+#include "ReSprite.h"
 #include <glm/ext/matrix_clip_space.hpp>
 
 using namespace std;
@@ -33,9 +35,12 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 
 int BaseGame::engineLoop()
 {
-	Shape* triangle = new Shape(GL_TRIANGLES, renderer);
-	//Shape* square = new Shape(GL_QUADS, renderer);
-	
+	Timer* timer = new Timer();
+	timer->start();
+	Shape* shapeA = new Shape(GL_QUADS, renderer);
+	ReSprite* test = new ReSprite(renderer, "../res/TRS.png");
+	//Sprite* sprite1 = new Sprite(renderer,true, "../res/TRS.png");
+
 	renderer->initVertexShader();
 	renderer->initFragmentShader();
 	renderer->initShaderProgram();
@@ -52,18 +57,18 @@ int BaseGame::engineLoop()
 	float rotXSpeed = 0;
 	float rotYSpeed = 0;
 	float rotZSpeed = 0;
-	float deltaTime = 0;
-	float lastTimer=glfwGetTime();
 
-
+	shapeA->setPosition(vec3(shapeA->getPosition().x + shapeA->getScale().x * shapeA->width,0.0f,0.0f));
+	cout << shapeA->getPosition().x << endl;
+	cout << shapeA->getPosition().y << endl;
+	cout << shapeA->getPosition().z << endl;
+	//shapeA->setPosition();
 	while (!glfwWindowShouldClose(window->getWindow()) && !gameShouldClose)
 	{
 		//clear
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		deltaTime = glfwGetTime() - lastTimer;
-		lastTimer = glfwGetTime();
 		//input
 		if (glfwGetKey(window->getWindow(),GLFW_KEY_UP)==GLFW_PRESS)
 		{
@@ -161,18 +166,23 @@ int BaseGame::engineLoop()
 			gameShouldClose = true;
 		}
 
-		vec3 newPos = triangle->getPosition() + vec3(speedX,speedY,speedZ) * deltaTime;
-		triangle->setPosition(newPos);
-		
-		vec3 newScale = triangle->getScale() + vec3(growSpeed, growSpeed, growSpeed)*deltaTime;
-		triangle->setScale(newScale);
+		cout << collManager.CheckCollision(shapeA, test);
 
-		vec3 newRot = triangle->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*deltaTime;
-		triangle->setRotation(newRot);
+		vec3 newPos = shapeA->getPosition() + vec3(speedX, speedY, speedZ) * timer->getDT();
+		shapeA->setPosition(newPos);
+		
+		vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
+		shapeA->setScale(newScale);
+
+		vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
+		shapeA->setRotation(newRot);
+
+		timer->updateTimer();
 
 		//draw
-		triangle->Draw();
-		//square->Draw();
+		shapeA->draw();
+		test->draw();
+
 		//swap
 		glfwSwapBuffers(window->getWindow());
 		glfwPollEvents();
@@ -180,7 +190,6 @@ int BaseGame::engineLoop()
 	renderer->deleteShaderProgram();
 	renderer->deleteFragmentShader();
 	renderer->deleteVertexShader();
-	renderer->deleteBuffer();
 	glfwTerminate();
 
 	return 0;

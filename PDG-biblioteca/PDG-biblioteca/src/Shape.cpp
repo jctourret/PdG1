@@ -1,6 +1,5 @@
 #include "Shape.h"
 #include "glm/gtc/type_ptr.hpp"
-#include "Texture.h"
 
 Shape::Shape(unsigned int geometry, Renderer* renderer):Entity(renderer)
 {
@@ -16,17 +15,18 @@ Shape::Shape(unsigned int geometry, Renderer* renderer):Entity(renderer)
 		createTriangle();
 	}
 }
-//Texture* tex;
 void Shape::createRectangle()
 {
 	const int vertexAmount = 20;
 	const int indexAmount = 6;
 	float verticesData[vertexAmount] = {
-		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
-		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
-		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f
+		-0.25f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.25f,-0.5f, 0.0f, 0.0f, 0.0f,
+		 0.25f, 0.5f, 0.0f, 1.0f, 1.0f,
+		 0.25f,-0.5f, 0.0f, 1.0f, 0.0f
 	};
+	width = 0.25f - (-0.25f);
+	height = 0.5f - (-0.5f);
 	int indicesData[indexAmount] =
 	{
 	    0, 2, 3,
@@ -34,15 +34,10 @@ void Shape::createRectangle()
 	};
 	rend->createVBO(verticesData, vertexAmount, vbo);
 	rend->createEBO(indicesData, indexAmount, ebo);
-	Texture* texturaTest = new Texture("../res/TRS.png");
-	texturaTest->Bind(0);
-	rend->setTexture();
-	//tex = new Texture("../res/TRS.png");
-	//tex->Bind(0);
-	//unsigned int shader = rend->getShader();
-	//unsigned int uniformTex = glGetUniformLocation(shader, "Tex");
-	//glUseProgram(shader);
-	//glUniform1i(uniformTex, 0);
+	Texture* texture = new Texture("../res/white.png");
+	texture->Bind(0);
+	defaultTexture = texture->getTex();
+	rend->setTexture(defaultTexture);
 }
 
 void Shape::createTriangle()
@@ -59,16 +54,19 @@ void Shape::createTriangle()
 	{
 		0, 1, 2
 	};
+	width = 0.25f - (-0.25f);
+	height = 0.5f - (-0.5f);
 	rend->createVBO(verticesData, vertexAmount, vbo);
 	rend->createEBO(indicesData,indexAmount,ebo);
-	Texture* texturaTest = new Texture("../res/TRS.png");
-	texturaTest->Bind(0);
-	rend->setTexture();
-	//Texture* tex = new Texture("../res/Choclo.png");
-	//tex->Bind(0);
+	Texture* texture = new Texture("../res/white.png");
+	texture->Bind(0);
+	defaultTexture = texture->getTex();
+	rend->setTexture(defaultTexture);
 }
 
-void Shape::Draw()
+void Shape::draw()
 {
+	glBindTexture(GL_TEXTURE_2D, defaultTexture);
+	glActiveTexture(GL_TEXTURE0);
 	rend->drawShape(_geometry, TRS, vbo, ebo);
 }

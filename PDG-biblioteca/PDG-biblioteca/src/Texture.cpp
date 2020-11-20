@@ -40,3 +40,7 @@ void Texture::Unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+unsigned int Texture::getTex()
+{
+	return rendererID;
+}
