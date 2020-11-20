@@ -34,6 +34,7 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 int BaseGame::engineLoop()
 {
 	Shape* triangle = new Shape(GL_TRIANGLES, renderer);
+	//Shape* square = new Shape(GL_QUADS, renderer);
 	
 	renderer->initVertexShader();
 	renderer->initFragmentShader();
@@ -171,7 +172,7 @@ int BaseGame::engineLoop()
 
 		//draw
 		triangle->Draw();
-
+		//square->Draw();
 		//swap
 		glfwSwapBuffers(window->getWindow());
 		glfwPollEvents();

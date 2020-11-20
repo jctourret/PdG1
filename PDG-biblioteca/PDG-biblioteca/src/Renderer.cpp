@@ -30,20 +30,19 @@ outColor = texColor;
 )glsl";
 
 Renderer::Renderer() {
-	_vbo = new GLuint();
+//	_vbo = new GLuint();
 }
 
 Renderer::~Renderer() {
-	if (_vbo != NULL) {
-		delete _vbo;
-	}
+	//if (_vbo != NULL) {
+	//	delete _vbo;
+	//}
 }
 
 void Renderer::initBuffer(std::vector<float> _vertex) {
-	glGenBuffers(1, _vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, *_vbo);
-	glBufferData(GL_ARRAY_BUFFER, _vertex.size() * sizeof(GLfloat), &(_vertex[0]), GL_STATIC_DRAW);
-	//glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float) + 8 * sizeof(int), &(_vertex[0]), GL_STATIC_DRAW);
+//	glGenBuffers(1, _vbo);
+//	glBindBuffer(GL_ARRAY_BUFFER, *_vbo);
+//	glBufferData(GL_ARRAY_BUFFER, _vertex.size() * sizeof(GLfloat), &(_vertex[0]), GL_STATIC_DRAW);
 }
 
 void Renderer::initVertexShader() {
@@ -74,7 +73,27 @@ void Renderer::initShaderProgram() {
 	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 }
 
-void Renderer::setPosAttrib() {
+void Renderer::createVBO(float* vertexDataArray, int arraySize, unsigned int &_vbo)
+{
+	std::vector<float> _vertex;
+	for (int i = 0; i < arraySize; i++)
+	{
+		_vertex.push_back(vertexDataArray[i]);
+	}
+	glGenBuffers(1, &_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	glBufferData(GL_ARRAY_BUFFER, _vertex.size() * sizeof(GLfloat), &(_vertex[0]), GL_STATIC_DRAW);
+}
+
+void Renderer::createEBO(int* indexArray, int arraySize, unsigned int &_ebo) 
+{
+	glGenBuffers(1, &_ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexArray) * arraySize, indexArray, GL_STATIC_DRAW);
+}
+
+void Renderer::setPosAttrib() 
+{
 	_posAttrib = glGetAttribLocation(_shaderProgram, "position");
 	glVertexAttribPointer(_posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
@@ -110,22 +129,35 @@ void Renderer::deleteVertexShader() {
 }
 
 void Renderer::deleteBuffer() {
-	glDeleteBuffers(1, _vbo);
+//	glDeleteBuffers(1, _vbo);
 }
 
-void Renderer::drawShape(unsigned int geometry)
+void Renderer::drawShape(unsigned int geometry, glm::mat4x4 trs, unsigned int _vbo, unsigned int ebo)
 {
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	unsigned int uniformModel = glGetUniformLocation(_shaderProgram, "MVP");
+	glUseProgram(_shaderProgram);
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(trs));
+	
 	//glBindVertexArray(_posAttrib); //?
 	if (geometry == GL_TRIANGLES)
 	{
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(geometry, 3, GL_UNSIGNED_INT, 0);
 	}
 	else
 	{
-		glDrawArrays(GL_QUADS, 0, 4);
+		glDrawElements(geometry, 6, GL_UNSIGNED_INT, 0);
 	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	//glBindVertexArray(0);
 	//glUseProgram(0);
+}
+
+void Renderer::setTexture()
+{
+	unsigned int uniformTex = glGetUniformLocation(_shaderProgram, "Tex");
+	glUseProgram(_shaderProgram);
+	glUniform1i(uniformTex, 1);
 }
 
 unsigned int Renderer::getShader()

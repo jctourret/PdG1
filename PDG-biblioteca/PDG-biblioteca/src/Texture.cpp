@@ -35,6 +35,7 @@ void Texture::Bind(unsigned int slot)
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, rendererID);
 }
+
 void Texture::Unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);

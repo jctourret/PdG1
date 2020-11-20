@@ -8,7 +8,7 @@
 class SABASAENGINE_API Renderer
 {
 private:
-	GLuint* _vbo;
+//	GLuint* _vbo;
 	GLuint _vertexShader;
 	GLuint _fragmentShader;
 	unsigned int _shaderProgram;
@@ -21,6 +21,8 @@ public:
 	void initVertexShader();
 	void initFragmentShader();
 	void initShaderProgram();
+	void createVBO(float* vertexDataArray, int arraySize, unsigned int &_vbo);
+	void createEBO(int* indexArray, int arraySize, unsigned int &_ebo);
 	void setPosAttrib();
 	void setTextureAttrib();
 	void addVertexes(float* vertexDataArray,int arraySize);
@@ -28,7 +30,8 @@ public:
 	void deleteFragmentShader();
 	void deleteVertexShader();
 	void deleteBuffer();
-	void drawShape(unsigned int geometry);
+	void drawShape(unsigned int geometry, glm::mat4x4 trs, unsigned int _vbo, unsigned int ebo);
+	void setTexture();
 	unsigned int getShader();
 };
 

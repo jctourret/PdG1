@@ -10,6 +10,8 @@ class SABASAENGINE_API Shape : public Entity
 	unsigned int _geometry;
 	void createRectangle();
 	void createTriangle();
+	unsigned int vbo;
+	unsigned int ebo;
 public:
 	Shape(unsigned int geometry, Renderer* renderer);
 	void Draw();

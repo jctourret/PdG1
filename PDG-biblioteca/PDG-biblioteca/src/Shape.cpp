@@ -16,51 +16,59 @@ Shape::Shape(unsigned int geometry, Renderer* renderer):Entity(renderer)
 		createTriangle();
 	}
 }
-Texture* tex;
+//Texture* tex;
 void Shape::createRectangle()
 {
 	const int vertexAmount = 20;
-	float vertexesData[vertexAmount] = {
-		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
+	const int indexAmount = 6;
+	float verticesData[vertexAmount] = {
 		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
 		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
 		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f
 	};
-	rend->addVertexes(vertexesData,vertexAmount);
-
-	tex = new Texture("../res/TRS.png");
-	tex->Bind(0);
-	unsigned int shader = rend->getShader();
-	unsigned int uniformTex = glGetUniformLocation(shader, "Tex");
-	glUseProgram(shader);
-	glUniform1i(uniformTex, 0);
+	int indicesData[indexAmount] =
+	{
+	    0, 2, 3,
+		1, 0, 3
+	};
+	rend->createVBO(verticesData, vertexAmount, vbo);
+	rend->createEBO(indicesData, indexAmount, ebo);
+	Texture* texturaTest = new Texture("../res/TRS.png");
+	texturaTest->Bind(0);
+	rend->setTexture();
+	//tex = new Texture("../res/TRS.png");
+	//tex->Bind(0);
+	//unsigned int shader = rend->getShader();
+	//unsigned int uniformTex = glGetUniformLocation(shader, "Tex");
+	//glUseProgram(shader);
+	//glUniform1i(uniformTex, 0);
 }
 
 void Shape::createTriangle()
 {
 	const int vertexAmount = 15;
-
-	float vertexesData[vertexAmount] = {
+	const int indexAmount = 3;
+	float verticesData[vertexAmount] =
+	{
 			-0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
 			 0.0f, 0.5f, 0.0f, 0.5f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
 	};
-	rend->addVertexes(vertexesData, vertexAmount);
-
-	tex = new Texture("../res/TRS.png");
-	tex->Bind(0);
-	unsigned int shader = rend->getShader();
-	unsigned int uniformTex = glGetUniformLocation(shader, "Tex");
-	glUseProgram(shader);
-	glUniform1i(uniformTex, 0);
+	int indicesData[indexAmount] =
+	{
+		0, 1, 2
+	};
+	rend->createVBO(verticesData, vertexAmount, vbo);
+	rend->createEBO(indicesData,indexAmount,ebo);
+	Texture* texturaTest = new Texture("../res/TRS.png");
+	texturaTest->Bind(0);
+	rend->setTexture();
+	//Texture* tex = new Texture("../res/Choclo.png");
+	//tex->Bind(0);
 }
 
 void Shape::Draw()
 {
-	unsigned int shader = rend->getShader();
-	
-	unsigned int uniformModel = glGetUniformLocation(shader, "MVP");
-	glUseProgram(shader);
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(TRS));
-	rend->drawShape(_geometry);
+	rend->drawShape(_geometry, TRS, vbo, ebo);
 }
