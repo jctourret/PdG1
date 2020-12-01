@@ -166,6 +166,7 @@ copy /Y "$(OutDir)PDG-biblioteca.lib" "$(SolutionDir)PDG-ejecutable\libs\PDG-bib
     <ClInclude Include="src\Entity2D.h" />
     <ClInclude Include="src\Exports.h" />
     <ClInclude Include="src\Frame.h" />
+    <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\ReSprite.h" />
     <ClInclude Include="src\Shape.h" />
@@ -181,6 +182,7 @@ copy /Y "$(OutDir)PDG-biblioteca.lib" "$(SolutionDir)PDG-ejecutable\libs\PDG-bib
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Entity2D.cpp" />
+    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\ReSprite.cpp" />
     <ClCompile Include="src\Shape.cpp" />

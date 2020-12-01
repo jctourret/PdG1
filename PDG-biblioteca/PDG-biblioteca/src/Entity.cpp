@@ -22,7 +22,7 @@ void Entity::UpdateTRS()
 	TRS = translateMat * rotateXMat * rotateYMat * rotateZMat * scaleMat;
 }
 
-vec3 Entity::getPosition()
+glm::vec3 Entity::getPosition()
 {
 	return posVec;
 }
@@ -34,7 +34,7 @@ void Entity::setPosition(vec3 newPosition)
 	UpdateTRS();
 }
 
-vec3 Entity::getRotation()
+glm::vec3 Entity::getRotation()
 {
 	return rotVec;
 }
@@ -96,7 +96,7 @@ void Entity::setRotation(vec3 newRot)
 	}
 }
 
-vec3 Entity::getScale()
+glm::vec3 Entity::getScale()
 {
 	return scaleVec;
 }
