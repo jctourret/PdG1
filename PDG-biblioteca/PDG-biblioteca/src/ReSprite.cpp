@@ -1,12 +1,11 @@
 #include "ReSprite.h"
 #include "glm/gtc/type_ptr.hpp"
 
-ReSprite::ReSprite(Renderer* renderer, const char* path) :Entity(renderer)
+ReSprite::ReSprite(Renderer* renderer, const char* path,bool transparency) :Entity(renderer)
 {
 	rend = renderer;
-
 	initSprite(path);
-
+	_transparency = transparency;
 }
 void ReSprite::initSprite(const char* path)
 {
@@ -57,7 +56,21 @@ void ReSprite::SetTextureCoordinates(float u0, float v0, float u1, float v1, flo
 }
 void ReSprite::draw()
 {
+	if (_transparency) {
+		blendSprite();
+	}
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE0);
 	rend->drawSprite(GL_QUADS, TRS, vbo, ebo, vao, verticesData, vertexAmount);
+	if (_transparency) {
+		unblendSprite();
+	}
+}
+
+void ReSprite::blendSprite() {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+void ReSprite::unblendSprite() {
+	glDisable(GL_BLEND);
 }
