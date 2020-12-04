@@ -39,6 +39,7 @@ void Sprite::UpdateSprite(Timer & timer) {
 	}
 	setAnimation(_animation);
 }
+
 void Sprite::SetTextureCoordinates(float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3)
 {
 	verticesData[3] = u0;
@@ -53,6 +54,7 @@ void Sprite::SetTextureCoordinates(float u0, float v0, float u1, float v1, float
 	
 	rend->bindSpriteBuffers(vbo, vao, verticesData, 20);
 }
+
 void Sprite::draw()
 {
 	if (_transparency) {

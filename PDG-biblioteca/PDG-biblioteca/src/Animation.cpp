@@ -20,7 +20,7 @@ int Animation::getCurrentFrame()
 	return currentFrame;
 }
 
-vector<Frame>& Animation::getAnimation() //check
+vector<Frame>& Animation::getAnimation()
 {
 	if (animNum < animations.size())
 	{
@@ -36,7 +36,7 @@ void Animation::setAnimNum(int newAnimNum)
 {
 	animNum = newAnimNum;
 }
-#include <iostream>
+
 void Animation::addFrame(float frameX, float frameY, int spriteWidth, int spriteHeigth, int textureWidth, int textureHeigth)
 {
 	Frame frame;
@@ -71,16 +71,11 @@ void Animation::update(Timer& timer)
 {
 	currentTime += (timer.getDT());
 
-	int timesSubtracted = 0;
-
 	while (currentTime >= timeLength)
 	{
 		currentTime -= timeLength;
-		timesSubtracted++;
 	}
 
-	if (timesSubtracted != 0) timesSubtracted -= 1;
-
 	float frameLength = timeLength / animations[animNum].size();
-	currentFrame = static_cast<int>(currentTime / frameLength) + timesSubtracted;
+	currentFrame = static_cast<int>(currentTime / frameLength);
 }
