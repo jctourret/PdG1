@@ -86,7 +86,7 @@ bool CollisionManager::CheckCollision(ReSprite* spriteA, ReSprite* spriteB)
 	return isColliding();
 }
 
-bool CollisionManager::CheckCollisionAndReact(Shape* shape, ReSprite* sprite, vec3 movement)
+bool CollisionManager::CheckCollisionAndPush(Shape* shape, ReSprite* sprite, vec3 movement)
 {
 	a.width = shape->width;
 	a.height = shape->height;
@@ -102,6 +102,25 @@ bool CollisionManager::CheckCollisionAndReact(Shape* shape, ReSprite* sprite, ve
 	{
 		shape->setPosition(shape->getPosition() - movement / 2.0f);
 		sprite->setPosition(sprite->getPosition() + movement / 2.0f);
+		return true;
+	}
+}
+
+bool CollisionManager::CheckCollisionAgainstStatic(Shape* shape, ReSprite* sprite, vec3 movement)
+{
+	a.width = shape->width;
+	a.height = shape->height;
+	a.pos = shape->getPosition();
+	a.scale = shape->getScale();
+
+	b.width = sprite->width;
+	b.height = sprite->height;
+	b.pos = sprite->getPosition();
+	b.scale = sprite->getScale();
+
+	if (isColliding())
+	{
+		shape->setPosition(shape->getPosition() - movement);
 		return true;
 	}
 }

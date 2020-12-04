@@ -19,6 +19,7 @@ public:
 	void initVertexShader();
 	void initFragmentShader();
 	void initShaderProgram();
+	void creatoVAO(unsigned int &vao);
 	void createVBO(float* vertexDataArray, int arraySize, unsigned int &vbo);
 	void createEBO(int* indexArray, int arraySize, unsigned int &_ebo);
 	void setPosAttrib();
@@ -26,7 +27,10 @@ public:
 	void deleteShaderProgram();
 	void deleteFragmentShader();
 	void deleteVertexShader();
-	void drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo);
+	void drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo, unsigned int vao, float* vertex, unsigned int size);
 	void setTexture(unsigned int texture);
+	void bindSpriteBuffers(unsigned int vbo, unsigned int vao, float* vertex, float size);
+	void setSpriteAttrib();
+	void startProgram(glm::mat4 model);
 };
 

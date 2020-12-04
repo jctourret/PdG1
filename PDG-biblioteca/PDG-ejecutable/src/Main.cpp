@@ -2,6 +2,6 @@
 void main()
 {
 	Game* game = new Game();
-	game->init();
+	game->play();
 	delete game;
 }

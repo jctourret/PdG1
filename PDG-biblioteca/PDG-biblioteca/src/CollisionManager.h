@@ -30,5 +30,6 @@ public:
 	bool CheckCollision(Shape* shapeA, Shape* ShapeB);
 	bool CheckCollision(Shape* shape, ReSprite* sprite);
 	bool CheckCollision(ReSprite* spriteA, ReSprite* spriteB);
-	bool CheckCollisionAndReact(Shape* shape, ReSprite* sprite, vec3 movement);
+	bool CheckCollisionAndPush(Shape* shape, ReSprite* sprite, vec3 movement);
+	bool CheckCollisionAgainstStatic(Shape* shape, ReSprite* sprite, vec3 movement);
 };

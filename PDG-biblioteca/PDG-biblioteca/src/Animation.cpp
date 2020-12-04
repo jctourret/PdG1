@@ -36,7 +36,7 @@ void Animation::setAnimNum(int newAnimNum)
 {
 	animNum = newAnimNum;
 }
-
+#include <iostream>
 void Animation::addFrame(float frameX, float frameY, int spriteWidth, int spriteHeigth, int textureWidth, int textureHeigth, float timeToAnimate)
 {
 	timeLength = timeToAnimate;
@@ -54,7 +54,7 @@ void Animation::addFrame(float frameX, float frameY, int spriteWidth, int sprite
 
 	frame.coordinates[3].U = ((frameX) / textureWidth);
 	frame.coordinates[3].V = ((frameY) / textureHeigth);
-
+	
 	frames.push_back(frame);
 }
 
@@ -67,15 +67,20 @@ void Animation::addAnimation()
 	}
 }
 
-void Animation::update(Timer* timer)
+void Animation::update(Timer& timer)
 {
-	currentTime += (timer->getDT());
+	currentTime += (timer.getDT());
+
+	int timesSubtracted = 0;
 
 	while (currentTime >= timeLength)
 	{
 		currentTime -= timeLength;
+		timesSubtracted++;
 	}
 
+	if (timesSubtracted != 0) timesSubtracted -= 1;
+
 	float frameLength = timeLength / animations[animNum].size();
-	currentFrame = static_cast<int>(currentTime / frameLength);
+	currentFrame = static_cast<int>(currentTime / frameLength) + timesSubtracted;
 }

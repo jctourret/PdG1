@@ -22,6 +22,9 @@ BaseGame::~BaseGame()
 	if (renderer != NULL) {
 		delete renderer;
 	}
+	if (input != NULL) {
+		delete input;
+	}
 }
 
 void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title)
@@ -31,33 +34,45 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 	glfwMakeContextCurrent(window->getWindow());
 	glewExperimental = GL_TRUE;
 	glewInit();
-	initGame(renderer);
+
+	renderer->initVertexShader();
+	renderer->initFragmentShader();
+	renderer->initShaderProgram();
+	renderer->setPosAttrib();	
+	renderer->setTextureAttrib();
 }
 
 int BaseGame::engineLoop()
 {
+	//game init
+	initGame(renderer);
+
 	while (!glfwWindowShouldClose(window->getWindow()) && !gameShouldClose)
 	{
 		//clear
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		updateGame(window, collManager,renderer,input);
-		
+		//game update
+		updateGame(collManager,input);
+
+		//engine input
 		if (input->isKeyDown(GLFW_KEY_ESCAPE))
 		{
 			gameShouldClose = true;
 		}
+		
 		//swap
 		glfwSwapBuffers(window->getWindow());
 		glfwPollEvents();
 	}
-	destroyGame();
-
 	renderer->deleteShaderProgram();
 	renderer->deleteFragmentShader();
 	renderer->deleteVertexShader();
 	glfwTerminate();
+	
+	//game destroy
+	destroyGame();
 
 	return 0;
 }

@@ -51,6 +51,12 @@ void Renderer::initShaderProgram() {
 	glUseProgram(_shaderProgram);
 }
 
+void Renderer::creatoVAO(unsigned int &vao)
+{
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+}
+
 void Renderer::createVBO(float* vertexDataArray, int arraySize, unsigned int &vbo)
 {
 	std::vector<float> _vertex;
@@ -74,14 +80,15 @@ void Renderer::setPosAttrib()
 {
 	_posAttrib = glGetAttribLocation(_shaderProgram, "position");
 	glVertexAttribPointer(_posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
-	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(_posAttrib); //cambie esto de 0 a _posAttrib
 }
+
 
 void Renderer::setTextureAttrib()
 {
 	_textureAttrib = glGetAttribLocation(_shaderProgram, "texCoor");
 	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) (3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(_textureAttrib);//cambie esto de 1 a _textureAttrib
 }
 
 void Renderer::deleteShaderProgram() {
@@ -96,27 +103,32 @@ void Renderer::deleteVertexShader() {
 	glDeleteShader(_vertexShader);
 }
 
-void Renderer::drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo)
+void Renderer::drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo, unsigned int vao, float* vertex, unsigned int size)
 {
-	glUseProgram(_shaderProgram);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glEnableVertexAttribArray(_posAttrib);
-	glEnableVertexAttribArray(_textureAttrib);
-	
+	bindSpriteBuffers(vbo,vao,vertex,size);
+	setSpriteAttrib();
+	startProgram(trs);
 
-	unsigned int uniformModel = glGetUniformLocation(_shaderProgram, "MVP");
-	glBindVertexArray(_posAttrib);
 
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(trs));
+	//glUseProgram(_shaderProgram);
+	//glBindVertexArray(vao);
+	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	//glEnableVertexAttribArray(_posAttrib);
+	//glEnableVertexAttribArray(_textureAttrib);
+	//
+	//unsigned int uniformModel = glGetUniformLocation(_shaderProgram, "MVP");
+	//glBindVertexArray(_posAttrib);
+	//
+	//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(trs));
 	
-	if (geometry == GL_TRIANGLES)
-	{
-		glDrawElements(geometry, 3, GL_UNSIGNED_INT, 0);
-	}
-	else
-	{
-		glDrawElements(geometry, 6, GL_UNSIGNED_INT, 0);
-	}
+	//if (geometry == GL_TRIANGLES)
+	//{
+	//	glDrawElements(geometry, 3, GL_UNSIGNED_INT, 0);
+	//}
+	//else
+	//{
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	//}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -127,4 +139,23 @@ void Renderer::setTexture(unsigned int texture)
 	glUniform1i(uniformTex, 1);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Renderer::bindSpriteBuffers(unsigned int vbo, unsigned int vao, float* vertex, float size) {
+	unsigned int memorySize = sizeof(float) * size;
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindVertexArray(vao);
+	glBufferData(GL_ARRAY_BUFFER, memorySize, vertex, GL_STATIC_DRAW);
+}
+
+void Renderer::setSpriteAttrib() {
+	glUniform1i((glGetUniformLocation(_shaderProgram, "tex")), 0);// CHECKEAR ESTO
+	setPosAttrib();
+	setTextureAttrib();
+}
+
+void Renderer::startProgram(glm::mat4 model) {
+	unsigned int transformLoc = glGetUniformLocation( _shaderProgram, "MVP");
+	glUseProgram(_shaderProgram);
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
 }

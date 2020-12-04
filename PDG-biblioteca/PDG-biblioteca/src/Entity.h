@@ -25,14 +25,14 @@ protected:
 	void UpdateTRS();
 public:
 	Entity(Renderer* renderer);
-	glm::vec3 getPosition();
-	void setPosition(glm::vec3 newPosition);
-	glm::vec3 getRotation();
+	vec3 getPosition();
+	void setPosition(vec3 newPosition);
+	vec3 getRotation();
 	void setRotationX(float x);	//despues crear una funcion para setear 
 	void setRotationY(float y);	//todas las rotaciones juntas
 	void setRotationZ(float z); //
-	void setRotation(glm::vec3 newRot);
-	glm::vec3 getScale();
-	void setScale(glm::vec3 newScale);
+	void setRotation(vec3 newRot);
+	vec3 getScale();
+	void setScale(vec3 newScale);
 };
 

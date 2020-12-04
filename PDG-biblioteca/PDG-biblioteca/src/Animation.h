@@ -19,9 +19,9 @@ public:
 	Animation();
 	~Animation();
 	int getCurrentFrame();
-	vector<Frame>& getAnimation();
+	vector<Frame>& getAnimation();	
 	void setAnimNum(int newAnimNum);
 	void addFrame(float frameX, float frameY, int spriteWidth, int spriteHeigth, int textureWidth, int textureHeigth, float timeToAnimate);
 	void addAnimation();
-	void update(Timer* time);
+	void update(Timer& time);
 };

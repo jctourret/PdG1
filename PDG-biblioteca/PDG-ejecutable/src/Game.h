@@ -2,11 +2,12 @@
 #include "BaseGame.h"
 class Game: BaseGame
 {
-	bool gameShouldClose = false;
+private:
+	Timer* timer;
 	Shape* shapeA;
 	ReSprite* sprite1;
 	ReSprite* sprite2;
-	Timer* timer;
+	Animation* animation;
 	float speedX = 0;
 	float speedY = 0;
 	float speedZ = 0;
@@ -17,8 +18,8 @@ class Game: BaseGame
 public:
 	Game();
 	~Game();
-	void init();
+	void play();
 	void initGame(Renderer* renderer) override;
-	void updateGame(Window* window, CollisionManager collManager, Renderer* renderer, Input* input) override;
+	void updateGame(CollisionManager collManager, Input* input) override;
 	void destroyGame() override;
 };
