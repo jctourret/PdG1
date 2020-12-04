@@ -9,16 +9,16 @@
 using namespace glm;
 
 
-class SABASAENGINE_API ReSprite : public Entity
+class SABASAENGINE_API Sprite : public Entity
 {
 	const int vertexAmount = 20;
 	const int indexAmount = 6;
 	void initSprite(const char* path);
 	float verticesData[20] = {
-		 0.25f, 0.5f, 0.0f, 1.0f, 1.0f,	//arriba der
-		 0.25f,-0.5f, 0.0f, 1.0f, 0.0f,	 //abajo der
-		-0.25f,-0.5f, 0.0f, 0.0f, 0.0f,	 //abajo izq
-		-0.25f, 0.5f, 0.0f, 0.0f, 1.0f, //arriba izq
+		 0.25f, 0.5f, 0.0f, 1.0f, 1.0f,
+		 0.25f,-0.5f, 0.0f, 1.0f, 0.0f,
+		-0.25f,-0.5f, 0.0f, 0.0f, 0.0f,
+		-0.25f, 0.5f, 0.0f, 0.0f, 1.0f
 	};
 	int indicesData[6] =
 	{
@@ -34,7 +34,7 @@ class SABASAENGINE_API ReSprite : public Entity
 	Animation* _animation;
 	bool _transparency;
 public:
-	ReSprite(Renderer* renderer, const char* path,bool transparency);
+	Sprite(Renderer* renderer, const char* path,bool transparency);
 	void draw();
 	void UpdateSprite(Timer& timer);
 	void setAnimation(Animation* animation) { _animation = animation; }

@@ -1,7 +1,7 @@
 #pragma once
 #include "Exports.h"
 #include "Shape.h"
-#include "ReSprite.h"
+#include "Sprite.h"
 #include "glm/glm.hpp"
 
 struct Collider
@@ -28,8 +28,8 @@ class SABASAENGINE_API CollisionManager
 	bool isColliding();
 public:
 	bool CheckCollision(Shape* shapeA, Shape* ShapeB);
-	bool CheckCollision(Shape* shape, ReSprite* sprite);
-	bool CheckCollision(ReSprite* spriteA, ReSprite* spriteB);
-	bool CheckCollisionAndPush(Shape* shape, ReSprite* sprite, vec3 movement);
-	bool CheckCollisionAgainstStatic(Shape* shape, ReSprite* sprite, vec3 movement);
+	bool CheckCollision(Shape* shape, Sprite* sprite);
+	bool CheckCollision(Sprite* spriteA, Sprite* spriteB);
+	bool CheckCollisionAndPush(Shape* shape, Sprite* sprite, vec3 movement);
+	bool CheckCollisionAgainstStatic(Shape* shape, Sprite* sprite, vec3 movement);
 };

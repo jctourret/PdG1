@@ -58,5 +58,5 @@ void Shape::draw()
 {
 	glBindTexture(GL_TEXTURE_2D, defaultTexture);
 	glActiveTexture(GL_TEXTURE0);
-	rend->drawSprite(_geometry, TRS, vbo, ebo, vao, recVerticesData, 20); //
+	rend->drawSprite(TRS, vbo, vao, recVerticesData, 20); //
 }

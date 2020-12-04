@@ -56,7 +56,7 @@ bool CollisionManager::CheckCollision(Shape* shapeA, Shape* ShapeB)
 	return isColliding();
 }
 
-bool CollisionManager::CheckCollision(Shape* shape, ReSprite* sprite)
+bool CollisionManager::CheckCollision(Shape* shape, Sprite* sprite)
 {
 	a.width = shape->width;
 	a.height = shape->height;
@@ -71,7 +71,7 @@ bool CollisionManager::CheckCollision(Shape* shape, ReSprite* sprite)
 	return isColliding();
 }
 
-bool CollisionManager::CheckCollision(ReSprite* spriteA, ReSprite* spriteB)
+bool CollisionManager::CheckCollision(Sprite* spriteA, Sprite* spriteB)
 {
 	a.width = spriteA->width;
 	a.height = spriteA->height;
@@ -86,7 +86,7 @@ bool CollisionManager::CheckCollision(ReSprite* spriteA, ReSprite* spriteB)
 	return isColliding();
 }
 
-bool CollisionManager::CheckCollisionAndPush(Shape* shape, ReSprite* sprite, vec3 movement)
+bool CollisionManager::CheckCollisionAndPush(Shape* shape, Sprite* sprite, vec3 movement)
 {
 	a.width = shape->width;
 	a.height = shape->height;
@@ -106,7 +106,7 @@ bool CollisionManager::CheckCollisionAndPush(Shape* shape, ReSprite* sprite, vec
 	}
 }
 
-bool CollisionManager::CheckCollisionAgainstStatic(Shape* shape, ReSprite* sprite, vec3 movement)
+bool CollisionManager::CheckCollisionAgainstStatic(Shape* shape, Sprite* sprite, vec3 movement)
 {
 	a.width = shape->width;
 	a.height = shape->height;

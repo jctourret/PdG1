@@ -21,7 +21,7 @@ public:
 	int getCurrentFrame();
 	vector<Frame>& getAnimation();	
 	void setAnimNum(int newAnimNum);
-	void addFrame(float frameX, float frameY, int spriteWidth, int spriteHeigth, int textureWidth, int textureHeigth, float timeToAnimate);
-	void addAnimation();
+	void addFrame(float frameX, float frameY, int spriteWidth, int spriteHeigth, int textureWidth, int textureHeigth);
+	void addAnimation(float timeToAnimate);
 	void update(Timer& time);
 };

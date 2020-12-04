@@ -37,10 +37,8 @@ void Animation::setAnimNum(int newAnimNum)
 	animNum = newAnimNum;
 }
 #include <iostream>
-void Animation::addFrame(float frameX, float frameY, int spriteWidth, int spriteHeigth, int textureWidth, int textureHeigth, float timeToAnimate)
+void Animation::addFrame(float frameX, float frameY, int spriteWidth, int spriteHeigth, int textureWidth, int textureHeigth)
 {
-	timeLength = timeToAnimate;
-
 	Frame frame;
 
 	frame.coordinates[0].U = ((frameX) / textureWidth);
@@ -58,8 +56,10 @@ void Animation::addFrame(float frameX, float frameY, int spriteWidth, int sprite
 	frames.push_back(frame);
 }
 
-void Animation::addAnimation()
+void Animation::addAnimation(float timeToAnimate)
 {
+	timeLength = timeToAnimate;
+
 	if (frames.size() > 0)
 	{
 		animations.push_back(frames);

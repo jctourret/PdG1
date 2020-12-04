@@ -103,33 +103,13 @@ void Renderer::deleteVertexShader() {
 	glDeleteShader(_vertexShader);
 }
 
-void Renderer::drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo, unsigned int vao, float* vertex, unsigned int size)
+void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size)
 {
 	bindSpriteBuffers(vbo,vao,vertex,size);
 	setSpriteAttrib();
 	startProgram(trs);
-
-
-	//glUseProgram(_shaderProgram);
-	//glBindVertexArray(vao);
-	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	//glEnableVertexAttribArray(_posAttrib);
-	//glEnableVertexAttribArray(_textureAttrib);
-	//
-	//unsigned int uniformModel = glGetUniformLocation(_shaderProgram, "MVP");
-	//glBindVertexArray(_posAttrib);
-	//
-	//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(trs));
-	
-	//if (geometry == GL_TRIANGLES)
-	//{
-	//	glDrawElements(geometry, 3, GL_UNSIGNED_INT, 0);
-	//}
-	//else
-	//{
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	//}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
 }
 
 void Renderer::setTexture(unsigned int texture)
@@ -154,8 +134,21 @@ void Renderer::setSpriteAttrib() {
 	setTextureAttrib();
 }
 
+void Renderer::bindTexture(unsigned int texture) {
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+}
+
 void Renderer::startProgram(glm::mat4 model) {
 	unsigned int transformLoc = glGetUniformLocation( _shaderProgram, "MVP");
 	glUseProgram(_shaderProgram);
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
+}
+
+void Renderer::blendTexture() {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+void Renderer::unblendTexture() {
+	glDisable(GL_BLEND);
 }

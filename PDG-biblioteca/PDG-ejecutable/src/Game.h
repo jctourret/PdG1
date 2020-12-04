@@ -5,8 +5,8 @@ class Game: BaseGame
 private:
 	Timer* timer;
 	Shape* shapeA;
-	ReSprite* sprite1;
-	ReSprite* sprite2;
+	Sprite* sprite1;
+	Sprite* sprite2;
 	Animation* animation;
 	float speedX = 0;
 	float speedY = 0;

@@ -3,5 +3,5 @@ void main()
 {
 	Game* game = new Game();
 	game->play();
-	delete game;
+	if (game) delete game;
 }

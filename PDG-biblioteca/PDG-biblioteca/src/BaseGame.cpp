@@ -1,7 +1,7 @@
 #include "BaseGame.h"
 #include <iostream>
 #include "Shape.h"
-#include "ReSprite.h"
+#include "Sprite.h"
 #include <glm/ext/matrix_clip_space.hpp>
 
 using namespace std;

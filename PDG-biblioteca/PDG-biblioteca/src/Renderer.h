@@ -27,10 +27,13 @@ public:
 	void deleteShaderProgram();
 	void deleteFragmentShader();
 	void deleteVertexShader();
-	void drawSprite(unsigned int geometry, glm::mat4x4 trs, unsigned int vbo, unsigned int ebo, unsigned int vao, float* vertex, unsigned int size);
+	void drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size);
 	void setTexture(unsigned int texture);
 	void bindSpriteBuffers(unsigned int vbo, unsigned int vao, float* vertex, float size);
 	void setSpriteAttrib();
+	void bindTexture(unsigned int texture);
 	void startProgram(glm::mat4 model);
+	void blendTexture();
+	void unblendTexture();
 };
 

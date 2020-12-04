@@ -21,17 +21,17 @@ void Game::initGame(Renderer* renderer)
 	timer = new Timer();
 	timer->start();
 	shapeA = new Shape(GL_QUADS, renderer);
-	sprite1 = new ReSprite(renderer, "../res/spriteSheet.png",true);
-	sprite2 = new ReSprite(renderer, "../res/Choclo.png",true);
+	sprite1 = new Sprite(renderer, "../res/spriteSheet.png",true);
+	sprite2 = new Sprite(renderer, "../res/Choclo.png",true);
 	animation = new Animation(); //spriteSheet 308 x 178
 
-	animation->addFrame(0.0f,				 0.0f,	102.66f, 89.0f, 308, 178, 0.5f);
-	animation->addFrame((308 - 102.66f * 2), 0.0f,	102.66f, 89.0f, 308, 178, 0.5f);
-	animation->addFrame((308 - 102.66f * 1), 0.0f,	102.66f, 89.0f, 308, 178, 0.5f);
-	animation->addFrame(0.0f,				 89.0f, 102.66f, 89.0f, 308, 178, 0.5f);
-	animation->addFrame((308 - 102.66f * 2), 89.0f, 102.66f, 89.0f, 308, 178, 0.5f);
-	animation->addFrame((308 - 102.66f * 1), 89.0f, 102.66f, 89.0f, 308, 178, 0.5f);
-	animation->addAnimation();
+	animation->addFrame(0.0f,				 0.0f,	102.66f, 89.0f, 308, 178);
+	animation->addFrame((308 - 102.66f * 2), 0.0f,	102.66f, 89.0f, 308, 178);
+	animation->addFrame((308 - 102.66f * 1), 0.0f,	102.66f, 89.0f, 308, 178);
+	animation->addFrame(0.0f,				 89.0f, 102.66f, 89.0f, 308, 178);
+	animation->addFrame((308 - 102.66f * 2), 89.0f, 102.66f, 89.0f, 308, 178);
+	animation->addFrame((308 - 102.66f * 1), 89.0f, 102.66f, 89.0f, 308, 178);
+	animation->addAnimation(0.5f);
 
 	sprite1->setAnimation(animation);
 

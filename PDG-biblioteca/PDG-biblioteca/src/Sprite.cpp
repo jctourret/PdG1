@@ -1,13 +1,13 @@
-#include "ReSprite.h"
+#include "Sprite.h"
 #include "glm/gtc/type_ptr.hpp"
 
-ReSprite::ReSprite(Renderer* renderer, const char* path,bool transparency) :Entity(renderer)
+Sprite::Sprite(Renderer* renderer, const char* path,bool transparency) :Entity(renderer)
 {
 	rend = renderer;
 	initSprite(path);
 	_transparency = transparency;
 }
-void ReSprite::initSprite(const char* path)
+void Sprite::initSprite(const char* path)
 {
 	width = 0.25 - (-0.25);
 	height = 0.5 - (-0.5);
@@ -20,7 +20,7 @@ void ReSprite::initSprite(const char* path)
 	rend->setTexture(texture);
 }
 
-void ReSprite::UpdateSprite(Timer & timer) {
+void Sprite::UpdateSprite(Timer & timer) {
 	if (!_animation) {
 		return;
 	}
@@ -39,7 +39,7 @@ void ReSprite::UpdateSprite(Timer & timer) {
 	}
 	setAnimation(_animation);
 }
-void ReSprite::SetTextureCoordinates(float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3)
+void Sprite::SetTextureCoordinates(float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3)
 {
 	verticesData[3] = u0;
 	verticesData[8] = u1;
@@ -51,26 +51,24 @@ void ReSprite::SetTextureCoordinates(float u0, float v0, float u1, float v1, flo
 	verticesData[14] = v2;
 	verticesData[19] = v3;
 	
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), verticesData, GL_STATIC_DRAW);
+	rend->bindSpriteBuffers(vbo, vao, verticesData, 20);
 }
-void ReSprite::draw()
+void Sprite::draw()
 {
 	if (_transparency) {
 		blendSprite();
 	}
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glActiveTexture(GL_TEXTURE0);
-	rend->drawSprite(GL_QUADS, TRS, vbo, ebo, vao, verticesData, vertexAmount);
+	rend->bindTexture(texture);
+	rend->drawSprite(TRS, vbo, vao, verticesData, vertexAmount);
 	if (_transparency) {
 		unblendSprite();
 	}
 }
 
-void ReSprite::blendSprite() {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+void Sprite::blendSprite() {
+	rend->blendTexture();
 }
-void ReSprite::unblendSprite() {
-	glDisable(GL_BLEND);
+
+void Sprite::unblendSprite() {
+	rend->unblendTexture();
 }
