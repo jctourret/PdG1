@@ -155,6 +155,8 @@ void TileMap::drawTileMap()
 	}
 }
 
+//hacer que haga el checkeo de colisiones no a la fuerza bruta sino que checkee nada mas
+//los tiles con los que puede estar colisionando transformando la posicion a coordenadas de tile
 bool TileMap::checkCollisionWithTileMap(Shape* shape, vec3 movement)
 {
 	if (!collidesWithTileMap(shape))
@@ -202,6 +204,7 @@ bool TileMap::checkCollisionWithTileMap(Shape* shape, vec3 movement)
 
 bool TileMap::collidesWithTileMap(Shape* shape)
 {
+													//ARREGLAR ESTO QUE POR ALGUNA RAZON ACA ES SSIN EL /2.0f
 	if (shape->getPosition().x + shape->width / 2.0f <	getPosition().x - tilemapWidth ||
 		shape->getPosition().x - shape->width / 2.0f > getPosition().x + tilemapWidth / 2.0f ||
 		shape->getPosition().y + shape->height / 2.0f < getPosition().y - tilemapHeight / 2.0f ||

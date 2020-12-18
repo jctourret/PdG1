@@ -21,16 +21,19 @@ void Game::initGame(Renderer* renderer)
 	timer = new Timer();
 	timer->start();
 	shapeA = new Shape(GL_QUADS, renderer);
-	sprite1 = new Sprite(renderer, "res/spriteSheet.png",false);
+	sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
 	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
 	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 2.0f, 2.0f);
-	vector<int> tilemapLayout = /*{ 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //*/{ 0,1,1,1,2,16,17,17,17,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
+	//automatizar, en vez de pasar id pasar una coordenada
+	vector<int> tilemapLayout = /*{ 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //*/{ 0,1,1,1,2,16,17,17,8 + 16 * 4,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
+	//automatizar, en vez de pasar id pasar una coordenada
 	vector<bool> tilemapWalkable = { true,true, true, true, true, true, true, true, true, true, 
-									true,true, true, true, true, true, false, true, true, true,
+									true,true, true, true, true, true, true, true, true, true,
 									true,true, true, true, true, true, true, true, true, true};
 	tileMap->setTileMap(5,5,tilemapLayout,tilemapWalkable);
 	animation = new Animation(); //spriteSheet 308 x 178
-
+	
+	//hacer un metodo que corte automaticamente 
 	animation->addFrame(0.0f,				 0.0f,	102.66f, 89.0f, 308, 178);
 	animation->addFrame((308 - 102.66f * 2), 0.0f,	102.66f, 89.0f, 308, 178);
 	animation->addFrame((308 - 102.66f * 1), 0.0f,	102.66f, 89.0f, 308, 178);
@@ -41,9 +44,11 @@ void Game::initGame(Renderer* renderer)
 
 	sprite1->setAnimation(animation);
 
+	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
 	shapeA->setPosition(vec3(shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
 	sprite1->setPosition(vec3(0.7, -0.5f, 0.0f));
-	sprite2->setPosition(vec3(-0.75f, 0.5f, 0.0f));
+	sprite2->setPosition(vec3(10, 10, 0.0f));
+	sprite2->setScale(vec3(1, 2, 1));
 }
 void Game::updateGame(CollisionManager collManager, Input* input)
 {
