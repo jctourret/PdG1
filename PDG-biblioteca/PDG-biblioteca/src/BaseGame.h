@@ -4,6 +4,9 @@
 #include "Timer.h"
 #include "CollisionManager.h"
 #include "Input.h"
+#include "Shape.h"
+#include "Sprite.h"
+#include "TileMap.h"
 class SABASAENGINE_API BaseGame
 {
 private:

@@ -1,7 +1,7 @@
 #pragma once
-
+#include "Exports.h"
 #include <iostream>
-class Texture
+class SABASAENGINE_API Texture
 {
 private:
 	unsigned int rendererID;

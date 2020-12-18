@@ -7,6 +7,7 @@ private:
 	Shape* shapeA;
 	Sprite* sprite1;
 	Sprite* sprite2;
+	TileMap* tileMap;
 	Animation* animation;
 	float speedX = 0;
 	float speedY = 0;

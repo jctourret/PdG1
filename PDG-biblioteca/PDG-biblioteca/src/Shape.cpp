@@ -29,7 +29,7 @@ void Shape::createRectangle()
 	rend->creatoVAO(vao);
 	rend->createVBO(recVerticesData, vertexAmount, vbo);
 	rend->createEBO(indicesData, indexAmount, ebo);
-	Texture* texture = new Texture("../res/white.png");
+	Texture* texture = new Texture("res/white.png");
 	texture->Bind(0);
 	defaultTexture = texture->getTex();
 	rend->setTexture(defaultTexture);
@@ -48,7 +48,7 @@ void Shape::createTriangle()
 	rend->creatoVAO(vao);
 	rend->createVBO(triVerticesData, vertexAmount, vbo);
 	rend->createEBO(indicesData,indexAmount,ebo);
-	Texture* texture = new Texture("../res/white.png");
+	Texture* texture = new Texture("res/white.png");
 	texture->Bind(0);
 	defaultTexture = texture->getTex();
 	rend->setTexture(defaultTexture);

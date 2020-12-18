@@ -2,6 +2,7 @@
 #include "Exports.h"
 #include "Shape.h"
 #include "Sprite.h"
+#include "Tile.h"
 #include "glm/glm.hpp"
 
 struct Collider
@@ -30,6 +31,8 @@ public:
 	bool CheckCollision(Shape* shapeA, Shape* ShapeB);
 	bool CheckCollision(Shape* shape, Sprite* sprite);
 	bool CheckCollision(Sprite* spriteA, Sprite* spriteB);
+	bool CheckCollision(Tile* tile, Shape* shape);
 	bool CheckCollisionAndPush(Shape* shape, Sprite* sprite, vec3 movement);
 	bool CheckCollisionAgainstStatic(Shape* shape, Sprite* sprite, vec3 movement);
+	bool CheckCollisionAgainstStatic(Shape* shape, Tile* tile, vec3 movement);
 };

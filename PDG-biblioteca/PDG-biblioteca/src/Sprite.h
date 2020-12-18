@@ -11,34 +11,45 @@ using namespace glm;
 
 class SABASAENGINE_API Sprite : public Entity
 {
+	Texture* textureUsed;
 	const int vertexAmount = 20;
 	const int indexAmount = 6;
+	int indicesData[6] =
+	{
+		0, 1, 3,
+		1, 2, 3
+	};
+	float baseWidth =  0.5f;
+	float baseHeight = 1.0f;
+	int _currentFrame;
+	int _prevFrame;
+	Animation* _animation;
 	void initSprite(const char* path);
+	void initSprite(unsigned int newTexture);
+	void initSprite(unsigned int newTexture, float newWidth, float newHeight);
+	unsigned int vbo;
+	unsigned int vao;
+	unsigned int ebo;
+protected:	
 	float verticesData[20] = {
 		 0.25f, 0.5f, 0.0f, 1.0f, 1.0f,
 		 0.25f,-0.5f, 0.0f, 1.0f, 0.0f,
 		-0.25f,-0.5f, 0.0f, 0.0f, 0.0f,
 		-0.25f, 0.5f, 0.0f, 0.0f, 1.0f
 	};
-	int indicesData[6] =
-	{
-		0, 1, 3,
-		1, 2, 3
-	};
-	unsigned int vbo;
-	unsigned int vao;
-	unsigned int ebo;
-	unsigned int texture;
-	int _currentFrame;
-	int _prevFrame;
-	Animation* _animation;
+	float _scaleX;
+	float _scaleY;
 	bool _transparency;
+	unsigned int texture;
 public:
 	Sprite(Renderer* renderer, const char* path,bool transparency);
+	Sprite(Renderer* renderer, unsigned int newTexture,bool transparency);
+	Sprite(Renderer* renderer, unsigned int newTexture, bool transparency, float newWidth, float newHeight);
+	~Sprite();
 	void draw();
-	void UpdateSprite(Timer& timer);
+	void updateSprite(Timer& timer);
 	void setAnimation(Animation* animation) { _animation = animation; }
-	void SetTextureCoordinates(float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3);
+	void setTextureCoordinates(float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3);
 	float width;
 	float height;
 	void blendSprite();

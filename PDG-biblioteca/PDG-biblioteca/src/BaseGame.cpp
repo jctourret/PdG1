@@ -1,7 +1,5 @@
 #include "BaseGame.h"
 #include <iostream>
-#include "Shape.h"
-#include "Sprite.h"
 #include <glm/ext/matrix_clip_space.hpp>
 
 using namespace std;
@@ -44,7 +42,6 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 
 int BaseGame::engineLoop()
 {
-	//game init
 	initGame(renderer);
 
 	while (!glfwWindowShouldClose(window->getWindow()) && !gameShouldClose)
