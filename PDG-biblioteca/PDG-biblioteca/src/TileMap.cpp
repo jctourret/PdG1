@@ -161,8 +161,9 @@ bool TileMap::checkCollisionWithTileMap(Shape* shape, vec3 movement)
 		return false;
 	
 	bool collides = false;
-	float convertedPosX = (shape->getPosition().x + (tilemapWidth/2.0f))   * _tileWidth;
-	float convertedPosY = (shape->getPosition().y - (tilemapHeight / 2.0f))  * _tileHeight;
+	
+	//float convertedPosX = (shape->getPosition().x + (tilemapWidth/2.0f))   * _tileWidth;
+	//float convertedPosY = (shape->getPosition().y - (tilemapHeight / 2.0f))  * _tileHeight;
 
 	for (int i = 0; i < tilesLayout.size(); i++)
 	{

@@ -24,9 +24,11 @@ void Game::initGame(Renderer* renderer)
 	sprite1 = new Sprite(renderer, "res/spriteSheet.png",false);
 	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
 	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 2.0f, 2.0f);
-	vector<int> tilemapLayout = { 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //{ 0,1,1,1,2,16,17,17,17,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
-	vector<bool> tilemapWalkable = { false,true, true, true, true, true, true, true, true, true };
-	tileMap->setTileMap(10,1,tilemapLayout,tilemapWalkable);
+	vector<int> tilemapLayout = /*{ 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //*/{ 0,1,1,1,2,16,17,17,17,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
+	vector<bool> tilemapWalkable = { true,true, true, true, true, true, true, true, true, true, 
+									true,true, true, true, true, true, false, true, true, true,
+									true,true, true, true, true, true, true, true, true, true};
+	tileMap->setTileMap(5,5,tilemapLayout,tilemapWalkable);
 	animation = new Animation(); //spriteSheet 308 x 178
 
 	animation->addFrame(0.0f,				 0.0f,	102.66f, 89.0f, 308, 178);
@@ -158,10 +160,10 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	sprite1->updateSprite(*timer);
 
 	//draw
+	tileMap->drawTileMap();
 	shapeA->draw();
 	sprite1->draw();
 	sprite2->draw();
-	tileMap->drawTileMap();
 
 
 }
