@@ -157,6 +157,9 @@ void TileMap::drawTileMap()
 
 //hacer que haga el checkeo de colisiones no a la fuerza bruta sino que checkee nada mas
 //los tiles con los que puede estar colisionando transformando la posicion a coordenadas de tile
+//ADEMAS LA COLISION TIENE QUE FUNCIONAR SIN IMPORTAR LA ESCALA, ES UN PROBLEMA DE LA COLISION EN
+//GENERAL, NO SOLO TILEMAP, PUEDE TENER QUE VER CON CHECKEAR LA "NO-COLISION" EN VEZ DE LA COLISION
+//ARREGLAR BIEN EL DIBUJADO, QUEDO LO DE LOS TRIANGULOS SIN IMPLEMENTAR
 bool TileMap::checkCollisionWithTileMap(Shape* shape, vec3 movement)
 {
 	if (!collidesWithTileMap(shape))
