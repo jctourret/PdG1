@@ -19,7 +19,7 @@ class SABASAENGINE_API Sprite : public Entity
 		0, 1, 3,
 		1, 2, 3
 	};
-	float baseWidth =  0.5f;
+	float baseWidth =  1.0f;
 	float baseHeight = 1.0f;
 	int _currentFrame;
 	int _prevFrame;
@@ -32,10 +32,10 @@ class SABASAENGINE_API Sprite : public Entity
 	unsigned int ebo;
 protected:	
 	float verticesData[20] = {
-		 0.25f, 0.5f, 0.0f, 1.0f, 1.0f,
-		 0.25f,-0.5f, 0.0f, 1.0f, 0.0f,
-		-0.25f,-0.5f, 0.0f, 0.0f, 0.0f,
-		-0.25f, 0.5f, 0.0f, 0.0f, 1.0f
+		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f
 	};
 	float _scaleX;
 	float _scaleY;

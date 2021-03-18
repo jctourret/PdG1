@@ -35,5 +35,6 @@ public:
 	void startProgram(glm::mat4 model);
 	void blendTexture();
 	void unblendTexture();
+	void setVP();
 };
 

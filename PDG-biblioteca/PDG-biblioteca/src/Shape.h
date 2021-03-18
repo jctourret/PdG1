@@ -12,10 +12,10 @@ class SABASAENGINE_API Shape : public Entity
 	void createRectangle();
 	void createTriangle();
 	float recVerticesData[20] = {
-		-0.25f, 0.5f, 0.0f, 0.0f, 1.0f,
-		-0.25f,-0.5f, 0.0f, 0.0f, 0.0f,
-		 0.25f, 0.5f, 0.0f, 1.0f, 1.0f,
-		 0.25f,-0.5f, 0.0f, 1.0f, 0.0f
+		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
+		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f
 	};
 	float triVerticesData[15] =
 	{

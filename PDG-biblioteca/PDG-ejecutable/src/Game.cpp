@@ -12,7 +12,7 @@ Game ::~Game()
 
 void Game::play()
 {
-	initBaseGame(1000, 500, "Awesome game");
+	initBaseGame(1000, 500, "Puzzle Demo");
 	engineLoop();
 }
 
@@ -45,10 +45,22 @@ void Game::initGame(Renderer* renderer)
 	sprite1->setAnimation(animation);
 
 	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
-	shapeA->setPosition(vec3(shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
-	sprite1->setPosition(vec3(0.7, -0.5f, 0.0f));
-	sprite2->setPosition(vec3(10, 10, 0.0f));
+	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
+	shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
+	
+	sprite1->setPosition(vec3(0.7f, -0.3f, 0.0f));
+	sprite2->setPosition(vec3(-0.75, 1, 0.0f));
 	sprite2->setScale(vec3(1, 2, 1));
+
+	//hacer una animacion de fuego que freene el paso, un puzzle en el que empujas algo
+	//y entra en un trigger y mientras esta en el trigger se apaga el fuego y podes pasar
+	//si pasas hay un trigger que te muestra que ganaste
+
+
+	//las collisiones no funcionan porque estan hechas con las medidas viejas
+	//cuanddo arreglo lo de las medidas con la view se rompen los sprites, la animacion
+	//mas que nada (opcion, cambiar el aspect ratio)
+
 }
 void Game::updateGame(CollisionManager collManager, Input* input)
 {
@@ -154,6 +166,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
 	shapeA->setRotation(newRot);
+
 
 	if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
 	collManager.CheckCollisionAgainstStatic(shapeA, sprite1, movement);
