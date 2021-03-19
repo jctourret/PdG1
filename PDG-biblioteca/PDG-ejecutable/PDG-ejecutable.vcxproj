@@ -29,7 +29,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D36787F3-B97E-4395-B8C9-46A7B623F854}</ProjectGuid>
     <RootNamespace>PDGejecutable</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -50,8 +50,8 @@ void Renderer::initShaderProgram() {
 	glAttachShader(_shaderProgram, _fragmentShader);
 	glLinkProgram(_shaderProgram);
 	glValidateProgram(_shaderProgram);
-
 	glUseProgram(_shaderProgram);
+	setVP();
 }
 
 void Renderer::creatoVAO(unsigned int &vao)
@@ -146,7 +146,6 @@ void Renderer::startProgram(glm::mat4 model) {
 	unsigned int transformLocation = glGetUniformLocation( _shaderProgram, "Model");
 	glUseProgram(_shaderProgram);
 	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(model));
-	setVP();
 }
 
 void Renderer::blendTexture() {
@@ -163,8 +162,15 @@ void Renderer::setVP(){
 	unsigned int viewLocation = glGetUniformLocation(_shaderProgram, "View");
 	glm::mat4 proj = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	view = glm::lookAt(glm::vec3(0.0, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	proj = glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); //glm::perspective(glm::radians(90.0f), 1.0f, 0.0f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(proj));
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
+}
+
+void Renderer::updateView(glm::vec3 position,glm::vec3 target){
+	unsigned int viewLocation = glGetUniformLocation(_shaderProgram, "View");
+	glm::mat4 view;
+	view = glm::lookAt(position, target, glm::vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 }

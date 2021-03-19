@@ -24,6 +24,7 @@ void Game::initGame(Renderer* renderer)
 	sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
 	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
 	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 2.0f, 2.0f);
+	_camera = new Camera(renderer);
 	//automatizar, en vez de pasar id pasar una coordenada
 	vector<int> tilemapLayout = /*{ 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //*/{ 0,1,1,1,2,16,17,17,8 + 16 * 4,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
 	//automatizar, en vez de pasar id pasar una coordenada
@@ -155,6 +156,24 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	{
 		rotZSpeed = 0;
 	}
+	if (input->isKeyDown(GLFW_KEY_KP_8))
+	{
+		camPosY ++;
+	}
+	if (input->isKeyDown(GLFW_KEY_KP_5))
+	{
+		camPosY--;
+	}
+	if (input->isKeyDown(GLFW_KEY_KP_4))
+	{
+		camPosX++;
+	}
+	if (input->isKeyDown(GLFW_KEY_KP_6))
+	{
+		camPosX--;
+	}
+
+	_camera->setPosition(glm::vec3 (camPosX,camPosY,camPosZ));
 
 	vec3 movement = vec3(speedX, speedY, speedZ) * timer->getDT();
 
@@ -174,7 +193,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	tileMap->checkCollisionWithTileMap(shapeA, movement);
 
 	timer->updateTimer();
-
+	_camera->setTransform();
 	sprite1->updateSprite(*timer);
 
 	//draw
@@ -182,8 +201,6 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	shapeA->draw();
 	sprite1->draw();
 	sprite2->draw();
-
-
 }
 void Game::destroyGame()
 {

@@ -43,6 +43,8 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 	//renderer->setVP();
 }
 
+const float radius = 10.0f;
+
 int BaseGame::engineLoop()
 {
 	initGame(renderer);
@@ -55,7 +57,6 @@ int BaseGame::engineLoop()
 		
 		//game update
 		updateGame(collManager,input);
-
 		//engine input
 		if (input->isKeyDown(GLFW_KEY_ESCAPE))
 		{

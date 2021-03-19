@@ -7,6 +7,7 @@
 #include "Shape.h"
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Camera.h"
 class SABASAENGINE_API BaseGame
 {
 private:

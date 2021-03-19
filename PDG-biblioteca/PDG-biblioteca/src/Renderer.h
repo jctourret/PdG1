@@ -36,5 +36,6 @@ public:
 	void blendTexture();
 	void unblendTexture();
 	void setVP();
+	void updateView(glm::vec3 position, glm::vec3 target);
 };
 
