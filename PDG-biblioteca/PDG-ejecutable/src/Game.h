@@ -18,9 +18,9 @@ private:
 	float rotYSpeed = 0;
 	float rotZSpeed = 0;
 
-	float camPosX = 0.0f;
-	float camPosY = 0.0f;
-	float camPosZ = 1.0f;
+	float camSpeedX = 0.0f;
+	float camSpeedY = 0.0f;
+	float camSpeedZ = 0.0f;
 
 	float camTargetX = 0.0f;
 	float camTargetY = 0.0f;

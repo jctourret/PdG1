@@ -16,6 +16,7 @@ public:
 	void setTransform();
 	void setPosition(glm::vec3 position);
 	glm::vec3 getPosition();
+	void move(glm::vec3 movement);
 	void setTarget(glm::vec3 position);
 	glm::vec3 getTarget();
 };

@@ -45,6 +45,9 @@ void Game::initGame(Renderer* renderer)
 
 	sprite1->setAnimation(animation);
 
+
+	_camera->setPosition(glm::vec3(0.0f, 0.0f, 1.0f));
+
 	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
 	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
 	shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
@@ -158,26 +161,36 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	}
 	if (input->isKeyDown(GLFW_KEY_KP_8))
 	{
-		camPosY ++;
+		camSpeedY = 1;
 	}
-	if (input->isKeyDown(GLFW_KEY_KP_5))
+	else if (input->isKeyDown(GLFW_KEY_KP_5))
 	{
-		camPosY--;
+		camSpeedY = -1;
+	}
+	else
+	{
+		camSpeedY = 0;
 	}
 	if (input->isKeyDown(GLFW_KEY_KP_4))
 	{
-		camPosX++;
+		camSpeedX = 1;
 	}
-	if (input->isKeyDown(GLFW_KEY_KP_6))
+	else if (input->isKeyDown(GLFW_KEY_KP_6))
 	{
-		camPosX--;
+		camSpeedX = -1;
+	}
+	else
+	{
+		camSpeedX = 0;
 	}
 
-	_camera->setPosition(glm::vec3 (camPosX,camPosY,camPosZ));
+	vec3 cameraMovement = vec3(camSpeedX, camSpeedY, camSpeedZ) * timer->getDT();
 
-	vec3 movement = vec3(speedX, speedY, speedZ) * timer->getDT();
+	_camera->move(glm::vec3 (cameraMovement));
 
-	vec3 newPos = shapeA->getPosition() + movement;
+	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
+
+	vec3 newPos = shapeA->getPosition() + playerMovement;
 	shapeA->setPosition(newPos);
 
 	vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
@@ -188,9 +201,9 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 
 	if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
-	collManager.CheckCollisionAgainstStatic(shapeA, sprite1, movement);
+	collManager.CheckCollisionAgainstStatic(shapeA, sprite1, playerMovement);
 
-	tileMap->checkCollisionWithTileMap(shapeA, movement);
+	tileMap->checkCollisionWithTileMap(shapeA, playerMovement);
 
 	timer->updateTimer();
 	_camera->setTransform();

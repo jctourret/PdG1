@@ -18,13 +18,24 @@ void Camera::setTransform(){
 
 void Camera::setPosition(glm::vec3 position) {
 	_position = position;
+	setTransform();
 }
+
 glm::vec3 Camera::getPosition() {
 	return _position;
 }
+
+void Camera::move(glm::vec3 movement)
+{
+	_position += movement;
+	setTransform();
+}
+
+
 void Camera::setTarget(glm::vec3 target) {
 	_target = target;
 }
+
 glm::vec3 Camera::getTarget() {
 	return _target;
 }
