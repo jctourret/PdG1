@@ -171,11 +171,11 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	{
 		camSpeedY = 0;
 	}
-	if (input->isKeyDown(GLFW_KEY_KP_4))
+	if (input->isKeyDown(GLFW_KEY_KP_6))
 	{
 		camSpeedX = 1;
 	}
-	else if (input->isKeyDown(GLFW_KEY_KP_6))
+	else if (input->isKeyDown(GLFW_KEY_KP_4))
 	{
 		camSpeedX = -1;
 	}
@@ -183,11 +183,25 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	{
 		camSpeedX = 0;
 	}
+	if (input->isKeyDown(GLFW_KEY_KP_9))
+	{
+		camSpeedZ = 1;
+	}
+	else if (input->isKeyDown(GLFW_KEY_KP_7))
+	{
+		camSpeedZ = -1;
+	}
+	else
+	{
+		camSpeedZ = 0;
+	}
 
 	vec3 cameraMovement = vec3(camSpeedX, camSpeedY, camSpeedZ) * timer->getDT();
 
 	_camera->move(glm::vec3 (cameraMovement));
+	//_camera->rotate(glm::vec3(cameraMovement));
 
+	
 	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
 
 	vec3 newPos = shapeA->getPosition() + playerMovement;

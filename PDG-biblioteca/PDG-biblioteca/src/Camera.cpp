@@ -13,7 +13,9 @@ Camera::~Camera(){
 }
 
 void Camera::setTransform(){
-	_renderer->updateView(_position,_target);
+
+	//_renderer->updateView(_position,_target);
+	_renderer->updateView(_position,front,up);
 }
 
 void Camera::setPosition(glm::vec3 position) {

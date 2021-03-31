@@ -9,6 +9,8 @@ class SABASAENGINE_API Camera
 protected:
 	glm::vec3 _position;
 	glm::vec3 _target;
+	glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 	Renderer* _renderer;
 public:
 	Camera(Renderer* rend);
