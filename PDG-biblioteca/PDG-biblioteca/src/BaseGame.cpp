@@ -33,6 +33,8 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 	glewExperimental = GL_TRUE;
 	glewInit();
 
+	glfwSetInputMode(window->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	
 	renderer->initVertexShader();
 	renderer->initFragmentShader();
 	renderer->initShaderProgram();

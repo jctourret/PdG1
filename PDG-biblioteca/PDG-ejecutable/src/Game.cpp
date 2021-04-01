@@ -66,6 +66,32 @@ void Game::initGame(Renderer* renderer)
 	//mas que nada (opcion, cambiar el aspect ratio)
 
 }
+
+void Game::mouse_callback(Window window, Camera camera) {
+	glfwGetCursorPos(window.getWindow(), &mouseCurrentX, &mouseCurrentY);
+	double xoffset = mouseCurrentX - mouseLastX;
+	double yoffset = mouseLastY - mouseCurrentY; // reversed since y-coordinates range from bottom to top
+	mouseLastX = mouseCurrentX;
+	mouseLastY = mouseCurrentY;
+	const double sensitivity = 0.1f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	mousePitch += xoffset;
+	mouseYaw += yoffset;
+	if (mousePitch > 89) {
+		mousePitch = 89;
+	}
+	if (mousePitch < -89) {
+		mousePitch = -89;
+	}
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(mouseYaw)) * cos(glm::radians(mousePitch));
+	direction.y = sin(glm::radians(mousePitch));
+	direction.z = sin(glm::radians(mouseYaw)) * cos(glm::radians(mousePitch));
+	camera.setFront(glm::normalize(direction));
+}
+
 void Game::updateGame(CollisionManager collManager, Input* input)
 {
 	//input
@@ -200,8 +226,8 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	_camera->move(glm::vec3 (cameraMovement));
 	//_camera->rotate(glm::vec3(cameraMovement));
+	mouse_callback(*window, *_camera);
 
-	
 	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
 
 	vec3 newPos = shapeA->getPosition() + playerMovement;
@@ -220,7 +246,6 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	tileMap->checkCollisionWithTileMap(shapeA, playerMovement);
 
 	timer->updateTimer();
-	_camera->setTransform();
 	sprite1->updateSprite(*timer);
 
 	//draw

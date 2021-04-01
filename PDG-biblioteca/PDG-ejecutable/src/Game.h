@@ -25,6 +25,13 @@ private:
 	float camTargetX = 0.0f;
 	float camTargetY = 0.0f;
 	float camTargetZ = 0.0f;
+
+	double mouseLastX;
+	double mouseLastY;
+	double mouseCurrentX;
+	double mouseCurrentY;
+	double mousePitch;
+	double mouseYaw;
 public:
 	Game();
 	~Game();
@@ -32,4 +39,5 @@ public:
 	void initGame(Renderer* renderer) override;
 	void updateGame(CollisionManager collManager, Input* input) override;
 	void destroyGame() override;
+	void mouse_callback(Window window, Camera camera);
 };

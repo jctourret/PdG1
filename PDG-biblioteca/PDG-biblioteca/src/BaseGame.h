@@ -11,11 +11,12 @@
 class SABASAENGINE_API BaseGame
 {
 private:
-	Window* window;
 	Renderer* renderer;
 	CollisionManager collManager;
 	Input* input;
 	bool gameShouldClose;
+protected:
+	Window* window;
 public:
 	BaseGame();
 	~BaseGame();
