@@ -21,6 +21,10 @@ void Game::initGame(Renderer* renderer)
 	timer = new Timer();
 	timer->start();
 	shapeA = new Shape(GL_QUADS, renderer);
+	//test
+	cube = new Shape(GL_TRIANGLES, renderer);
+	cube->setPosition(glm::vec3(1.0f, 1.0f, 0.0f));
+
 	sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
 	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
 	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 2.0f, 2.0f);
@@ -209,11 +213,11 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	{
 		camSpeedX = 0;
 	}
-	if (input->isKeyDown(GLFW_KEY_KP_9))
+	if (input->isKeyDown(GLFW_KEY_KP_7))
 	{
 		camSpeedZ = 1;
 	}
-	else if (input->isKeyDown(GLFW_KEY_KP_7))
+	else if (input->isKeyDown(GLFW_KEY_KP_9))
 	{
 		camSpeedZ = -1;
 	}
@@ -221,12 +225,49 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	{
 		camSpeedZ = 0;
 	}
+	//
+	if (input->isKeyDown(GLFW_KEY_T))
+	{
+		camTargetY = 1;
+	}
+	else if (input->isKeyDown(GLFW_KEY_G))
+	{
+		camTargetY = -1;
+	}
+	else
+	{
+		camTargetY = 0;
+	}
+	if (input->isKeyDown(GLFW_KEY_H))
+	{
+		camTargetX = 1;
+	}
+	else if (input->isKeyDown(GLFW_KEY_F))
+	{
+		camTargetX = -1;
+	}
+	else
+	{
+		camTargetX = 0;
+	}
+	if (input->isKeyDown(GLFW_KEY_R)) //esta parte se puede remover
+	{
+		camTargetZ = 1;
+	}
+	else if (input->isKeyDown(GLFW_KEY_Y))
+	{
+		camTargetZ = -1;
+	}
+	else
+	{
+		camTargetZ = 0;
+	}
 
 	vec3 cameraMovement = vec3(camSpeedX, camSpeedY, camSpeedZ) * timer->getDT();
-
-	_camera->move(glm::vec3 (cameraMovement));
-	//_camera->rotate(glm::vec3(cameraMovement));
-	mouse_callback(*window, *_camera);
+	vec3 cameraRotation = vec3(camTargetX, camTargetY, camTargetZ) * camRotSpeed * timer->getDT();
+	_camera->moveOnLocal(glm::vec3 (cameraMovement));
+	_camera->rotate(glm::vec3(cameraRotation));
+	//mouse_callback(*window, *_camera);
 
 	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
 
@@ -251,6 +292,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	//draw
 	tileMap->drawTileMap();
 	shapeA->draw();
+	cube->draw();
 	sprite1->draw();
 	sprite2->draw();
 }

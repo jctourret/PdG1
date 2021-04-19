@@ -62,14 +62,21 @@ void Renderer::creatoVAO(unsigned int &vao)
 
 void Renderer::createVBO(float* vertexDataArray, int arraySize, unsigned int &vbo)
 {
-	std::vector<float> _vertex;
-	for (int i = 0; i < arraySize; i++)
-	{
-		_vertex.push_back(vertexDataArray[i]);
-	}
+	//std::vector<float> _vertex;
+	//for (int i = 0; i < arraySize; i++)
+	//{
+	//	_vertex.push_back(vertexDataArray[i]);
+	//}
+	//glGenBuffers(1, &vbo);
+	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	//glBufferData(GL_ARRAY_BUFFER, _vertex.size() * sizeof(GLfloat), &(_vertex[0]), GL_STATIC_DRAW);
+
+
+	int vertexSize = sizeof(vertexDataArray) * arraySize;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, _vertex.size() * sizeof(GLfloat), &(_vertex[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertexSize, vertexDataArray, GL_STATIC_DRAW);
+
 }
 
 void Renderer::createEBO(int* indexArray, int arraySize, unsigned int &_ebo) 
@@ -106,12 +113,12 @@ void Renderer::deleteVertexShader() {
 	glDeleteShader(_vertexShader);
 }
 
-void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size)
+void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize)
 {
 	bindSpriteBuffers(vbo,vao,vertex,size);
 	setSpriteAttrib();
 	startProgram(trs);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
 }
 

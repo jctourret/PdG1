@@ -5,6 +5,9 @@ class Game: BaseGame
 private:
 	Timer* timer;
 	Shape* shapeA;
+	//test
+	Shape* cube;
+
 	Sprite* sprite1;
 	Sprite* sprite2;
 	TileMap* tileMap;
@@ -25,6 +28,7 @@ private:
 	float camTargetX = 0.0f;
 	float camTargetY = 0.0f;
 	float camTargetZ = 0.0f;
+	float camRotSpeed = 50.0f;
 
 	double mouseLastX;
 	double mouseLastY;

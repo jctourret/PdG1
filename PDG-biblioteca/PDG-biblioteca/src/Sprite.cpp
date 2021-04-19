@@ -128,7 +128,7 @@ void Sprite::draw()
 		blendSprite();
 	}
 	rend->bindTexture(texture);
-	rend->drawSprite(TRS, vbo, vao, verticesData, vertexAmount);
+	rend->drawSprite(TRS, vbo, vao, verticesData, vertexAmount, indexAmount);
 	if (_transparency) {
 		unblendSprite();
 	}

@@ -38,9 +38,11 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 	renderer->initVertexShader();
 	renderer->initFragmentShader();
 	renderer->initShaderProgram();
-	renderer->setPosAttrib();	
-	renderer->setTextureAttrib();
-
+	
+	//quitado:
+	//renderer->setPosAttrib();	
+	//renderer->setTextureAttrib();
+	
 	//test VP
 	//renderer->setVP();
 }
