@@ -1,19 +1,23 @@
 #include "Shape.h"
 #include "glm/gtc/type_ptr.hpp"
 
-Shape::Shape(unsigned int geometry, Renderer* renderer):Entity(renderer)
+Shape::Shape(ShapeTypes shapeType, Renderer* renderer):Entity(renderer)
 {
 	rend = renderer;
-	_geometry = geometry;
-	
-	if (_geometry == GL_QUADS)
+	_shapeType = shapeType;
+	vertexToUse = NULL;
+	switch (_shapeType)
 	{
-		createRectangle();
-	}
-	else
-	{
-		//createTriangle();
+	case triangle:
+		createTriangle();
+		break;
+	case cube:
 		createCube();
+		break;
+	default:
+	case rectangle:
+		createRectangle();
+		break;
 	}
 }
 
@@ -25,30 +29,27 @@ void Shape::createCube()
 	height = 0.5f - (-0.5f);
 	int indicesData[36] =
 	{
-
-		/*Above ABC,BCD*/
 		0,1,2,
 		1,2,3,
-
-		/*Following EFG,FGH*/
+	
 		4,5,6,
 		5,6,7,
-		/*Left ABF,AEF*/
+		
 		0,1,5,
 		0,4,5,
-		/*Right side CDH,CGH*/
+		
 		2,3,7,
 		2,6,7,
-		/*ACG,AEG*/
+		
 		0,2,6,
 		0,4,6,
-		/*Behind BFH,BDH*/
+		
 		1,5,7,
 		1,3,7
-
 	};
+	vertexToUse = cubeVerticesData;
 	rend->creatoVAO(vao);
-	rend->createVBO(cubeVerticesData, vertexAmount, vbo);
+	rend->createVBO(vertexToUse, vertexAmount, vbo);
 	rend->createEBO(indicesData, indexAmount, ebo);
 	Texture* texture = new Texture("res/white.png");
 	texture->Bind(0);
@@ -67,8 +68,9 @@ void Shape::createRectangle()
 	    0, 1, 3,
 		1, 2, 3
 	};
+	vertexToUse = recVerticesData;
 	rend->creatoVAO(vao);
-	rend->createVBO(recVerticesData, vertexAmount, vbo);
+	rend->createVBO(vertexToUse, vertexAmount, vbo);
 	rend->createEBO(indicesData, indexAmount, ebo);
 	Texture* texture = new Texture("res/white.png");
 	texture->Bind(0);
@@ -86,8 +88,9 @@ void Shape::createTriangle()
 	};
 	width = 0.25f - (-0.25f);
 	height = 0.5f - (-0.5f);
+	vertexToUse = triVerticesData;
 	rend->creatoVAO(vao);
-	rend->createVBO(triVerticesData, vertexAmount, vbo);
+	rend->createVBO(vertexToUse, vertexAmount, vbo);
 	rend->createEBO(indicesData,indexAmount,ebo);
 	Texture* texture = new Texture("res/white.png");
 	texture->Bind(0);
@@ -99,12 +102,6 @@ void Shape::draw()
 {
 	glBindTexture(GL_TEXTURE_2D, defaultTexture);
 	glActiveTexture(GL_TEXTURE0);
-	if (_geometry == GL_QUADS)
-	{
-		rend->drawSprite(TRS, vbo, vao, recVerticesData, vertexAmount, indexAmount); //
-	}
-	else
-	{
-		rend->drawSprite(TRS, vbo, vao, cubeVerticesData, vertexAmount, indexAmount); //
-	}
+
+	rend->drawSprite(TRS, vbo, vao, vertexToUse, vertexAmount, indexAmount); 
 }

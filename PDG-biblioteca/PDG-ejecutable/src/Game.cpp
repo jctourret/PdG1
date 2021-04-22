@@ -20,9 +20,9 @@ void Game::initGame(Renderer* renderer)
 {
 	timer = new Timer();
 	timer->start();
-	shapeA = new Shape(GL_QUADS, renderer);
+	shapeA = new Shape(ShapeTypes::rectangle, renderer);
 	//test
-	cube = new Shape(GL_TRIANGLES, renderer);
+	cube = new Shape(ShapeTypes::cube, renderer);
 	cube->setPosition(glm::vec3(1.0f, 1.0f, 0.0f));
 
 	sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
@@ -300,6 +300,7 @@ void Game::destroyGame()
 {
 	if (timer) delete timer;
 	if (shapeA) delete shapeA;
+	if (cube) delete cube;
 	if (sprite1) delete sprite1;
 	if (sprite2) delete sprite2;
 	if (tileMap) delete tileMap;

@@ -6,9 +6,16 @@
 
 using namespace glm;
 
+enum ShapeTypes
+{
+	rectangle,
+	triangle,
+	cube
+};
+
 class SABASAENGINE_API Shape : public Entity
 {
-	unsigned int _geometry;
+private:
 	void createRectangle();
 	void createTriangle();
 	void createCube();
@@ -43,8 +50,10 @@ class SABASAENGINE_API Shape : public Entity
 	unsigned int vbo;
 	unsigned int ebo;
 	unsigned int defaultTexture;
+	ShapeTypes _shapeType;
+	float* vertexToUse;
 public:
-	Shape(unsigned int geometry, Renderer* renderer);
+	Shape(ShapeTypes shapeType, Renderer* renderer);
 	void draw();
 	float width;
 	float height;
