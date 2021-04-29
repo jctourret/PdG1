@@ -32,6 +32,8 @@ void BaseGame::initBaseGame(int screenWidth, int screenHeight, const char* title
 	glfwMakeContextCurrent(window->getWindow());
 	glewExperimental = GL_TRUE;
 	glewInit();
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	glfwSetInputMode(window->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
@@ -58,7 +60,8 @@ int BaseGame::engineLoop()
 		//clear
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER);
 		//game update
 		updateGame(collManager,input);
 		//engine input

@@ -4,7 +4,7 @@
 Camera::Camera(Renderer* rend)
 {
 	_renderer = rend;
-	_position = glm::vec3(0.0f, 0.0f, 0.0f);
+	_position = glm::vec3(-1.0f, 0.0f, 0.0f);
 	_target = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 

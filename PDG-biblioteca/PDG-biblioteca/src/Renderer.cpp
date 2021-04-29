@@ -170,7 +170,7 @@ void Renderer::setVP(){
 	glm::mat4 proj = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	view = glm::lookAt(glm::vec3(0.0, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	proj = /*glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */glm::perspective(glm::radians(90.0f), 2.0f, 0.0f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
+	proj = /*glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */glm::perspective(45.0f, 2.0f, 1.0f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(proj));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 }

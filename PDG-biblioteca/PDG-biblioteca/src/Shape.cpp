@@ -51,7 +51,7 @@ void Shape::createCube()
 	rend->creatoVAO(vao);
 	rend->createVBO(vertexToUse, vertexAmount, vbo);
 	rend->createEBO(indicesData, indexAmount, ebo);
-	Texture* texture = new Texture("res/white.png");
+	Texture* texture = new Texture("res/Choclo.png");
 	texture->Bind(0);
 	defaultTexture = texture->getTex();
 	rend->setTexture(defaultTexture);
