@@ -23,29 +23,29 @@ Shape::Shape(ShapeTypes shapeType, Renderer* renderer):Entity(renderer)
 
 void Shape::createCube()
 {
-	vertexAmount = 40;
+	vertexAmount = 288;
 	indexAmount = 36;
 	width = 0.25f - (-0.25f);
 	height = 0.5f - (-0.5f);
 	int indicesData[36] =
 	{
 		0,1,2,
-		1,2,3,
-	
+		2,3,0,
+
 		4,5,6,
-		5,6,7,
-		
-		0,1,5,
-		0,4,5,
-		
-		2,3,7,
-		2,6,7,
-		
-		0,2,6,
-		0,4,6,
-		
-		1,5,7,
-		1,3,7
+		6,7,4,
+
+		8,9,10,
+		10,11,8,
+
+		12,13,14,
+		14,15,12,
+
+		16,17,18,
+		18,19,16,
+
+		20,21,22,
+		22,23,20
 	};
 	vertexToUse = cubeVerticesData;
 	rend->creatoVAO(vao);
@@ -59,7 +59,7 @@ void Shape::createCube()
 
 void Shape::createRectangle()
 {
-	vertexAmount = 20;
+	vertexAmount = 32;
 	indexAmount = 6;
 	width = 0.25f - (-0.25f);
 	height = 0.5f - (-0.5f);
@@ -80,7 +80,7 @@ void Shape::createRectangle()
 
 void Shape::createTriangle()
 {
-	vertexAmount = 15;
+	vertexAmount = 24;
 	indexAmount = 3;
 	int indicesData[3] =
 	{

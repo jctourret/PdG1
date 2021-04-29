@@ -14,7 +14,7 @@ private:
 	unsigned int _shaderProgram;
 	int _posAttrib;
 	int _textureAttrib;
-
+	int _normalAttrib;
 public:
 	void initVertexShader();
 	void initFragmentShader();
@@ -24,6 +24,7 @@ public:
 	void createEBO(int* indexArray, int arraySize, unsigned int &_ebo);
 	void setPosAttrib();
 	void setTextureAttrib();
+	void setNormalAttrib();
 	void deleteShaderProgram();
 	void deleteFragmentShader();
 	void deleteVertexShader();

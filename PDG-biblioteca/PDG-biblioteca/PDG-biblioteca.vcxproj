@@ -159,6 +159,7 @@ copy /Y "$(OutDir)PDG-biblioteca.lib" "$(SolutionDir)PDG-ejecutable\libs\PDG-bib
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Lightining.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\BaseGame.h" />
     <ClInclude Include="src\Camera.h" />
@@ -178,6 +179,7 @@ copy /Y "$(OutDir)PDG-biblioteca.lib" "$(SolutionDir)PDG-ejecutable\libs\PDG-bib
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lightining.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\BaseGame.cpp" />
     <ClCompile Include="src\Camera.cpp" />

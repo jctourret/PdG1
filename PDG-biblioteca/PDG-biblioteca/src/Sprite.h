@@ -12,7 +12,7 @@ using namespace glm;
 class SABASAENGINE_API Sprite : public Entity
 {
 	Texture* textureUsed;
-	const int vertexAmount = 20;
+	const int vertexAmount = 32;
 	const int indexAmount = 6;
 	int indicesData[6] =
 	{
@@ -31,11 +31,11 @@ class SABASAENGINE_API Sprite : public Entity
 	unsigned int vao;
 	unsigned int ebo;
 protected:	
-	float verticesData[20] = {
-		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
-		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f,
-		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f
+	float verticesData[32] = {
+		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f,  0.0f,  1.0f,
+		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  0.0f,  1.0f,
+		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f, 0.0f,  0.0f,  1.0f,
+		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  0.0f,  1.0f
 	};
 	float _scaleX;
 	float _scaleY;

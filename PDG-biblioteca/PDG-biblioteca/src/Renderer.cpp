@@ -8,6 +8,7 @@ const GLchar* vertexSource = R"glsl(
 #version 330 core
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texCoor;
+layout (location = 2) in vec3 normal;
 out vec2 texCoord;
 uniform mat4 Model;
 uniform mat4 View;
@@ -89,7 +90,7 @@ void Renderer::createEBO(int* indexArray, int arraySize, unsigned int &_ebo)
 void Renderer::setPosAttrib() 
 {
 	_posAttrib = glGetAttribLocation(_shaderProgram, "position");
-	glVertexAttribPointer(_posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+	glVertexAttribPointer(_posAttrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
 	glEnableVertexAttribArray(_posAttrib); //cambie esto de 0 a _posAttrib
 }
 
@@ -97,8 +98,15 @@ void Renderer::setPosAttrib()
 void Renderer::setTextureAttrib()
 {
 	_textureAttrib = glGetAttribLocation(_shaderProgram, "texCoor");
-	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
 	glEnableVertexAttribArray(_textureAttrib);//cambie esto de 1 a _textureAttrib
+}
+
+void Renderer::setNormalAttrib()
+{
+	_normalAttrib = glGetAttribLocation(_shaderProgram, "normal");
+	glVertexAttribPointer(_normalAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+	glEnableVertexAttribArray(_normalAttrib);//cambie esto de 1 a _textureAttrib
 }
 
 void Renderer::deleteShaderProgram() {
@@ -142,6 +150,7 @@ void Renderer::setSpriteAttrib() {
 	glUniform1i((glGetUniformLocation(_shaderProgram, "tex")), 0);// CHECKEAR ESTO
 	setPosAttrib();
 	setTextureAttrib();
+	setNormalAttrib();
 }
 
 void Renderer::bindTexture(unsigned int texture) {
