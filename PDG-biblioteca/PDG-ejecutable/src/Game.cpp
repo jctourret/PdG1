@@ -27,7 +27,7 @@ void Game::initGame(Renderer* renderer)
 
 	sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
 	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
-	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 2.0f, 2.0f);
+	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 1.0f, 1.0f);
 	_camera = new Camera(renderer);
 	//automatizar, en vez de pasar id pasar una coordenada
 	vector<int> tilemapLayout = /*{ 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //*/{ 0,1,1,1,2,16,17,17,8 + 16 * 4,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
