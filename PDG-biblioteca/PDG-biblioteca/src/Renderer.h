@@ -1,6 +1,7 @@
 #pragma once
 #include "Exports.h"
 #include "Window.h"
+#include "Lightining.h"
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <vector>
@@ -12,6 +13,7 @@ private:
 	GLuint _vertexShader;
 	GLuint _fragmentShader;
 	unsigned int _shaderProgram;
+	Lightining _light;
 	int _posAttrib;
 	int _textureAttrib;
 	int _normalAttrib;

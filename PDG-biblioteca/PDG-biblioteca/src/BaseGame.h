@@ -14,6 +14,7 @@ private:
 	Renderer* renderer;
 	CollisionManager collManager;
 	Input* input;
+	
 	bool gameShouldClose;
 protected:
 	Window* window;

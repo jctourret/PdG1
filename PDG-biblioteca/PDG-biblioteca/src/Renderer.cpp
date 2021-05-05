@@ -9,7 +9,11 @@ const GLchar* vertexSource = R"glsl(
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texCoor;
 layout (location = 2) in vec3 normal;
+
 out vec2 texCoord;
+out vec3 fposition;
+out vec3 fnormal;
+
 uniform mat4 Model;
 uniform mat4 View;
 uniform mat4 Projection;
@@ -17,19 +21,40 @@ uniform mat4 Projection;
 void main()
 {
 gl_Position = Projection * View * Model * vec4(position, 1.0);
+fnormal = mat3(Model)*normal;
+fposition = vec4(Model*vec4(position,1.0f)).xyz;
 texCoord = texCoor;
 }
 )glsl";
 
 const GLchar* fragmentSource = R"glsl(
 #version 330 core
+
 out vec4 outColor;
+
 in vec2 texCoord;
+in vec3 fposition;
+in vec3 fnormal;
+
 uniform sampler2D tex;
+uniform vec3 Light;
+
 void main()
 {	
+
 vec4 texColor = texture(tex, texCoord);
-outColor = texColor;
+
+//Ambient Light
+vec3 ambientLight = vec3(0.1f,0.1f,0.1f);
+
+//Diffuse Light
+vec3 posToLightDirVec = normalize(fposition-Light);
+vec3 diffuseColor = vec3(0.0f,1.0f,1.0f); // potencia y color 
+float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+vec3 diffuseFinal = diffuseColor * diffuse;
+
+//outColor = texColor;
+outColor = texColor* (vec4(ambientLight,1.f))+vec4(diffuseFinal,1.0f); 
 }
 )glsl";
 
@@ -93,7 +118,6 @@ void Renderer::setPosAttrib()
 	glVertexAttribPointer(_posAttrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
 	glEnableVertexAttribArray(_posAttrib); //cambie esto de 0 a _posAttrib
 }
-
 
 void Renderer::setTextureAttrib()
 {
@@ -162,6 +186,8 @@ void Renderer::startProgram(glm::mat4 model) {
 	unsigned int transformLocation = glGetUniformLocation( _shaderProgram, "Model");
 	glUseProgram(_shaderProgram);
 	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(model));
+	_light.setPos(vec3 (0.0f,2.0f,2.0f));
+	glUniform3fv(glGetUniformLocation(_shaderProgram,"Light"),1,glm::value_ptr(_light.getPos()));
 }
 
 void Renderer::blendTexture() {
@@ -179,7 +205,7 @@ void Renderer::setVP(){
 	glm::mat4 proj = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	view = glm::lookAt(glm::vec3(0.0, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	proj = /*glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */glm::perspective(45.0f, 2.0f, 1.0f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
+	proj = /*glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */glm::perspective(45.0f, 2.0f, 0.1f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(proj));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 }

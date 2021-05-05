@@ -66,7 +66,7 @@
     <ClInclude Include="src\Camera.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Lightining.h">
+    <ClInclude Include="src\Lightining.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,7 +116,7 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Lightining.cpp">
+    <ClCompile Include="src\Lightining.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
