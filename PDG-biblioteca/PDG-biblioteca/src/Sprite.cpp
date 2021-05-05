@@ -53,20 +53,17 @@ void Sprite::initSprite(unsigned int newTexture, float scaleX, float scaleY)
 	_scaleX = scaleX;
 	_scaleY = scaleY;
 
-	verticesData[0] = (0 + (baseWidth / 2)) * _scaleX;
-	verticesData[1] = (0 + (baseHeight / 2)) * _scaleY;
 
-	verticesData[5] = (0 + (baseWidth / 2)) * _scaleX;
-	verticesData[6] = (0 - (baseHeight / 2)) * _scaleY;
+	unsigned int stride = rend->getAttribElementsAmount();
 
-	verticesData[10] = (0 - (baseWidth / 2)) * _scaleX;
-	verticesData[11] = (0 - (baseHeight / 2)) * _scaleY;
+	for (int i = 0; i < 4; i++)
+	{
+		verticesData[i * stride] = (sign(verticesData[i * stride]) * (baseWidth / 2)) * _scaleX;
+		verticesData[i * stride +1] = (sign(verticesData[i * stride +1]) * (baseWidth / 2)) * _scaleX;
+	}
 
-	verticesData[15] = (0 - (baseWidth / 2)) * _scaleX;
-	verticesData[16] = (0 + (baseHeight / 2)) * _scaleY;
-	
-	width = verticesData[0] - verticesData[10];
-	height = verticesData[1] - verticesData[11];
+	width =  verticesData[0] - verticesData[stride*2];
+	height = verticesData[1] - verticesData[stride * 2 + 1];
 
 	rend->creatoVAO(vao);
 	rend->createVBO(verticesData, vertexAmount, vbo);
@@ -97,29 +94,19 @@ void Sprite::updateSprite(Timer & timer) {
 
 void Sprite::setTextureCoordinates(float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3)
 {
-	verticesData[3] = u0;
-	verticesData[8] = u1;
-	verticesData[13] = u2;
-	verticesData[18] = u3;
-	
+	unsigned int uStart = 3;
+	unsigned int vStart = 4;
+	unsigned int stride = rend->getAttribElementsAmount();
+	float uElements[4] = { u0,u1,u2,u3 };
+	float vElements[4] = { v0,v1,v2,v3 };
 
-	verticesData[4] = v0;
-	verticesData[9] = v1;
-	verticesData[14] = v2;
-	verticesData[19] = v3;
-	/*
-	cout<<	verticesData[3]	<<endl;
-	cout<<	verticesData[8]	<<endl;
-	cout<<	verticesData[13]<<endl;
-	cout<<	verticesData[18]<<endl<<endl;
-	cout<<	verticesData[4]	<<endl;
-	cout<<	verticesData[9]	<<endl;
-	cout<<	verticesData[14]<<endl;
-	cout<<	verticesData[19]<<endl;
-	cin.get();
-	*/
+	for (int i = 0; i < 4; i++)
+	{
+		verticesData[stride*i + uStart] = uElements[i];
+		verticesData[stride*i + vStart] = vElements[i];
+	}
 
-	rend->bindSpriteBuffers(vbo, vao, verticesData, 20);
+	rend->bindSpriteBuffers(vbo, vao, verticesData, vertexAmount);
 }
 
 void Sprite::draw()

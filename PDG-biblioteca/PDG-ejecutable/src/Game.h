@@ -5,8 +5,8 @@ class Game: BaseGame
 private:
 	Timer* timer;
 	Shape* shapeA;
-	//test
 	Shape* cube;
+	//test
 
 	Sprite* sprite1;
 	Sprite* sprite2;

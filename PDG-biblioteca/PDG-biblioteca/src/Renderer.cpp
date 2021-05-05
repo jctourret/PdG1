@@ -115,21 +115,21 @@ void Renderer::createEBO(int* indexArray, int arraySize, unsigned int &_ebo)
 void Renderer::setPosAttrib() 
 {
 	_posAttrib = glGetAttribLocation(_shaderProgram, "position");
-	glVertexAttribPointer(_posAttrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
+	glVertexAttribPointer(_posAttrib, posElementsAmount, GL_FLOAT, GL_FALSE, attribElementsAmount * sizeof(float), 0);
 	glEnableVertexAttribArray(_posAttrib); //cambie esto de 0 a _posAttrib
 }
 
 void Renderer::setTextureAttrib()
 {
 	_textureAttrib = glGetAttribLocation(_shaderProgram, "texCoor");
-	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
+	glVertexAttribPointer(_textureAttrib, texElementsAmount, GL_FLOAT, GL_FALSE, attribElementsAmount * sizeof(float), (void*) (3 * sizeof(float)));
 	glEnableVertexAttribArray(_textureAttrib);//cambie esto de 1 a _textureAttrib
 }
 
 void Renderer::setNormalAttrib()
 {
 	_normalAttrib = glGetAttribLocation(_shaderProgram, "normal");
-	glVertexAttribPointer(_normalAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+	glVertexAttribPointer(_normalAttrib, normalElementsAmount, GL_FLOAT, GL_FALSE, attribElementsAmount * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(_normalAttrib);//cambie esto de 1 a _textureAttrib
 }
 
@@ -223,4 +223,9 @@ void Renderer::updateView(glm::vec3 position, glm::vec3 front, glm::vec3 up)
 	glm::mat4 view;
 	view = glm::lookAt(position, position + front, up);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
+}
+
+int Renderer::getAttribElementsAmount()
+{
+	return attribElementsAmount;
 }
