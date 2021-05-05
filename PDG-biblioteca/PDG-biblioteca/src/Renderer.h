@@ -15,6 +15,10 @@ private:
 	int _posAttrib;
 	int _textureAttrib;
 	int _normalAttrib;
+	int posElementsAmount = 3;
+	int texElementsAmount = 2;
+	int normalElementsAmount = 2;
+	int attribElementsAmount = 8;
 public:
 	void initVertexShader();
 	void initFragmentShader();
@@ -39,5 +43,6 @@ public:
 	void setVP();
 	void updateView(glm::vec3 position, glm::vec3 target);
 	void updateView(glm::vec3 position, glm::vec3 front, glm::vec3 up);
+	int getAttribElementsAmount();
 };
 
