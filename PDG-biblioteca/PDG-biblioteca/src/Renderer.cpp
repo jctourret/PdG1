@@ -16,13 +16,13 @@ out vec3 fnormal;
 
 uniform mat4 Model;
 uniform mat4 View;
-uniform mat4 Projection;
+uniform mat4 Projection;	
 
 void main()
 {
 gl_Position = Projection * View * Model * vec4(position, 1.0);
-fnormal = mat3(Model)*normal;
-fposition = vec4(Model*vec4(position,1.0f)).xyz;
+fnormal = mat3(transpose(inverse(Model)))*normal;
+fposition = vec3(Model*vec4(position,1.0f))	;
 texCoord = texCoor;
 }
 )glsl";
@@ -48,9 +48,10 @@ vec4 texColor = texture(tex, texCoord);
 vec3 ambientLight = vec3(0.1f,0.1f,0.1f);
 
 //Diffuse Light
-vec3 posToLightDirVec = normalize(fposition-Light);
+vec3 norm=normalize(fnormal);
+vec3 posToLightDirVec = normalize(Light-fposition);
 vec3 diffuseColor = vec3(0.0f,1.0f,1.0f); // potencia y color 
-float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+float diffuse = max(dot(posToLightDirVec,fnormal),0.0f); // producto punto entre la distancia con la luz y la normal
 vec3 diffuseFinal = diffuseColor * diffuse;
 
 //outColor = texColor;
@@ -186,7 +187,7 @@ void Renderer::startProgram(glm::mat4 model) {
 	unsigned int transformLocation = glGetUniformLocation( _shaderProgram, "Model");
 	glUseProgram(_shaderProgram);
 	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(model));
-	_light.setPos(vec3 (0.0f,2.0f,2.0f));
+	_light.setPos(vec3 (0.0f,-1.0f,1.0f));
 	glUniform3fv(glGetUniformLocation(_shaderProgram,"Light"),1,glm::value_ptr(_light.getPos()));
 }
 

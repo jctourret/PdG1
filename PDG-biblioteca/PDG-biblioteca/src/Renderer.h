@@ -19,7 +19,7 @@ private:
 	int _normalAttrib;
 	int posElementsAmount = 3;
 	int texElementsAmount = 2;
-	int normalElementsAmount = 2;
+	int normalElementsAmount = 3;
 	int attribElementsAmount = 8;
 public:
 	void initVertexShader();
