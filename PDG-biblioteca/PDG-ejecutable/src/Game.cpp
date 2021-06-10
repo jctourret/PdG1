@@ -29,6 +29,8 @@ void Game::initGame(Renderer* renderer)
 	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
 	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 1.0f, 1.0f);
 	_camera = new Camera(renderer);
+	_light = new Lightning(vec3(0.0f, -1.0f, 1.0f), renderer);
+
 	//automatizar, en vez de pasar id pasar una coordenada
 	vector<int> tilemapLayout = /*{ 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //*/{ 0,1,1,1,2,16,17,17,8 + 16 * 4,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
 	//automatizar, en vez de pasar id pasar una coordenada
@@ -279,7 +281,6 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
 	shapeA->setRotation(newRot);
-
 
 	if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
 	collManager.CheckCollisionAgainstStatic(shapeA, sprite1, playerMovement);

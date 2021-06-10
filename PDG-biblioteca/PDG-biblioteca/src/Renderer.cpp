@@ -38,6 +38,16 @@ in vec3 fnormal;
 
 uniform sampler2D tex;
 uniform vec3 Light;
+uniform vec3 ViewPos;
+
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+}; 
+  
+uniform Material material;
 
 void main()
 {	
@@ -45,19 +55,34 @@ void main()
 vec4 texColor = texture(tex, texCoord);
 
 //Ambient Light
-vec3 ambientLight = vec3(0.1f,0.1f,0.1f);
+vec3 ambientLight = vec3(0.1f,0.1f,0.1f) * material.ambient;
 
 //Diffuse Light
 vec3 norm=normalize(fnormal);
 vec3 posToLightDirVec = normalize(Light-fposition);
 vec3 diffuseColor = vec3(0.0f,1.0f,1.0f); // potencia y color 
 float diffuse = max(dot(posToLightDirVec,fnormal),0.0f); // producto punto entre la distancia con la luz y la normal
-vec3 diffuseFinal = diffuseColor * diffuse;
+vec3 diffuseFinal = diffuseColor * (diffuse * material.diffuse);
 
-//outColor = texColor;
-outColor = texColor* (vec4(ambientLight,1.f))+vec4(diffuseFinal,1.0f); 
+//Specular Spiderman
+float specularStrength = 0.5;
+vec3 viewDir = normalize(ViewPos - fposition);
+vec3 reflectDir = reflect(-posToLightDirVec, fnormal);
+float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+vec3 specular = (material.specular * spec) * vec3(1.0f,1.0f,1.0f);
+
+outColor = texColor* (vec4(ambientLight,1.0f)+vec4(diffuseFinal,1.0f)+vec4(specular,1.0f)); 
 }
 )glsl";
+
+Renderer::Renderer()
+{
+	defaultMat = new Material(vec3(1.0f), vec3(1.0f), vec3(1.0f), 1.0f);
+}
+Renderer::~Renderer()
+{
+	if (defaultMat) delete defaultMat;
+}
 
 void Renderer::initVertexShader() {
 	_vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -148,7 +173,18 @@ void Renderer::deleteVertexShader() {
 
 void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize)
 {
+	setMaterial(defaultMat);
 	bindSpriteBuffers(vbo,vao,vertex,size);
+	setSpriteAttrib();
+	startProgram(trs);
+	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
+}
+
+void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material)
+{
+	setMaterial(material);
+	bindSpriteBuffers(vbo, vao, vertex, size);
 	setSpriteAttrib();
 	startProgram(trs);
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
@@ -183,12 +219,10 @@ void Renderer::bindTexture(unsigned int texture) {
 	glActiveTexture(GL_TEXTURE0);
 }
 
-void Renderer::startProgram(glm::mat4 model) {
+void Renderer::startProgram(mat4 model) {
 	unsigned int transformLocation = glGetUniformLocation( _shaderProgram, "Model");
 	glUseProgram(_shaderProgram);
-	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(model));
-	_light.setPos(vec3 (0.0f,-1.0f,1.0f));
-	glUniform3fv(glGetUniformLocation(_shaderProgram,"Light"),1,glm::value_ptr(_light.getPos()));
+	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, value_ptr(model));
 }
 
 void Renderer::blendTexture() {
@@ -203,30 +237,53 @@ void Renderer::unblendTexture() {
 void Renderer::setVP(){
 	unsigned int projectionLocation = glGetUniformLocation(_shaderProgram, "Projection");
 	unsigned int viewLocation = glGetUniformLocation(_shaderProgram, "View");
-	glm::mat4 proj = glm::mat4(1.0f);
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::lookAt(glm::vec3(0.0, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	proj = /*glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */glm::perspective(45.0f, 2.0f, 0.1f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
+	mat4 proj = mat4(1.0f);
+	mat4 view = mat4(1.0f);
+	view = lookAt(vec3(0.0, 0.0f, 1.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	proj = /*glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */perspective(45.0f, 2.0f, 0.1f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(proj));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 }
 
-void Renderer::updateView(glm::vec3 position,glm::vec3 target){
+void Renderer::updateView(vec3 position, vec3 target){
 	unsigned int viewLocation = glGetUniformLocation(_shaderProgram, "View");
-	glm::mat4 view;
-	view = glm::lookAt(position, target, glm::vec3(0.0f, 1.0f, 0.0f));
+	mat4 view = lookAt(position, target, vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
+
+	unsigned int viewPos = glGetUniformLocation(_shaderProgram, "ViewPos");
+	glUniform3fv(viewPos, 1, value_ptr(position));
 }
 
-void Renderer::updateView(glm::vec3 position, glm::vec3 front, glm::vec3 up)
+void Renderer::updateView(vec3 position, vec3 front, vec3 up)
 {
 	unsigned int viewLocation = glGetUniformLocation(_shaderProgram, "View");
-	glm::mat4 view;
-	view = glm::lookAt(position, position + front, up);
+	mat4 view;
+	view = lookAt(position, position + front, up);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
+
+	unsigned int viewPos = glGetUniformLocation(_shaderProgram, "ViewPos");
+	glUniform3fv(viewPos, 1, value_ptr(position));
 }
 
 int Renderer::getAttribElementsAmount()
 {
 	return attribElementsAmount;
+}
+
+void Renderer::setLightUniformData(glm::vec3 position)
+{
+	unsigned int lightUniformLoc = glGetUniformLocation(_shaderProgram, "Light");
+	glUniform3fv(lightUniformLoc, 1, value_ptr(position));
+}
+
+void Renderer::setMaterial(Material* material)
+{
+	unsigned int uniformMatAmb = glGetUniformLocation(_shaderProgram, "material.ambient");
+	unsigned int uniformMatDiff = glGetUniformLocation(_shaderProgram, "material.diffuse");
+	unsigned int uniformMatSpec = glGetUniformLocation(_shaderProgram, "material.specular");
+	unsigned int uniformMatShin = glGetUniformLocation(_shaderProgram, "material.shininess");
+	glUniform3fv(uniformMatAmb, 1, value_ptr(material->_ambient));
+	glUniform3fv(uniformMatDiff, 1, value_ptr(material->_diffuse));
+	glUniform3fv(uniformMatSpec, 1, value_ptr(material->_specular));
+	glUniform1f(uniformMatShin, material->_shininess);
 }

@@ -19,6 +19,16 @@ Shape::Shape(ShapeTypes shapeType, Renderer* renderer):Entity(renderer)
 		createRectangle();
 		break;
 	}
+	mat = new Material();
+	mat->_ambient = glm::vec3(1.0f, 0.5f, 0.31f);
+	mat->_diffuse = glm::vec3(1.0f, 0.5f, 0.31f);
+	mat->_specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	mat->_shininess = 32.0f;
+}
+
+Shape::~Shape()
+{
+	if (mat)delete mat;
 }
 
 void Shape::createCube()
@@ -103,5 +113,5 @@ void Shape::draw()
 	glBindTexture(GL_TEXTURE_2D, defaultTexture);
 	glActiveTexture(GL_TEXTURE0);
 
-	rend->drawSprite(TRS, vbo, vao, vertexToUse, vertexAmount, indexAmount); 
+	rend->drawSprite(TRS, vbo, vao, vertexToUse, vertexAmount, indexAmount, mat);
 }

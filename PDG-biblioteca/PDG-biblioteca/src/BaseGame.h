@@ -8,6 +8,8 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Camera.h"
+#include "Lightning.h"
+
 class SABASAENGINE_API BaseGame
 {
 private:

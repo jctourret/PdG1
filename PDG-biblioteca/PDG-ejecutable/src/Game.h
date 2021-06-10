@@ -13,6 +13,8 @@ private:
 	TileMap* tileMap;
 	Animation* animation;
 	Camera* _camera;
+	Lightning* _light;
+
 	float speedX = 0;
 	float speedY = 0;
 	float speedZ = 0;

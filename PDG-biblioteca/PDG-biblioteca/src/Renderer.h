@@ -1,10 +1,10 @@
 #pragma once
 #include "Exports.h"
 #include "Window.h"
-#include "Lightining.h"
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <vector>
+#include "Material.h"
 
 
 class SABASAENGINE_API Renderer
@@ -13,7 +13,6 @@ private:
 	GLuint _vertexShader;
 	GLuint _fragmentShader;
 	unsigned int _shaderProgram;
-	Lightining _light;
 	int _posAttrib;
 	int _textureAttrib;
 	int _normalAttrib;
@@ -21,7 +20,11 @@ private:
 	int texElementsAmount = 2;
 	int normalElementsAmount = 3;
 	int attribElementsAmount = 8;
+	Material* defaultMat;
+	void setMaterial(Material* material);
 public:
+	Renderer();
+	~Renderer();
 	void initVertexShader();
 	void initFragmentShader();
 	void initShaderProgram();
@@ -35,6 +38,7 @@ public:
 	void deleteFragmentShader();
 	void deleteVertexShader();
 	void drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize);
+	void drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material);
 	void setTexture(unsigned int texture);
 	void bindSpriteBuffers(unsigned int vbo, unsigned int vao, float* vertex, float size);
 	void setSpriteAttrib();
@@ -46,5 +50,6 @@ public:
 	void updateView(glm::vec3 position, glm::vec3 target);
 	void updateView(glm::vec3 position, glm::vec3 front, glm::vec3 up);
 	int getAttribElementsAmount();
+	void setLightUniformData(glm::vec3 position);
 };
 

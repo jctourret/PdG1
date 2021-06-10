@@ -3,6 +3,7 @@
 #include "glm/mat4x4.hpp"
 #include "Exports.h"
 #include "Texture.h"
+#include "Material.h"
 
 using namespace glm;
 
@@ -21,7 +22,7 @@ private:
 	void createCube();
 	unsigned int vertexAmount = 32;
 	unsigned int indexAmount = 6;
-	float recVerticesData[32] = 
+	float recVerticesData[32] =
 	{
 		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f,  0.0f,  1.0f,
 		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  0.0f,  1.0f,
@@ -45,7 +46,7 @@ private:
 		 0.5f, -0.5f,  0.5f,    0.0f, 0.0f,      0.0f,  0.0f, 1.0f, //5
 		 0.5f,  0.5f,  0.5f,    0.0f, 1.0f,      0.0f,  0.0f, 1.0f, //6
 		-0.5f,  0.5f,  0.5f,    1.0f, 1.0f,      0.0f,  0.0f, 1.0f,//7
-															  
+
 		-0.5f,  0.5f,  0.5f,    0.0f, 1.0f,     -1.0f,  0.0f,  0.0f, //8
 		-0.5f,  0.5f, -0.5f,    1.0f, 1.0f,     -1.0f,  0.0f,  0.0f, //9
 		-0.5f, -0.5f, -0.5f,    1.0f, 0.0f,     -1.0f,  0.0f,  0.0f, //10
@@ -72,8 +73,10 @@ private:
 	unsigned int defaultTexture;
 	ShapeTypes _shapeType;
 	float* vertexToUse;
+	Material* mat;
 public:
 	Shape(ShapeTypes shapeType, Renderer* renderer);
+	~Shape();
 	void draw();
 	float width;
 	float height;
