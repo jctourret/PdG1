@@ -1,3 +1,44 @@
+#pragma once
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+#include "Exports.h"
+#include "Renderer.h"
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+struct Vertex {
+	glm::vec3 Position;
+	glm::vec2 TexCoords;
+	glm::vec3 Normal;
+};
+
+struct meshTexture {
+	unsigned int id;
+	string type;
+	string path;
+};
+
+class SABASAENGINE_API Mesh
+{
+	unsigned int vao;
+	unsigned int vbo;
+	unsigned int ebo;
+	float* vertexData;
+	int* indicesData;	
+public:
+	vector<Vertex> _vertices;
+	vector<unsigned int> _indices;
+	vector<meshTexture> _textures;
+	Mesh(vector<Vertex> vertices, vector<unsigned int> indices,
+		vector<meshTexture> textures, Renderer* rend);
+	void drawMesh(Renderer* rend);
+};
+
+
 //#pragma once
 //
 //#include <string>

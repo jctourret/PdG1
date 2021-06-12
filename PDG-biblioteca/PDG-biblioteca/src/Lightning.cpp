@@ -1,16 +1,13 @@
 #include "Lightning.h"
 
-Lightning::Lightning(glm::vec3 pos, Renderer* renderer) {
+Lightning::Lightning(glm::vec3 pos, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, Renderer* rend) {
 	_pos = pos;
-	rend = renderer;
-	rend->setLightUniformData(pos);
+	_ambient = ambient;
+	_diffuse = diffuse;
+	_specular = specular;
+	_rend = rend;
+	rend->updateLight(pos, ambient, diffuse, specular);
 }
-
 glm::vec3 Lightning::getPos() {
 	return _pos;
-}
-
-void Lightning::setPos(glm::vec3 pos) {
-	_pos = pos;
-	rend->setLightUniformData(pos);
 }

@@ -21,14 +21,29 @@ uniform mat4 Projection;
 void main()
 {
 gl_Position = Projection * View * Model * vec4(position, 1.0);
-fnormal = mat3(transpose(inverse(Model)))*normal;
-fposition = vec3(Model*vec4(position,1.0f))	;
+fnormal = mat3(Model)*normal;
+fposition = vec4(Model*vec4(position,1.0f)).xyz;
 texCoord = texCoor;
 }
 )glsl";
 
 const GLchar* fragmentSource = R"glsl(
 #version 330 core
+
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;    
+    float shininess;
+}; 
+
+struct Light {
+    vec3 position;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
 
 out vec4 outColor;
 
@@ -37,17 +52,9 @@ in vec3 fposition;
 in vec3 fnormal;
 
 uniform sampler2D tex;
-uniform vec3 Light;
-uniform vec3 ViewPos;
-
-struct Material {
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
-}; 
-  
-uniform Material material;
+uniform Light light;
+uniform Material mat;
+uniform vec3 viewPos;
 
 void main()
 {	
@@ -55,23 +62,22 @@ void main()
 vec4 texColor = texture(tex, texCoord);
 
 //Ambient Light
-vec3 ambientLight = vec3(0.1f,0.1f,0.1f) * material.ambient;
+vec3 ambientLight = light.ambient * mat.ambient;
 
 //Diffuse Light
-vec3 norm=normalize(fnormal);
-vec3 posToLightDirVec = normalize(Light-fposition);
-vec3 diffuseColor = vec3(0.0f,1.0f,1.0f); // potencia y color 
-float diffuse = max(dot(posToLightDirVec,fnormal),0.0f); // producto punto entre la distancia con la luz y la normal
-vec3 diffuseFinal = diffuseColor * (diffuse * material.diffuse);
+vec3 posToLightDirVec = normalize(fposition-light.position);
+float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+vec3 diffuseFinal = light.diffuse * (diffuse* mat.diffuse);
 
-//Specular Spiderman
-float specularStrength = 0.5;
-vec3 viewDir = normalize(ViewPos - fposition);
-vec3 reflectDir = reflect(-posToLightDirVec, fnormal);
-float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-vec3 specular = (material.specular * spec) * vec3(1.0f,1.0f,1.0f);
+// Specular Light
+float specularStrength = 1f;	
+vec3 viewDir = normalize(viewPos-fposition);
+vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
+float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
+vec3 specular = light.specular * (spec * mat.specular);
 
-outColor = texColor* (vec4(ambientLight,1.0f)+vec4(diffuseFinal,1.0f)+vec4(specular,1.0f)); 
+//outColor = texColor;
+outColor = texColor* ((vec4(ambientLight,1.0f))+vec4(diffuseFinal,1.0f)+vec4(specular,1.0f)); 
 }
 )glsl";
 
@@ -180,7 +186,6 @@ void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, f
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
 }
-
 void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material)
 {
 	setMaterial(material);
@@ -191,8 +196,13 @@ void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, f
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
 }
 
-void Renderer::setTexture(unsigned int texture)
+unsigned int Renderer::getShaderProgram()
 {
+	return _shaderProgram;
+}
+
+void Renderer::setTexture(unsigned int texture)
+{	
 	unsigned int uniformTex = glGetUniformLocation(_shaderProgram, "tex");
 	glUseProgram(_shaderProgram);
 	glUniform1i(uniformTex, 1);
@@ -270,20 +280,22 @@ int Renderer::getAttribElementsAmount()
 	return attribElementsAmount;
 }
 
-void Renderer::setLightUniformData(glm::vec3 position)
-{
-	unsigned int lightUniformLoc = glGetUniformLocation(_shaderProgram, "Light");
-	glUniform3fv(lightUniformLoc, 1, value_ptr(position));
-}
-
 void Renderer::setMaterial(Material* material)
 {
-	unsigned int uniformMatAmb = glGetUniformLocation(_shaderProgram, "material.ambient");
-	unsigned int uniformMatDiff = glGetUniformLocation(_shaderProgram, "material.diffuse");
-	unsigned int uniformMatSpec = glGetUniformLocation(_shaderProgram, "material.specular");
-	unsigned int uniformMatShin = glGetUniformLocation(_shaderProgram, "material.shininess");
+	unsigned int uniformMatAmb = glGetUniformLocation(_shaderProgram, "mat.ambient");
+	unsigned int uniformMatDiff = glGetUniformLocation(_shaderProgram, "mat.diffuse");
+	unsigned int uniformMatSpec = glGetUniformLocation(_shaderProgram, "mat.specular");
+	unsigned int uniformMatShin = glGetUniformLocation(_shaderProgram, "mat.shininess");
 	glUniform3fv(uniformMatAmb, 1, value_ptr(material->_ambient));
 	glUniform3fv(uniformMatDiff, 1, value_ptr(material->_diffuse));
 	glUniform3fv(uniformMatSpec, 1, value_ptr(material->_specular));
 	glUniform1f(uniformMatShin, material->_shininess);
+}
+
+void Renderer::updateLight(glm::vec3 position, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
+{
+	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.position"), 1, value_ptr(position));
+	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.ambient"), 1, value_ptr(ambient));
+	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.diffuse"), 1, value_ptr(diffuse));
+	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.specular"), 1, value_ptr(specular));
 }
