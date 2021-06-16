@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+
 using namespace std;
 using namespace glm;
 
@@ -39,10 +40,17 @@ struct Material {
 
 struct Light {
     vec3 position;
+    vec3 direction;
 
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
+
+	float cutOff;
 };
 
 out vec4 outColor;
@@ -53,37 +61,156 @@ in vec3 fnormal;
 
 uniform sampler2D tex;
 uniform Light light;
+uniform Light dirLight;
+uniform Light pointLight;
+uniform Light spotLight;
 uniform Material mat;
 uniform vec3 viewPos;
+
+vec3 calculateLight(int lightType);
 
 void main()
 {	
 
 vec4 texColor = texture(tex, texCoord);
 
-//Ambient Light
-vec3 ambientLight = light.ambient * mat.ambient;
-
-//Diffuse Light
-vec3 posToLightDirVec = normalize(fposition-light.position);
-float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
-vec3 diffuseFinal = light.diffuse * (diffuse* mat.diffuse);
-
-// Specular Light
-float specularStrength = 1f;	
-vec3 viewDir = normalize(viewPos-fposition);
-vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
-float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
-vec3 specular = light.specular * (spec * mat.specular);
+//vec3 lightResultTest = calculateLight(0);
+//vec3 lightResultPoint = calculateLight(1);
+//vec3 lightResultDir = calculateLight(2);
+vec3 lightResultSpot = calculateLight(3);
+vec3 lightResultTotal = /*lightResultTest + lightResultPoint + lightResultDir +*/ lightResultSpot;
 
 //outColor = texColor;
-outColor = texColor* ((vec4(ambientLight,1.0f))+vec4(diffuseFinal,1.0f)+vec4(specular,1.0f)); 
+outColor = texColor * vec4(lightResultTotal, 1.0f);
+ 
 }
+
+vec3 calculateLight(int lightType)
+{
+	
+	if(lightType==0) //testLight
+	{
+		vec3 ambientLight = vec3(1.0f);
+		vec3 specular= vec3(1.0f);
+		vec3 diffuseFinal= vec3(1.0f);
+			
+		vec3 posToLightDirVec = normalize(fposition-light.position);
+
+		//Ambient Light
+		ambientLight = light.ambient * mat.ambient;
+		
+		//Diffuse Light
+		float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+		diffuseFinal = light.diffuse * (diffuse* mat.diffuse);
+		
+		// Specular Light
+		vec3 viewDir = normalize(viewPos-fposition);
+		vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
+		float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
+		specular = light.specular * (spec * mat.specular);
+		
+		vec3 lightResult = ambientLight + diffuseFinal + specular;
+		
+		return lightResult;
+	}
+	if(lightType==1) //pointLight
+	{
+		vec3 ambientLight = vec3(1.0f);
+		vec3 specular= vec3(1.0f);
+		vec3 diffuseFinal= vec3(1.0f);
+		
+		vec3 posToLightDirVec = normalize(fposition-pointLight.position);
+
+		//Ambient Light
+		ambientLight = pointLight.ambient * mat.ambient;
+		
+		//Diffuse Light
+		float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+		diffuseFinal = pointLight.diffuse * (diffuse* mat.diffuse);
+		
+		//Specular Light	
+		vec3 viewDir = normalize(viewPos-fposition);
+		vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
+		float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
+		specular = pointLight.specular * (spec * mat.specular);
+		
+		//Atenuation
+		float distance    = length(pointLight.position - fposition);
+		float attenuation = 1.0 / (pointLight.constant + pointLight.linear * distance + pointLight.quadratic * (distance * distance));  
+		
+		ambientLight *= attenuation;
+		diffuseFinal *= attenuation;
+		specular *= attenuation;
+
+		vec3 lightResult = ambientLight + diffuseFinal + specular;
+
+		return lightResult;
+	}
+	if (lightType==2) //dirLight
+	{
+		vec3 ambientLight = vec3(0.0f);
+		vec3 specular= vec3(0.0f);
+		vec3 diffuseFinal= vec3(0.0f);
+
+		vec3 posToLightDirVec = normalize(-dirLight.position);
+			
+		//Ambient Light
+		ambientLight = dirLight.ambient * mat.ambient;
+		
+		//Diffuse Light
+		float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+		diffuseFinal = dirLight.diffuse * (diffuse* mat.diffuse);
+		
+		// Specular Light
+		vec3 viewDir = normalize(viewPos-fposition);
+		vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
+		float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
+		specular = dirLight.specular * (spec * mat.specular);
+		
+		vec3 lightResult = ambientLight + diffuseFinal + specular;
+
+		return lightResult;
+	}
+	if(lightType==3) //spotLight
+	{
+		vec3 ambientLight = vec3(0.0f);
+		vec3 specular= vec3(0.0f);
+		vec3 diffuseFinal= vec3(0.0f);
+			
+		//Ambient Light
+		ambientLight = spotLight.ambient * mat.ambient;
+		
+		vec3 posToLightDirVec = normalize(fposition-spotLight.position);
+		
+		float theta = dot(posToLightDirVec, normalize(-spotLight.direction));
+		
+		if(theta > spotLight.cutOff) 
+		{       
+			//Diffuse Light
+			float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+			diffuseFinal = spotLight.diffuse * (diffuse* mat.diffuse);
+			
+			// Specular Light	
+			vec3 viewDir = normalize(viewPos-fposition);
+			vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
+			float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
+			specular = spotLight.specular * (spec * mat.specular);
+		}	
+		vec3 lightResult = ambientLight + diffuseFinal + specular;
+		return lightResult;
+		
+	}
+	else
+	{
+		return vec3(0.0f);
+	}
+}
+
 )glsl";
 
 Renderer::Renderer()
 {
-	defaultMat = new Material(vec3(1.0f), vec3(1.0f), vec3(1.0f), 1.0f);
+	defaultMat = new Material(vec3(1.0f, 0.5f, 0.31f), vec3(1.0f, 0.5f, 0.31f), vec3(0.5f, 0.5f, 0.5f), 32.0f);
 }
 Renderer::~Renderer()
 {
@@ -120,21 +247,10 @@ void Renderer::creatoVAO(unsigned int &vao)
 
 void Renderer::createVBO(float* vertexDataArray, int arraySize, unsigned int &vbo)
 {
-	//std::vector<float> _vertex;
-	//for (int i = 0; i < arraySize; i++)
-	//{
-	//	_vertex.push_back(vertexDataArray[i]);
-	//}
-	//glGenBuffers(1, &vbo);
-	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	//glBufferData(GL_ARRAY_BUFFER, _vertex.size() * sizeof(GLfloat), &(_vertex[0]), GL_STATIC_DRAW);
-
-
 	int vertexSize = sizeof(vertexDataArray) * arraySize;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertexSize, vertexDataArray, GL_STATIC_DRAW);
-
 }
 
 void Renderer::createEBO(int* indexArray, int arraySize, unsigned int &_ebo) 
@@ -292,10 +408,41 @@ void Renderer::setMaterial(Material* material)
 	glUniform1f(uniformMatShin, material->_shininess);
 }
 
-void Renderer::updateLight(glm::vec3 position, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
+void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, unsigned int lightKind)
 {
-	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.position"), 1, value_ptr(position));
-	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.ambient"), 1, value_ptr(ambient));
-	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.diffuse"), 1, value_ptr(diffuse));
-	glUniform3fv(glGetUniformLocation(_shaderProgram, "light.specular"), 1, value_ptr(specular));
+
+	switch (lightKind)
+	{
+	default:
+	case 0:
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "light.position"), 1, value_ptr(position));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "light.ambient" ), 1, value_ptr(ambient));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "light.diffuse" ), 1, value_ptr(diffuse));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "light.specular" ), 1, value_ptr(specular));
+		break;
+	case 1:
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "pointLight.position"), 1, value_ptr(position));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "pointLight.ambient"), 1, value_ptr(ambient));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "pointLight.diffuse"), 1, value_ptr(diffuse));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "pointLight.specular"), 1, value_ptr(specular));
+		glUniform1f(glGetUniformLocation(_shaderProgram, "pointLight.constant"), constant);// 1.0f
+		glUniform1f(glGetUniformLocation(_shaderProgram, "pointLight.linear"), linear);// 0.09f
+		glUniform1f(glGetUniformLocation(_shaderProgram, "pointLight.quadratic"), quadratic);// 0.032f
+		break;
+	case 2:
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.position"), 1, value_ptr(position));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.ambient"), 1, value_ptr(ambient));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.diffuse"), 1, value_ptr(diffuse));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.specular"), 1, value_ptr(specular));
+		break;
+	case 3:
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "spotLight.position"), 1, value_ptr(position));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "spotLight.direction"), 1, value_ptr(direction));//vec3(0.0f, 1.0f, 0.0f)
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "spotLight.ambient"), 1, value_ptr(ambient));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "spotLight.diffuse"), 1, value_ptr(diffuse));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "spotLight.specular"), 1, value_ptr(specular));
+		glUniform1f(glGetUniformLocation(_shaderProgram, "spotLight.cutOff"), glm::cos(cutOff));// glm::radians(12.5f)
+		break;
+	}
+
 }

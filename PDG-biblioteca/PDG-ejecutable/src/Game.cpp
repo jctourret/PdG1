@@ -21,11 +21,11 @@ void Game::initGame(Renderer* renderer)
 	timer = new Timer();
 	timer->start();
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
-	_light = new Lightning(glm::vec3(0.0f, 2.0f, 2.0f), glm::vec3(0.5f, 0.5f, 0.5f)
-	, glm::vec3(1.0f, 1.0f, 0.0f),glm::vec3(1.0f, 1.0f, 0.0f),renderer);
+	_light = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.09f, 0.032f, glm::radians(12.5f), LightType::spot, renderer);
+	
 	//test
 	cube = new Shape(ShapeTypes::cube, renderer);
-	cube->setPosition(glm::vec3(1.0f, 1.0f, 0.0f));
+	cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
 	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
@@ -270,7 +270,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	vec3 cameraRotation = vec3(camTargetX, camTargetY, camTargetZ) * camRotSpeed * timer->getDT();
 	_camera->moveOnLocal(glm::vec3 (cameraMovement));
 	_camera->rotate(glm::vec3(cameraRotation));
-	//mouse_callback(*window, *_camera);
+
 
 	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
 
@@ -293,8 +293,13 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	//draw
 	tileMap->drawTileMap();
+
+	shapeA->setPosition(_light->getPos());
+
 	shapeA->draw();
+
 	cube->draw();
+
 	sprite1->draw();
 	sprite2->draw();
 }
@@ -307,5 +312,6 @@ void Game::destroyGame()
 	if (sprite2) delete sprite2;
 	if (tileMap) delete tileMap;
 	if (animation) delete animation;
+	if (_camera) delete _camera;
 	if (_light) delete _light;
 }
