@@ -22,7 +22,7 @@ uniform mat4 Projection;
 void main()
 {
 gl_Position = Projection * View * Model * vec4(position, 1.0);
-fnormal = mat3(Model)*normal;
+fnormal = mat3(transpose(inverse(Model))) * normal;
 fposition = vec4(Model*vec4(position,1.0f)).xyz;
 texCoord = texCoor;
 }
@@ -78,7 +78,7 @@ vec4 texColor = texture(tex, texCoord);
 //vec3 lightResultPoint = calculateLight(1);
 //vec3 lightResultDir = calculateLight(2);
 vec3 lightResultSpot = calculateLight(3);
-vec3 lightResultTotal = /*lightResultTest + lightResultPoint + lightResultDir +*/ lightResultSpot;
+vec3 lightResultTotal = /*lightResultTest + lightResultPoint + lightResultDir */ + lightResultSpot;
 
 //outColor = texColor;
 outColor = texColor * vec4(lightResultTotal, 1.0f);
@@ -94,7 +94,7 @@ vec3 calculateLight(int lightType)
 		vec3 specular= vec3(1.0f);
 		vec3 diffuseFinal= vec3(1.0f);
 			
-		vec3 posToLightDirVec = normalize(fposition-light.position);
+		vec3 posToLightDirVec = normalize(light.position - fposition);
 
 		//Ambient Light
 		ambientLight = light.ambient * mat.ambient;
@@ -106,7 +106,7 @@ vec3 calculateLight(int lightType)
 		// Specular Light
 		vec3 viewDir = normalize(viewPos-fposition);
 		vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
-		float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
+		float spec = pow(max(dot(viewDir,reflectDir),0.0f), mat.shininess);	
 		specular = light.specular * (spec * mat.specular);
 		
 		vec3 lightResult = ambientLight + diffuseFinal + specular;
@@ -115,11 +115,11 @@ vec3 calculateLight(int lightType)
 	}
 	if(lightType==1) //pointLight
 	{
-		vec3 ambientLight = vec3(1.0f);
-		vec3 specular= vec3(1.0f);
-		vec3 diffuseFinal= vec3(1.0f);
+		vec3 ambientLight = vec3(0.0f);
+		vec3 specular= vec3(0.0f);
+		vec3 diffuseFinal= vec3(0.0f);
 		
-		vec3 posToLightDirVec = normalize(fposition-pointLight.position);
+		vec3 posToLightDirVec = normalize(pointLight.position - fposition);
 
 		//Ambient Light
 		ambientLight = pointLight.ambient * mat.ambient;
@@ -152,7 +152,7 @@ vec3 calculateLight(int lightType)
 		vec3 specular= vec3(0.0f);
 		vec3 diffuseFinal= vec3(0.0f);
 
-		vec3 posToLightDirVec = normalize(-dirLight.position);
+		vec3 posToLightDirVec = normalize(-dirLight.direction);
 			
 		//Ambient Light
 		ambientLight = dirLight.ambient * mat.ambient;
@@ -180,25 +180,24 @@ vec3 calculateLight(int lightType)
 		//Ambient Light
 		ambientLight = spotLight.ambient * mat.ambient;
 		
-		vec3 posToLightDirVec = normalize(fposition-spotLight.position);
+		vec3 posToLightDirVec = normalize(spotLight.position - fposition);
 		
 		float theta = dot(posToLightDirVec, normalize(-spotLight.direction));
 		
 		if(theta > spotLight.cutOff) 
 		{       
 			//Diffuse Light
-			float diffuse = clamp(dot(posToLightDirVec,fnormal),0,1); // producto punto entre la distancia con la luz y la normal
+			float diffuse = max(dot(fnormal, posToLightDirVec),0.0f); // producto punto entre la distancia con la luz y la normal
 			diffuseFinal = spotLight.diffuse * (diffuse* mat.diffuse);
 			
 			// Specular Light	
-			vec3 viewDir = normalize(viewPos-fposition);
+			vec3 viewDir = normalize(viewPos - fposition);
 			vec3 reflectDir = reflect(-posToLightDirVec,fnormal);
-			float spec = pow(max(dot(viewDir,reflectDir),0.0), mat.shininess);	
+			float spec = pow(max(dot(viewDir,reflectDir),0.0f), mat.shininess);	
 			specular = spotLight.specular * (spec * mat.specular);
 		}	
 		vec3 lightResult = ambientLight + diffuseFinal + specular;
 		return lightResult;
-		
 	}
 	else
 	{
@@ -376,7 +375,7 @@ void Renderer::updateView(vec3 position, vec3 target){
 	mat4 view = lookAt(position, target, vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 
-	unsigned int viewPos = glGetUniformLocation(_shaderProgram, "ViewPos");
+	unsigned int viewPos = glGetUniformLocation(_shaderProgram, "viewPos");
 	glUniform3fv(viewPos, 1, value_ptr(position));
 }
 
@@ -387,7 +386,7 @@ void Renderer::updateView(vec3 position, vec3 front, vec3 up)
 	view = lookAt(position, position + front, up);
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 
-	unsigned int viewPos = glGetUniformLocation(_shaderProgram, "ViewPos");
+	unsigned int viewPos = glGetUniformLocation(_shaderProgram, "viewPos");
 	glUniform3fv(viewPos, 1, value_ptr(position));
 }
 
@@ -430,7 +429,7 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 		glUniform1f(glGetUniformLocation(_shaderProgram, "pointLight.quadratic"), quadratic);// 0.032f
 		break;
 	case 2:
-		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.position"), 1, value_ptr(position));
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.direction"), 1, value_ptr(direction));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.ambient"), 1, value_ptr(ambient));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.diffuse"), 1, value_ptr(diffuse));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, "dirLight.specular"), 1, value_ptr(specular));

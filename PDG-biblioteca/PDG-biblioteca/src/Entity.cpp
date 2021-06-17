@@ -44,7 +44,7 @@ void Entity::setRotationX(float newRotX)
 	rotVec.x = newRotX;
 	vec3 rot;
 	rot = vec3(1.0f, 0.0f, 0.0f);
-	rotateXMat = rotate(mat4(1.0f), newRotX, rotVec);
+	rotateXMat = rotate(mat4(1.0f), glm::radians(newRotX), rot);
 	UpdateTRS();
 }
 
@@ -53,7 +53,7 @@ void Entity::setRotationY(float newRotY)
 	rotVec.y = newRotY;
 	vec3 rot;
 	rot = vec3(0.0f, 1.0f, 0.0f);
-	rotateYMat = rotate(mat4(1.0f), newRotY, rotVec);
+	rotateYMat = rotate(mat4(1.0f), glm::radians(newRotY), rot);
 	UpdateTRS();
 }
 
@@ -62,7 +62,7 @@ void Entity::setRotationZ(float newRotZ)
 	rotVec.z = newRotZ;
 	vec3 rot;
 	rot = vec3(0.0f, 0.0f, 1.0f);
-	rotateZMat = rotate(mat4(1.0f), newRotZ, rotVec);
+	rotateZMat = rotate(mat4(1.0f), glm::radians(newRotZ), rot);
 	UpdateTRS();
 }
 
@@ -73,25 +73,23 @@ void Entity::setRotation(vec3 newRot)
 	{
 		rotVec.x = newRot.x;
 		rot = vec3(1.0f, 0.0f, 0.0f);
-		rotateXMat = rotate(mat4(1.0f), newRot.x, rotVec);
+		rotateXMat = rotate(mat4(1.0f), glm::radians(newRot.x), rot);
 		UpdateTRS();
 	}
 
 	if (newRot.y != rotVec.y)
 	{
 		rotVec.y = newRot.y;
-		rot;
 		rot = vec3(0.0f, 1.0f, 0.0f);
-		rotateYMat = rotate(mat4(1.0f), newRot.y, rotVec);
+		rotateYMat = rotate(mat4(1.0f), glm::radians(newRot.y), rot);
 		UpdateTRS();
 	}
 
 	if (newRot.z != rotVec.z)
 	{
 		rotVec.z = newRot.z;
-		rot;
 		rot = vec3(0.0f, 0.0f, 1.0f);
-		rotateZMat = rotate(mat4(1.0f), newRot.z, rotVec);
+		rotateZMat = rotate(mat4(1.0f), glm::radians(newRot.z), rot);
 		UpdateTRS();
 	}
 }

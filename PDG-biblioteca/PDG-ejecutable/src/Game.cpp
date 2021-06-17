@@ -21,7 +21,7 @@ void Game::initGame(Renderer* renderer)
 	timer = new Timer();
 	timer->start();
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
-	_light = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.09f, 0.032f, glm::radians(12.5f), LightType::spot, renderer);
+	_light = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::spot, renderer);
 	
 	//test
 	cube = new Shape(ShapeTypes::cube, renderer);
@@ -292,16 +292,18 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	sprite1->updateSprite(*timer);
 
 	//draw
-	tileMap->drawTileMap();
+	//tileMap->drawTileMap();
 
-	shapeA->setPosition(_light->getPos());
+	//cube->setRotationX(cube->getRotation().x + 5* timer->getDT());
 
+	shapeA->setPosition(_light->getPos() + vec3(0.0f,0.0f,1));
+	shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
 	shapeA->draw();
 
 	cube->draw();
 
-	sprite1->draw();
-	sprite2->draw();
+	//sprite1->draw();
+	//sprite2->draw();
 }
 void Game::destroyGame()
 {

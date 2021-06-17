@@ -32,10 +32,10 @@ class SABASAENGINE_API Sprite : public Entity
 	unsigned int ebo;
 protected:	
 	float verticesData[32] = {
-		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f,  0.0f,  1.0f,
-		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  0.0f,  1.0f,
-		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f, 0.0f,  0.0f,  1.0f,
-		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  0.0f,  1.0f
+		 0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f,  0.0f,  -1.0f,
+		 0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  0.0f,  -1.0f,
+		-0.5f,-0.5f, 0.0f, 0.0f, 0.0f, 0.0f,  0.0f,  -1.0f,
+		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  0.0f,  -1.0f
 	};
 	float _scaleX;
 	float _scaleY;
