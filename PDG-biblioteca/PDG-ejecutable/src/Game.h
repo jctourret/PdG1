@@ -14,6 +14,7 @@ private:
 	Animation* animation;
 	Camera* _camera;
 	Lightning* _light;
+	Lightning* _lightA;
 
 	float speedX = 0;
 	float speedY = 0;

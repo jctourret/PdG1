@@ -14,6 +14,11 @@ enum LightType
 class SABASAENGINE_API Lightning
 {
 	Renderer* _rend;
+	
+	static int dirLights;
+	static int pointLights;
+	static int spotLights;
+	
 	glm::vec3 _pos;
 	glm::vec3 _dir;
 
@@ -29,6 +34,7 @@ class SABASAENGINE_API Lightning
 
 	LightType _lightType;
 public:
+	int id;
 	Lightning(glm::vec3 pos, glm::vec3 dir, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, LightType lightType, Renderer* rend);
 	glm::vec3 getPos();
 };
