@@ -83,11 +83,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PDG-biblioteca\libs\GLM;$(SolutionDir)PDG-biblioteca\libs\GLFW\include;$(SolutionDir)PDG-biblioteca\libs\GLEW\include;$(SolutionDir)PDG-biblioteca\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PDG-biblioteca\libs\GLM;$(SolutionDir)PDG-biblioteca\libs\GLFW\include;$(SolutionDir)PDG-biblioteca\libs\GLEW\include;$(SolutionDir)PDG-biblioteca\src;$(SolutionDir)PDG-biblioteca\libs\ASSIMP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)PDG-biblioteca\libs\GLFW\lib-vc2017;$(SolutionDir)PDG-biblioteca\libs\GLEW\lib\Release\Win32;$(ProjectDir)libs\PDG-biblioteca;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PDG-biblioteca.lib;glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)PDG-biblioteca\libs\ASSIMP\lib;$(SolutionDir)PDG-biblioteca\libs\GLFW\lib-vc2017;$(SolutionDir)PDG-biblioteca\libs\GLEW\lib\Release\Win32;$(ProjectDir)libs\PDG-biblioteca;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PDG-biblioteca.lib;glfw3.lib;opengl32.lib;glew32s.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -7,7 +7,7 @@ private:
 	Shape* shapeA;
 	Shape* cube;
 	//test
-
+	Model* _model;
 	Sprite* sprite1;
 	Sprite* sprite2;
 	TileMap* tileMap;

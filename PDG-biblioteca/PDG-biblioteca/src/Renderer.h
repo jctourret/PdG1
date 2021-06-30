@@ -53,4 +53,5 @@ public:
 	void updateView(glm::vec3 position, glm::vec3 front, glm::vec3 up);
 	int getAttribElementsAmount();
 	void updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, unsigned int lightKind, int id);
+	void setMesh(std::string locationName, int texNumber);
 };

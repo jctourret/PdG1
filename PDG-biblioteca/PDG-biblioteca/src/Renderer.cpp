@@ -62,6 +62,7 @@ in vec3 fposition;
 in vec3 fnormal;
 
 uniform sampler2D tex;
+uniform sampler2D texture_diffuse1;
 
 #define MAX_DIR_LIGHTS 6
 #define MAX_POINT_LIGHTS 6
@@ -82,10 +83,20 @@ vec3 calculatePointLight(int index);
 vec3 calculateDirLight(int index);
 vec3 calculateSpotLight(int index);
 
+uniform int isModel;
+
 void main()
 {	
+vec4 texColor = vec4(0.0f,0.0f,0.0f,0.0f);
 
-vec4 texColor = texture(tex, texCoord);
+if(isModel == 1)
+{
+texColor = texture(texture_diffuse1, texCoord);
+}
+else
+{
+texColor = texture(tex, texCoord);
+}
 
 vec3 lightResultTest = calculateLight();
 
@@ -339,6 +350,7 @@ void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, f
 	setMaterial(material);
 	bindSpriteBuffers(vbo, vao, vertex, size);
 	setSpriteAttrib();
+	glUniform1i(glGetUniformLocation(_shaderProgram, "isModel"), 0);
 	startProgram(trs);
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
@@ -494,4 +506,9 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(spotLightStr+".id").c_str()), id);
 		break;
 	}
+}
+
+void Renderer::setMesh(string locationName, int texNumber) {
+	glUniform1i(glGetUniformLocation(_shaderProgram,(GLchar*)locationName.c_str()), texNumber);
+	glUniform1i(glGetUniformLocation(_shaderProgram, "isModel"), 1);
 }
