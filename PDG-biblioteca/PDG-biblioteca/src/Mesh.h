@@ -14,8 +14,8 @@ using namespace std;
 
 struct Vertex {
     vec3 Position;
-    vec3 Normal;
     vec2 TexCoords;
+    vec3 Normal;
     vec3 Tangent;
     vec3 Bitangent;
 };
@@ -41,7 +41,6 @@ private:
     unsigned int vbo;
     unsigned int ebo;
     Renderer* _rend;
-
-    void setupMesh();
+	void setupMesh();
 };
 

@@ -83,20 +83,20 @@ vec3 calculatePointLight(int index);
 vec3 calculateDirLight(int index);
 vec3 calculateSpotLight(int index);
 
-uniform int isModel;
+uniform bool isModel;
 
 void main()
 {	
 vec4 texColor = vec4(0.0f,0.0f,0.0f,0.0f);
 
-if(isModel == 1)
-{
+//if(isModel)
+//{
 texColor = texture(texture_diffuse1, texCoord);
-}
-else
-{
-texColor = texture(tex, texCoord);
-}
+//}
+//else
+//{
+//texColor = texture(tex, texCoord);
+//}
 
 vec3 lightResultTest = calculateLight();
 
@@ -120,7 +120,7 @@ for (int i = 0; i < MAX_SPOT_LIGHTS; i++)
 
 vec3 lightResultTotal = /*lightResultTest +*/ lightResultPoint + lightResultDir + lightResultSpot;
 
-outColor = texColor * vec4(lightResultTotal, 1.0f);
+outColor = texColor;// * vec4(lightResultTotal, 1.0f);
  
 }
 
@@ -363,9 +363,10 @@ unsigned int Renderer::getShaderProgram()
 
 void Renderer::setTexture(unsigned int texture)
 {	
+	//cout << texture << endl;
 	unsigned int uniformTex = glGetUniformLocation(_shaderProgram, "tex");
 	glUseProgram(_shaderProgram);
-	glUniform1i(uniformTex, 1);
+	glUniform1i(uniformTex, 0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE0);
 }
@@ -509,6 +510,9 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 }
 
 void Renderer::setMesh(string locationName, int texNumber) {
+	glUseProgram(_shaderProgram);
 	glUniform1i(glGetUniformLocation(_shaderProgram,(GLchar*)locationName.c_str()), texNumber);
-	glUniform1i(glGetUniformLocation(_shaderProgram, "isModel"), 1);
+	//setMaterial(defaultMat);
+	glUniform1i(glGetUniformLocation(_shaderProgram, "isModel"), true);
 }
+

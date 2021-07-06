@@ -20,19 +20,19 @@ void Game::initGame(Renderer* renderer)
 {
 	timer = new Timer();
 	timer->start();
-	shapeA = new Shape(ShapeTypes::rectangle, renderer);
+	//shapeA = new Shape(ShapeTypes::rectangle, renderer);
 	
 	_light = new Lightning(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
 	_lightA = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
-	
+
 	_model = new Model("res/backpack/backpack.obj",renderer,false);
 	//test
-	cube = new Shape(ShapeTypes::cube, renderer);
-	cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-
-	sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
-	sprite2 = new Sprite(renderer, "res/Choclo.png", true);
-	tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 1.0f, 1.0f);
+	//cube = new Shape(ShapeTypes::cube, renderer);
+	//cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	//
+	//sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
+	//sprite2 = new Sprite(renderer, "res/Choclo.png", true);
+	//tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 1.0f, 1.0f);
 	_camera = new Camera(renderer);
 
 	//automatizar, en vez de pasar id pasar una coordenada
@@ -41,7 +41,7 @@ void Game::initGame(Renderer* renderer)
 	vector<bool> tilemapWalkable = { true,true, true, true, true, true, true, true, true, true, 
 									true,true, true, true, true, true, true, true, true, true,
 									true,true, true, true, true, true, true, true, true, true};
-	tileMap->setTileMap(5,5,tilemapLayout,tilemapWalkable);
+	//tileMap->setTileMap(5,5,tilemapLayout,tilemapWalkable);
 	animation = new Animation(); //spriteSheet 308 x 178
 	
 	//hacer un metodo que corte automaticamente 
@@ -53,7 +53,7 @@ void Game::initGame(Renderer* renderer)
 	animation->addFrame((308 - 102.66f * 1), 89.0f, 102.66f, 89.0f, 308, 178);
 	animation->addAnimation(0.5f);
 
-	sprite1->setAnimation(animation);
+	//sprite1->setAnimation(animation);
 
 
 	_camera->setPosition(glm::vec3(0.0f, 0.0f, 10.0f));
@@ -61,13 +61,13 @@ void Game::initGame(Renderer* renderer)
 	_model->setPosition(vec3(0.0f,0.0f,-5.0f));
 
 	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
-	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
-	shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
-	
-
-	sprite1->setPosition(vec3(0.7f, -0.3f, 0.0f));
-	sprite2->setPosition(vec3(-0.75, 1, 0.0f));
-	sprite2->setScale(vec3(1, 2, 1));
+	//shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
+	//shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
+	//
+	//
+	//sprite1->setPosition(vec3(0.7f, -0.3f, 0.0f));
+	//sprite2->setPosition(vec3(-0.75, 1, 0.0f));
+	//sprite2->setScale(vec3(1, 2, 1));
 
 	//hacer una animacion de fuego que freene el paso, un puzzle en el que empujas algo
 	//y entra en un trigger y mientras esta en el trigger se apaga el fuego y podes pasar
@@ -276,37 +276,37 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	vec3 cameraRotation = vec3(camTargetX, camTargetY, camTargetZ) * camRotSpeed * timer->getDT();
 	_camera->moveOnLocal(glm::vec3 (cameraMovement));
 	_camera->rotate(glm::vec3(cameraRotation));
-
-
-	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
-
-	vec3 newPos = shapeA->getPosition() + playerMovement;
-	shapeA->setPosition(newPos);
-
-	vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
-	shapeA->setScale(newScale);
-
-	vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
-	shapeA->setRotation(newRot);
-
-	if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
-	collManager.CheckCollisionAgainstStatic(shapeA, sprite1, playerMovement);
-
-	tileMap->checkCollisionWithTileMap(shapeA, playerMovement);
+	//
+	//
+	//vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
+	//
+	//vec3 newPos = shapeA->getPosition() + playerMovement;
+	//shapeA->setPosition(newPos);
+	//
+	//vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
+	//shapeA->setScale(newScale);
+	//
+	//vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
+	//shapeA->setRotation(newRot);
+	//
+	//if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
+	//collManager.CheckCollisionAgainstStatic(shapeA, sprite1, playerMovement);
+	//
+	//tileMap->checkCollisionWithTileMap(shapeA, playerMovement);
 
 	timer->updateTimer();
-	sprite1->updateSprite(*timer);
+	_model->Draw();
+	//sprite1->updateSprite(*timer);
 
 	//draw
 	//tileMap->drawTileMap();
 
 	//cube->setRotationX(cube->getRotation().x + 5* timer->getDT());
 
-	shapeA->setPosition(_light->getPos());
-	shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
-	shapeA->draw();
-	_model->Draw();
-	cube->draw();
+	//shapeA->setPosition(_light->getPos());
+	//shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
+	//shapeA->draw();
+	//cube->draw();
 
 
 	//sprite1->draw();

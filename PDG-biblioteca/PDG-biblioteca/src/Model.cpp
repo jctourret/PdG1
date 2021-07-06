@@ -1,5 +1,6 @@
 #include "Model.h"
 
+
 Model::Model(string const& path, Renderer* rend, bool gamma) : gammaCorrection(gamma), Entity(rend)
 {
 	_rend = rend;
@@ -8,6 +9,7 @@ Model::Model(string const& path, Renderer* rend, bool gamma) : gammaCorrection(g
 
 void Model::loadModel(string const &path)
 {
+	stbi_set_flip_vertically_on_load(true);
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path,aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -124,6 +126,7 @@ vector<meshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType t
 		}
 		if (!skip)
 		{
+
 			meshTexture texture;
 			texture.id = TextureFromFile(str.C_Str(),this->directory, false);
 			texture.type = typeName;
