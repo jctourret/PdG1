@@ -23,14 +23,14 @@ void Game::initGame(Renderer* renderer)
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
 
 	_light = new Lightning(renderer);
-	_light->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
+	_light->initializeDirectional(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
 	_light->setActiveState(false);
 	_lightA = new Lightning(renderer);
-	_lightA->initializeSpot(glm::vec3(0.0f,0.0f,5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f), glm::radians(5.0f), 0.022f, 0.0019f);
+	_lightA->initializeSpot(glm::vec3(0.0f,0.0f,5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f), glm::radians(5.0f), 0.09f, 0.032f);
 
 
-	importer.loadModel("res/models/backpack/backpack.obj",renderer);
-
+	importer.loadModel("res/models/Gun_dae/Gun.dae", false, renderer);
+	importer.loadModel("res/models/backpack/backpack.obj", true, renderer);
 	//test
 	cube = new Shape(ShapeTypes::cube, renderer);
 	cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -306,6 +306,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	timer->updateTimer();
 	importer.models_Loaded[0]->Draw();
+	importer.models_Loaded[1]->Draw();
 
 	//sprite1->updateSprite(*timer);
 

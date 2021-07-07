@@ -1,10 +1,10 @@
 #include "modelImporter.h"
 
 
-void modelImporter::loadModel(string const& path, Renderer* rend)
+void modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
 {
 	models_Loaded.push_back(new Model(rend,false));
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(flipUVs);
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)

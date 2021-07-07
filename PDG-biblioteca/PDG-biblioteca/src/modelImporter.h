@@ -16,7 +16,8 @@ protected:
 public:
 	~modelImporter();
 	vector<Model*> models_Loaded;
-	void loadModel(string const& path, Renderer* rend);
+	void loadModel(string const& path, bool flipUVs, Renderer* rend);
+private:
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	vector<meshTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);

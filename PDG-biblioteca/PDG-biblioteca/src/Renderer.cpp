@@ -38,7 +38,13 @@ struct Material {
     vec3 specular;    
     float shininess;
 	sampler2D texture_diffuse1;
+	sampler2D texture_diffuse2;
+	sampler2D texture_diffuse3;
+	sampler2D texture_diffuse4;
 	sampler2D texture_specular1;
+	sampler2D texture_specular2;
+	sampler2D texture_specular3;
+	sampler2D texture_specular4;
 	sampler2D texture_normal1;
 	sampler2D texture_height1;
 
@@ -95,6 +101,8 @@ vec3 calculateLight();
 vec3 calculatePointLight(int index);
 vec3 calculateDirLight(int index);
 vec3 calculateSpotLight(int index);
+vec3 unifyDiffuse();
+vec3 unifySpecular();
 
 uniform bool isModel;
 
@@ -105,9 +113,9 @@ vec4 texColor = vec4(0.0f,0.0f,0.0f,0.0f);
 if(isModel)
 {
 	texColor = texture(texture_diffuse1, texCoord);
-	finalMat.diffuse = texture(mat.texture_diffuse1, texCoord).rgb;
-	finalMat.specular = texture(mat.texture_specular1, texCoord).rgb;
-	finalMat.ambient = texture(mat.texture_diffuse1, texCoord).rgb;
+	finalMat.diffuse = unifyDiffuse();
+	finalMat.specular = unifySpecular();
+	finalMat.ambient = unifyDiffuse();
 	finalMat.shininess = 32.0f;
 }
 else
@@ -278,6 +286,26 @@ vec3 calculateSpotLight(int index)
 		
 }
 
+vec3 unifyDiffuse()
+{
+	vec3 finalTex;
+	finalTex = texture(mat.texture_diffuse1, texCoord).rgb;
+	finalTex += texture(mat.texture_diffuse2, texCoord).rgb;
+	finalTex += texture(mat.texture_diffuse3, texCoord).rgb;
+	finalTex += texture(mat.texture_diffuse4, texCoord).rgb;
+	return finalTex;
+}
+
+vec3 unifySpecular()
+{
+	vec3 finalTex;
+	finalTex =  texture(mat.texture_specular1, texCoord).rgb;
+	finalTex += texture(mat.texture_specular2, texCoord).rgb;
+	finalTex += texture(mat.texture_specular3, texCoord).rgb;
+	finalTex += texture(mat.texture_specular4, texCoord).rgb;
+	return finalTex;
+}
+
 )glsl";
 
 Renderer::Renderer()
@@ -373,6 +401,7 @@ void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, f
 	startProgram(trs);
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
+	//glBindTexture(GL_TEXTURE_2D, 0);
 }
 void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material)
 {
