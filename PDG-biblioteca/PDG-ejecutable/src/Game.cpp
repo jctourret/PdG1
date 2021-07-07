@@ -22,8 +22,12 @@ void Game::initGame(Renderer* renderer)
 	timer->start();
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
 	
-	_light = new Lightning(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
-	//_lightA = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
+	_light = new Lightning(renderer);
+	_light->initializeDirectional(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
+	_light->setActiveState(false);
+	_lightA = new Lightning(renderer);
+	_lightA->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
+
 
 	_model = new Model("res/backpack/backpack.obj",renderer,false);
 	//test
@@ -270,6 +274,11 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	else
 	{
 		camTargetZ = 0;
+	}
+
+	if (input->isKeyPressed(GLFW_KEY_1, isPressed[1]))
+	{
+		_light->setActiveState(!_light->getActiveState());
 	}
 
 	vec3 cameraMovement = vec3(camSpeedX, camSpeedY, camSpeedZ) * 3.0f * timer->getDT();

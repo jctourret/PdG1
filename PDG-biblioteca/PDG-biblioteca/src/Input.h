@@ -11,5 +11,6 @@ public:
 	~Input();
 	bool isKeyDown(int key);
 	bool isKeyUp(int key);
+	bool isKeyPressed(int key, bool &pressed);
 };
 

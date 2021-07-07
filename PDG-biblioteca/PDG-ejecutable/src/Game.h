@@ -33,6 +33,8 @@ private:
 	float camTargetZ = 0.0f;
 	float camRotSpeed = 50.0f;
 
+	bool isPressed[9];
+
 	double mouseLastX;
 	double mouseLastY;
 	double mouseCurrentX;

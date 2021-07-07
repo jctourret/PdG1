@@ -475,7 +475,7 @@ void Renderer::setMaterial(Material* material)
 	glUniform1f(uniformMatShin, material->_shininess);
 }
 
-void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, unsigned int lightKind, int id)
+void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, unsigned int lightKind, bool activeState, int id)
 {
 
 	string dirLightStr = "dirLight";
@@ -496,7 +496,7 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(testLightStr+".ambient").c_str()), 1, value_ptr(ambient));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(testLightStr+".diffuse").c_str()), 1, value_ptr(diffuse));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(testLightStr+".specular").c_str()), 1, value_ptr(specular));
-		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(testLightStr+".initialized").c_str()), true);
+		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(testLightStr+".initialized").c_str()), activeState);
 		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(testLightStr+".id").c_str()), id);
 		break;
 	case 1:
@@ -507,7 +507,7 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 		glUniform1f(glGetUniformLocation(_shaderProgram,  (GLchar*)(pointLightStr+".constant").c_str()), constant);// 1.0f
 		glUniform1f(glGetUniformLocation(_shaderProgram,  (GLchar*)(pointLightStr+".linear").c_str()), linear);// 0.09f
 		glUniform1f(glGetUniformLocation(_shaderProgram,  (GLchar*)(pointLightStr+".quadratic").c_str()), quadratic);// 0.032f
-		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(pointLightStr+".initialized").c_str()), true);
+		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(pointLightStr+".initialized").c_str()), activeState);
 		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(pointLightStr+".id").c_str()), id);
 		break;
 	case 2:
@@ -515,7 +515,7 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(dirLightStr+".ambient").c_str()), 1, value_ptr(ambient));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(dirLightStr+".diffuse").c_str()), 1, value_ptr(diffuse));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(dirLightStr+".specular").c_str()), 1, value_ptr(specular));
-		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(dirLightStr+".initialized").c_str()), true);
+		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(dirLightStr+".initialized").c_str()), activeState);
 		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(dirLightStr+".id").c_str()), id);
 		break;
 	case 3:
@@ -525,7 +525,7 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(spotLightStr+".diffuse").c_str()), 1, value_ptr(diffuse));
 		glUniform3fv(glGetUniformLocation(_shaderProgram, (GLchar*)(spotLightStr+".specular").c_str()), 1, value_ptr(specular));
 		glUniform1f(glGetUniformLocation(_shaderProgram,  (GLchar*)(spotLightStr+".cutOff").c_str()), glm::cos(cutOff));// glm::radians(12.5f)
-		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(spotLightStr+".initialized").c_str()), true);
+		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(spotLightStr+".initialized").c_str()), activeState);
 		glUniform1i(glGetUniformLocation(_shaderProgram,  (GLchar*)(spotLightStr+".id").c_str()), id);
 		break;
 	}
