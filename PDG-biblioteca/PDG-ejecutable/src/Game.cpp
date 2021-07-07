@@ -22,18 +22,54 @@ void Game::initGame(Renderer* renderer)
 	timer->start();
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
 
-	_light = new Lightning(renderer);
-	_light->initializeDirectional(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
-	_light->setActiveState(false);
 	_lightA = new Lightning(renderer);
-	_lightA->initializeSpot(glm::vec3(0.0f,0.0f,5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f), glm::radians(5.0f), 0.09f, 0.032f);
+	_lightA->initializeSpot(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f), glm::radians(5.0f), 0.09f, 0.032f);
+	_lightA->setActiveState(false);
+
+	_lightB = new Lightning(renderer);
+	_lightB->initializePoint(glm::vec3(0.0f, 5.0f, 5.0f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f), 0.09f, 0.032f);
+	_lightB->setActiveState(false);
+
+	_lightC = new Lightning(renderer);
+	_lightC->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.1f), glm::vec3(0.5f), glm::vec3(0.5f));
+	_lightC->setActiveState(false);
 
 
-	importer.loadModel("res/models/Gun_dae/Gun.dae", false, renderer);
-	importer.loadModel("res/models/backpack/backpack.obj", true, renderer);
+	importer.loadModel("res/Models/Knuckles/Knuckles.fbx", false, renderer);
+	importer.loadModel("res/Models/Gun_dae/Gun.dae", false, renderer);
+	importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
+
+	importer.models_Loaded[0]->setPosition(vec3(0.0f, 0.0f, -8.0f));
+	importer.models_Loaded[0]->setRotation(vec3(270.0f, 0.0f, 0.0f));
+	importer.models_Loaded[1]->setPosition(vec3(-5.0f, 0.0f, -5.0f));
+	importer.models_Loaded[1]->setRotation(vec3(270.0f, 0.0f, 180.0f));
+	importer.models_Loaded[1]->setScale(vec3(5.0f, 5.0f, 5.0f));
+	importer.models_Loaded[2]->setPosition(vec3(5.0f, 0.0f, -5.0f));
+
 	//test
-	cube = new Shape(ShapeTypes::cube, renderer);
-	cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	Material greenRubber;
+	greenRubber._diffuse = glm::vec3(0.4f, 0.5f, 0.4f);
+	greenRubber._specular = glm::vec3(0.04f, 0.7f, 0.04f);
+	greenRubber._shininess = 0.78125f * 128.0f;
+
+	cubeA = new Shape(ShapeTypes::cube, greenRubber, renderer);
+	cubeA->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+
+	Material obsidian;
+	obsidian._diffuse = glm::vec3(0.18275f, 0.17f, 0.22525f);
+	obsidian._specular = glm::vec3(0.332741f, 0.328634f, 0.346435f);
+	obsidian._shininess = 0.3f * 128.0f;
+
+	cubeB = new Shape(ShapeTypes::cube, obsidian, renderer);
+	cubeB->setPosition(glm::vec3(-1.0f, 1.0f, 0.0f));
+
+	Material emerald;
+	emerald._diffuse = glm::vec3(0.07568f, 0.61424f, 0.07568f);
+	emerald._specular = glm::vec3(0.633f, 0.727811f, 0.633f);
+	emerald._shininess = 0.6f * 128.0f;
+
+	cubeC = new Shape(ShapeTypes::cube, emerald, renderer);
+	cubeC->setPosition(glm::vec3(1.0f, 1.0f, 0.0f));
 	
 	//sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
 	//sprite2 = new Sprite(renderer, "res/Choclo.png", true);
@@ -62,9 +98,6 @@ void Game::initGame(Renderer* renderer)
 
 
 	_camera->setPosition(glm::vec3(0.0f, 0.0f, 10.0f));
-
-	importer.models_Loaded[0]->setPosition(vec3(0.0f, 0.0f, -5.0f));
-
 	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
 	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
 	shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
@@ -279,7 +312,15 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	if (input->isKeyPressed(GLFW_KEY_1, isPressed[1]))
 	{
-		_light->setActiveState(!_light->getActiveState());
+		_lightA->setActiveState(!_lightA->getActiveState());
+	}
+	if (input->isKeyPressed(GLFW_KEY_2, isPressed[2]))
+	{
+		_lightB->setActiveState(!_lightB->getActiveState());
+	}
+	if (input->isKeyPressed(GLFW_KEY_3, isPressed[3]))
+	{
+		_lightC->setActiveState(!_lightC->getActiveState());
 	}
 
 	vec3 cameraMovement = vec3(camSpeedX, camSpeedY, camSpeedZ) * 3.0f * timer->getDT();
@@ -305,8 +346,10 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	//tileMap->checkCollisionWithTileMap(shapeA, playerMovement);
 
 	timer->updateTimer();
+
 	importer.models_Loaded[0]->Draw();
 	importer.models_Loaded[1]->Draw();
+	importer.models_Loaded[2]->Draw();
 
 	//sprite1->updateSprite(*timer);
 
@@ -316,10 +359,14 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	//cube->setRotationX(cube->getRotation().x + 5* timer->getDT());
 	_lightA->setPos(_camera->getPosition());
 	_lightA->setDir(_camera->getFront());
-	shapeA->setPosition(_light->getPos());
+
+	shapeA->setPosition(_lightB->getPos());
 	shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
 	shapeA->draw();
-	cube->draw();
+
+	cubeA->draw();
+	cubeB->draw();
+	cubeC->draw();
 
 	//sprite1->draw();
 	//sprite2->draw();
@@ -328,12 +375,14 @@ void Game::destroyGame()
 {
 	if (timer) delete timer;
 	if (shapeA) delete shapeA;
-	if (cube) delete cube;
+	if (cubeA) delete cubeA;
+	if (cubeB) delete cubeB;
+	if (cubeC) delete cubeC;
 	if (sprite1) delete sprite1;
 	if (sprite2) delete sprite2;
 	if (tileMap) delete tileMap;
 	if (animation) delete animation;
 	if (_camera) delete _camera;
-	if (_light) delete _light;
+	if (_lightB) delete _lightB;
 	if (_lightA) delete _lightA;
 }

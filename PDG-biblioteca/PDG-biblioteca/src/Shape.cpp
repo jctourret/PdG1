@@ -26,6 +26,28 @@ Shape::Shape(ShapeTypes shapeType, Renderer* renderer):Entity(renderer)
 	mat->_shininess = 32.0f;
 }
 
+Shape::Shape(ShapeTypes shapeType, Material newMat, Renderer* renderer) :Entity(renderer)
+{
+	rend = renderer;
+	_shapeType = shapeType;
+	vertexToUse = NULL;
+	switch (_shapeType)
+	{
+	case triangle:
+		createTriangle();
+		break;
+	case cube:
+		createCube();
+		break;
+	default:
+	case rectangle:
+		createRectangle();
+		break;
+	}
+	mat = new Material(newMat._ambient,newMat._diffuse,newMat._specular,newMat._shininess);
+
+}
+
 Shape::~Shape()
 {
 	if (mat)delete mat;
@@ -61,7 +83,7 @@ void Shape::createCube()
 	rend->creatoVAO(vao);
 	rend->createVBO(vertexToUse, vertexAmount, vbo);
 	rend->createEBO(indicesData, indexAmount, ebo);
-	Texture* texture = new Texture("res/Choclo.png");
+	Texture* texture = new Texture("res/white.png");
 	texture->Bind(0);
 	defaultTexture = texture->getTex();
 	rend->setTexture(defaultTexture);
@@ -113,5 +135,5 @@ void Shape::draw()
 	glBindTexture(GL_TEXTURE_2D, defaultTexture);
 	glActiveTexture(GL_TEXTURE0);
 
-	rend->drawSprite(TRS, vbo, vao, vertexToUse, vertexAmount, indexAmount, mat);
+	rend->drawShape(TRS, vbo, vao, vertexToUse, vertexAmount, indexAmount, mat);
 }

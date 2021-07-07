@@ -90,6 +90,9 @@ Mesh modelImporter::processMesh(aiMesh* mesh, const aiScene* scene)
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 	vector<meshTexture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	if (specularMaps.empty()) models_Loaded.back()->hasSpecularMaps = false;
+	else models_Loaded.back()->hasSpecularMaps = true;
+
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
 	// NORMAL USES HEIGHT INSTEAD OF NORMALS
@@ -100,7 +103,7 @@ Mesh modelImporter::processMesh(aiMesh* mesh, const aiScene* scene)
 	vector<meshTexture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	return Mesh(vertices, indices, textures, models_Loaded.back()->_rend);
+	return Mesh(vertices, indices, textures, models_Loaded.back()->hasSpecularMaps, models_Loaded.back()->_rend);
 }
 
 vector<meshTexture> modelImporter::loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
@@ -110,6 +113,7 @@ vector<meshTexture> modelImporter::loadMaterialTextures(aiMaterial* mat, aiTextu
 	{
 		aiString str;
 		mat->GetTexture(type, i, &str);
+		cout << str.C_Str() << endl;
 		bool skip = false;
 		for (unsigned int j = 0; j < models_Loaded.back()->textures_loaded.size(); j++)
 		{

@@ -13,8 +13,6 @@ Camera::~Camera(){
 }
 
 void Camera::setTransform(){
-
-	//_renderer->updateView(_position,_target);
 	_renderer->updateView(_position,_front,up);
 }
 
@@ -59,8 +57,6 @@ void Camera::moveOnLocal(glm::vec3 movement)
 
 void Camera::rotate(glm::vec3 movement)
 {
-	//if (movement == glm::vec3(0.0f)) return;
-
 	yaw += movement.x;
 	pitch += movement.y;
 	roll += movement.z;

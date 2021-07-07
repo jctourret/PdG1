@@ -1,10 +1,11 @@
 #include "Mesh.h"
 
-Mesh::Mesh(vector<Vertex> vertices,vector<unsigned int> indices,vector<meshTexture> textures, Renderer* rend) 
+Mesh::Mesh(vector<Vertex> vertices,vector<unsigned int> indices,vector<meshTexture> textures, bool usesSpecularMaps, Renderer* rend) 
 {
 	_vertices = vertices;
 	_indices = indices;
 	_textures = textures;
+	_usesSpecularMaps = usesSpecularMaps;
 	_rend = rend;
 	setupMesh();
 }
@@ -72,7 +73,7 @@ void Mesh::Draw()
 		{
 			number = to_string(heightNr++);
 		}
-		_rend->setMesh((matStructName + name + number).c_str(),i);
+		_rend->setMesh((matStructName + name + number).c_str(),i,_usesSpecularMaps);
 		glBindTexture(GL_TEXTURE_2D, _textures[i].id);
 	}
 

@@ -33,8 +33,7 @@ const GLchar* fragmentSource = R"glsl(
 #version 330 core
 
 struct Material {
-    vec3 ambient; //ya no se usa ambient en material
-    vec3 diffuse; //diffuse ahora es un sample 2d
+    vec3 diffuse;
     vec3 specular;    
     float shininess;
 	sampler2D texture_diffuse1;
@@ -47,6 +46,8 @@ struct Material {
 	sampler2D texture_specular4;
 	sampler2D texture_normal1;
 	sampler2D texture_height1;
+
+	bool useSpecularMaps;
 
 }; 
 
@@ -114,8 +115,11 @@ if(isModel)
 {
 	texColor = texture(texture_diffuse1, texCoord);
 	finalMat.diffuse = unifyDiffuse();
-	finalMat.specular = unifySpecular();
 	finalMat.ambient = unifyDiffuse();
+	if (mat.useSpecularMaps)
+		finalMat.specular = unifySpecular();
+	else
+		finalMat.specular = mat.specular;
 	finalMat.shininess = 32.0f;
 }
 else
@@ -123,7 +127,7 @@ else
 	texColor = texture(tex, texCoord);
 	finalMat.diffuse = mat.diffuse;
 	finalMat.specular = mat.specular;
-	finalMat.ambient = mat.ambient;
+	finalMat.ambient = mat.diffuse;
 	finalMat.shininess = mat.shininess;
 }
 
@@ -146,12 +150,14 @@ for (int i = 0; i < MAX_SPOT_LIGHTS; i++)
 {
 	lightResultSpot += calculateSpotLight(i);
 }
-
 vec3 lightResultTotal = /*lightResultTest +*/ lightResultPoint + lightResultDir + lightResultSpot;
 
-outColor = texColor * vec4(lightResultTotal, 1.0f);
+vec3 baseAmbient = finalMat.ambient * vec3(0.04f,0.04f,0.04f);
+
+outColor = vec4(lightResultTotal, 1.0f);
 if (isModel) outColor = vec4(lightResultTotal, 1.0f);
- 
+
+outColor+= vec4(baseAmbient,1.0f); 
 }
 
 vec3 calculateLight()
@@ -256,7 +262,6 @@ vec3 calculateSpotLight(int index)
 	vec3 diffuseFinal= vec3(0.0f);
 		
 	//Ambient Light
-	ambientLight = spotLight[index].ambient * finalMat.ambient;
 	
 	vec3 posToLightDirVec = normalize(spotLight[index].position - fposition);
 	
@@ -264,6 +269,7 @@ vec3 calculateSpotLight(int index)
 	
 	if(theta > spotLight[index].cutOff) 
 	{       
+		ambientLight = spotLight[index].ambient * finalMat.ambient;
 		//Diffuse Light
 		float diffuse = max(dot(fnormal, posToLightDirVec),0.0f); // producto punto entre la distancia con la luz y la normal
 		diffuseFinal = spotLight[index].diffuse * (diffuse* finalMat.diffuse);
@@ -393,23 +399,23 @@ void Renderer::deleteVertexShader() {
 	glDeleteShader(_vertexShader);
 }
 
-void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize)
+void Renderer::drawShape(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize)
 {
 	setMaterial(defaultMat);
 	bindSpriteBuffers(vbo,vao,vertex,size);
 	setSpriteAttrib();
-	startProgram(trs);
+	updateProgram(trs);
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
 	//glBindTexture(GL_TEXTURE_2D, 0);
 }
-void Renderer::drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material)
+void Renderer::drawShape(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material)
 {
 	setMaterial(material);
 	bindSpriteBuffers(vbo, vao, vertex, size);
 	setSpriteAttrib();
 	glUniform1i(glGetUniformLocation(_shaderProgram, "isModel"), 0);
-	startProgram(trs);
+	updateProgram(trs);
 	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind
 }
@@ -448,7 +454,7 @@ void Renderer::bindTexture(unsigned int texture) {
 	glActiveTexture(GL_TEXTURE0);
 }
 
-void Renderer::startProgram(mat4 model) {
+void Renderer::updateProgram(mat4 model) {
 	unsigned int transformLocation = glGetUniformLocation( _shaderProgram, "Model");
 	glUseProgram(_shaderProgram);
 	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, value_ptr(model));
@@ -570,10 +576,17 @@ void Renderer::updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 am
 	}
 }
 
-void Renderer::setMesh(string locationName, int texNumber) {
+void Renderer::setMesh(string locationName, int texNumber, bool usesSpecularMaps) {
 	glUseProgram(_shaderProgram);
 	glUniform1i(glGetUniformLocation(_shaderProgram,(GLchar*)locationName.c_str()), texNumber);
-	//setMaterial(defaultMat);
+	setMaterial(defaultMat);
+	glUniform1i(glGetUniformLocation(_shaderProgram, "mat.useSpecularMaps"), usesSpecularMaps);
+	if (!usesSpecularMaps)
+	{
+		glUniform3fv(glGetUniformLocation(_shaderProgram, "mat.specular"), 1, value_ptr(glm::vec3(0.5f,0.5f,0.5f)));
+	}
 	glUniform1i(glGetUniformLocation(_shaderProgram, "isModel"), true);
 }
+
+
 

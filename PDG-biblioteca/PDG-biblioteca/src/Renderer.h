@@ -38,14 +38,14 @@ public:
 	void deleteShaderProgram();
 	void deleteFragmentShader();
 	void deleteVertexShader();
-	void drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize);
-	void drawSprite(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material);
+	void drawShape(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize);
+	void drawShape(glm::mat4x4 trs, unsigned int vbo, unsigned int vao, float* vertex, unsigned int size, unsigned int indexSize, Material* material);
 	unsigned int getShaderProgram();
 	void setTexture(unsigned int texture);
 	void bindSpriteBuffers(unsigned int vbo, unsigned int vao, float* vertex, float size);
 	void setSpriteAttrib();
 	void bindTexture(unsigned int texture);
-	void startProgram(glm::mat4 model);
+	void updateProgram(glm::mat4 model);
 	void blendTexture();
 	void unblendTexture();
 	void setVP();
@@ -53,5 +53,5 @@ public:
 	void updateView(glm::vec3 position, glm::vec3 front, glm::vec3 up);
 	int getAttribElementsAmount();
 	void updateLight(glm::vec3 position, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, unsigned int lightKind, bool activeState, int id);
-	void setMesh(std::string locationName, int texNumber);
+	void setMesh(std::string locationName, int texNumber, bool usesSpecularMaps);
 };

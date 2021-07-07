@@ -34,10 +34,10 @@ public:
     vector<meshTexture> _textures;
     unsigned int vao;
 
-    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<meshTexture> textures, Renderer* rend);
+    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<meshTexture> textures, bool usesSpecularMaps, Renderer* rend);
     void Draw();
 private:
-
+	bool _usesSpecularMaps;
     unsigned int vbo;
     unsigned int ebo;
     Renderer* _rend;

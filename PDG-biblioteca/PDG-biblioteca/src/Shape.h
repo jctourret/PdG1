@@ -76,6 +76,7 @@ private:
 	Material* mat;
 public:
 	Shape(ShapeTypes shapeType, Renderer* renderer);
+	Shape(ShapeTypes shapeType, Material newMat, Renderer* renderer);
 	~Shape();
 	void draw();
 	float width;
