@@ -29,7 +29,7 @@ void Game::initGame(Renderer* renderer)
 	_lightA->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
 
 
-	importer.loadModel("res/backpack/backpack.obj",renderer);
+	importer.loadModel("res/models/backpack/backpack.obj",renderer);
 
 	//test
 	cube = new Shape(ShapeTypes::cube, renderer);

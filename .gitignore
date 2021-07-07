@@ -73,7 +73,7 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
-!backpack.obj
+!PDG-biblioteca\PDG-ejecutable\res\Models
 *.iobj
 *.pch
 *.pdb
