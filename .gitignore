@@ -73,7 +73,8 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
-!PDG-biblioteca\PDG-ejecutable\res\Models
+!PDG-biblioteca/PDG-ejecutable/res/Models/*.obj
+!PDG-biblioteca/PDG-ejecutable/res/Models/*/*.obj
 *.iobj
 *.pch
 *.pdb
