@@ -23,10 +23,10 @@ void Game::initGame(Renderer* renderer)
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
 
 	_light = new Lightning(renderer);
-	_light->initializeDirectional(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
+	_light->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
 	_light->setActiveState(false);
 	_lightA = new Lightning(renderer);
-	_lightA->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f));
+	_lightA->initializeSpot(glm::vec3(0.0f,0.0f,5.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f), glm::radians(5.0f), 0.022f, 0.0019f);
 
 
 	importer.loadModel("res/models/backpack/backpack.obj",renderer);
@@ -313,7 +313,8 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	//tileMap->drawTileMap();
 
 	//cube->setRotationX(cube->getRotation().x + 5* timer->getDT());
-
+	_lightA->setPos(_camera->getPosition());
+	_lightA->setDir(_camera->getFront());
 	shapeA->setPosition(_light->getPos());
 	shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
 	shapeA->draw();

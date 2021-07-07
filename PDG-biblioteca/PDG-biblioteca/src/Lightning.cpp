@@ -53,7 +53,7 @@ void Lightning::initializeDirectional(glm::vec3 dir, glm::vec3 ambient, glm::vec
 	setLight();
 }
 
-void Lightning::initializeSpot(glm::vec3 pos, glm::vec3 dir, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float cutOff)
+void Lightning::initializeSpot(glm::vec3 pos, glm::vec3 dir, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float cutOff, float linear, float quadratic)
 {
 	_lightType = spot;
 	id = spotLights++;
@@ -64,14 +64,34 @@ void Lightning::initializeSpot(glm::vec3 pos, glm::vec3 dir, glm::vec3 ambient, 
 	_diffuse = diffuse;
 	_specular = specular;
 	_cutOff = cutOff;
+	_constant = 1.0f;
+	_linear = linear;
+	_quadratic = quadratic;
 	_active = true;
 
+	setLight();
+}
+
+void Lightning::setPos(glm::vec3 newPos)
+{
+	_pos = newPos;
 	setLight();
 }
 
 glm::vec3 Lightning::getPos() 
 {
 	return _pos;
+}
+
+void Lightning::setDir(glm::vec3 newDir)
+{
+	_dir = newDir;
+	setLight();
+}
+
+glm::vec3 Lightning::getDir()
+{
+	return _dir;
 }
 
 void Lightning::setActiveState(bool newActiveState)
