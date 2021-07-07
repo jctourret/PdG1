@@ -7,7 +7,7 @@
 #include "Shape.h"
 #include "Sprite.h"
 #include "TileMap.h"
-#include "Model.h"
+#include "modelImporter.h"
 #include "Camera.h"
 #include "Lightning.h"
 
@@ -17,11 +17,11 @@ private:
 	Renderer* renderer;
 	CollisionManager collManager;
 	Input* input;
-	
 	bool gameShouldClose;
 protected:
 	Window* window;
 public:
+	modelImporter importer;
 	BaseGame();
 	~BaseGame();
 	void initBaseGame(int screenWidth, int screenHeight, const char* title);
