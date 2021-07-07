@@ -21,11 +21,10 @@ void Game::initGame(Renderer* renderer)
 	timer = new Timer();
 	timer->start();
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
-	
+	importer.loadModel("res/backpack/backpack.obj",renderer);
 	_light = new Lightning(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
 	//_lightA = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
 
-	_model = new Model("res/backpack/backpack.obj",renderer,false);
 	//test
 	cube = new Shape(ShapeTypes::cube, renderer);
 	cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -58,7 +57,7 @@ void Game::initGame(Renderer* renderer)
 
 	_camera->setPosition(glm::vec3(0.0f, 0.0f, 10.0f));
 
-	_model->setPosition(vec3(0.0f,0.0f,-5.0f));
+	importer.models_Loaded[0]->setPosition(vec3(0.0f, 0.0f, -5.0f));
 
 	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
 	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
@@ -295,7 +294,8 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	//tileMap->checkCollisionWithTileMap(shapeA, playerMovement);
 
 	timer->updateTimer();
-	_model->Draw();
+	importer.models_Loaded[0]->Draw();
+
 	//sprite1->updateSprite(*timer);
 
 	//draw
@@ -307,7 +307,6 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
 	shapeA->draw();
 	cube->draw();
-
 
 	//sprite1->draw();
 	//sprite2->draw();
@@ -324,5 +323,4 @@ void Game::destroyGame()
 	if (_camera) delete _camera;
 	if (_light) delete _light;
 	if (_lightA) delete _lightA;
-	if (_model) delete _model;
 }
