@@ -20,16 +20,16 @@ void Game::initGame(Renderer* renderer)
 {
 	timer = new Timer();
 	timer->start();
-	//shapeA = new Shape(ShapeTypes::rectangle, renderer);
+	shapeA = new Shape(ShapeTypes::rectangle, renderer);
 	
-	_light = new Lightning(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
-	_lightA = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
+	_light = new Lightning(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
+	//_lightA = new Lightning(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f),glm::vec3(1.0f), 1.0f, 0.14f, 0.07f, glm::radians(12.5f), LightType::directional, renderer);
 
 	_model = new Model("res/backpack/backpack.obj",renderer,false);
 	//test
-	//cube = new Shape(ShapeTypes::cube, renderer);
-	//cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-	//
+	cube = new Shape(ShapeTypes::cube, renderer);
+	cube->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	
 	//sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
 	//sprite2 = new Sprite(renderer, "res/Choclo.png", true);
 	//tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 1.0f, 1.0f);
@@ -61,8 +61,8 @@ void Game::initGame(Renderer* renderer)
 	_model->setPosition(vec3(0.0f,0.0f,-5.0f));
 
 	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
-	//shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
-	//shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
+	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
+	shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
 	//
 	//
 	//sprite1->setPosition(vec3(0.7f, -0.3f, 0.0f));
@@ -272,23 +272,23 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 		camTargetZ = 0;
 	}
 
-	vec3 cameraMovement = vec3(camSpeedX, camSpeedY, camSpeedZ) * timer->getDT();
+	vec3 cameraMovement = vec3(camSpeedX, camSpeedY, camSpeedZ) * 3.0f * timer->getDT();
 	vec3 cameraRotation = vec3(camTargetX, camTargetY, camTargetZ) * camRotSpeed * timer->getDT();
 	_camera->moveOnLocal(glm::vec3 (cameraMovement));
 	_camera->rotate(glm::vec3(cameraRotation));
-	//
-	//
-	//vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
-	//
-	//vec3 newPos = shapeA->getPosition() + playerMovement;
-	//shapeA->setPosition(newPos);
-	//
-	//vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
-	//shapeA->setScale(newScale);
-	//
-	//vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
-	//shapeA->setRotation(newRot);
-	//
+	
+	
+	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
+	
+	vec3 newPos = shapeA->getPosition() + playerMovement;
+	shapeA->setPosition(newPos);
+	
+	vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
+	shapeA->setScale(newScale);
+	
+	vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
+	shapeA->setRotation(newRot);
+	
 	//if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
 	//collManager.CheckCollisionAgainstStatic(shapeA, sprite1, playerMovement);
 	//
@@ -303,10 +303,10 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	//cube->setRotationX(cube->getRotation().x + 5* timer->getDT());
 
-	//shapeA->setPosition(_light->getPos());
-	//shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
-	//shapeA->draw();
-	//cube->draw();
+	shapeA->setPosition(_light->getPos());
+	shapeA->setRotation(vec3(0.0f, 0.0f, 45.0f));
+	shapeA->draw();
+	cube->draw();
 
 
 	//sprite1->draw();

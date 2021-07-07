@@ -55,6 +55,7 @@ void Mesh::Draw()
 		glActiveTexture(GL_TEXTURE0 + i);
 		string number;
 		string name = _textures[i].type;
+		string matStructName = "mat.";
 		if(name=="texture_diffuse")
 		{
 			number = to_string(diffuseNr++);
@@ -71,7 +72,7 @@ void Mesh::Draw()
 		{
 			number = to_string(heightNr++);
 		}
-		_rend->setMesh((name + number).c_str(),i);
+		_rend->setMesh((matStructName + name + number).c_str(),i);
 		glBindTexture(GL_TEXTURE_2D, _textures[i].id);
 	}
 

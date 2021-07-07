@@ -1,5 +1,5 @@
 #include "Model.h"
-
+#define STB_IMAGE_IMPLEMENTATION
 
 Model::Model(string const& path, Renderer* rend, bool gamma) : gammaCorrection(gamma), Entity(rend)
 {
@@ -56,6 +56,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 			vector.x = mesh->mNormals[i].x;
 			vector.y = mesh->mNormals[i].y;
 			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
 		}
 		if (mesh->mTextureCoords[0])
 		{
