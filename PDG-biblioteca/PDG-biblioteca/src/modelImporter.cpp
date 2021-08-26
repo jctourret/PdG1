@@ -1,5 +1,6 @@
 #include "modelImporter.h"
 
+mat4 ConvertMatrixToGLMFormat(aiMatrix4x4 from);
 
 void modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
 {
@@ -14,19 +15,42 @@ void modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
 	}
 	directory = path.substr(0, path.find_last_of('/'));
 
-	processNode(scene->mRootNode, scene);
+	processNode(scene->mRootNode, models_Loaded.back(), models_Loaded.back()->getTRS(), scene, rend);
 }
 
-void modelImporter::processNode(aiNode* node, const aiScene* scene)
+void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTransform , const aiScene* scene, Renderer* rend)
 {
-	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	Model* parent;
+	mat4 transform;
+
+	if (node->mNumMeshes>0)
 	{
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		models_Loaded.back()->meshes.push_back(processMesh(mesh, scene));
+		Model* newModel = new Model(rend, false);
+        targetParent->AddChild(newModel);
+
+		//Copy Meshes
+		for (unsigned int i = 0; i < node->mNumMeshes; i++)
+		{
+			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			targetParent->meshes.push_back(processMesh(mesh, scene));
+		}
+		
+		parent = newModel;
+
+		transform = mat4(0.0f);
+		transform[0][0] = 1.0f;
+		transform[1][1] = 1.0f;
+		transform[2][2] = 1.0f;
+		transform[3][3] = 1.0f;
+	}
+	else
+	{
+		parent = targetParent;
+		transform = targetParent->getTRS() * ConvertMatrixToGLMFormat(node->mTransformation);
 	}
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		processNode(node->mChildren[i], scene);
+		processNode(node->mChildren[i], parent, transform, scene, rend);
 	}
 }
 
@@ -188,4 +212,15 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
 
 modelImporter::~modelImporter() {
 	models_Loaded.clear();
+}
+
+glm::mat4 ConvertMatrixToGLMFormat(aiMatrix4x4 from)
+{
+	glm::mat4 to;
+	//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
+	to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
+	to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
+	to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
+	to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
+	return to;
 }

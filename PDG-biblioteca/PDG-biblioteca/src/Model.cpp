@@ -11,4 +11,21 @@ void Model::Draw() {
 	{
 		meshes[i].Draw();
 	}
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->Draw();
+	}
+}
+
+void Model::AddChild(Model* newChild)
+{
+	children.push_back(newChild);
+}
+
+
+void Model::setPosition(vec3 newPosition) {
+	posVec = newPosition;
+	translateMat = translate(mat4(1.0f), posVec);
+
+	UpdateTRS();
 }

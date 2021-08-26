@@ -24,15 +24,16 @@ protected:
 
 	void UpdateTRS();
 public:
+	Entity();
 	Entity(Renderer* renderer);
 	vec3 getPosition();
-	void setPosition(vec3 newPosition);
+	virtual void setPosition(vec3 newPosition);
 	vec3 getRotation();
-	void setRotationX(float x);	//despues crear una funcion para setear 
-	void setRotationY(float y);	//todas las rotaciones juntas
-	void setRotationZ(float z); //
-	void setRotation(vec3 newRot);
+	virtual void setRotationX(float x);	//despues crear una funcion para setear 
+	virtual void setRotationY(float y);	//todas las rotaciones juntas
+	virtual void setRotationZ(float z);
+	virtual void setRotation(vec3 newRot);
 	vec3 getScale();
-	void setScale(vec3 newScale);
+	virtual void setScale(vec3 newScale);
+	mat4 getTRS();
 };
-

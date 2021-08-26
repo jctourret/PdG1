@@ -1,6 +1,21 @@
 #include "Entity.h"
 #include <glm/ext/matrix_transform.hpp> 
 
+
+Entity::Entity()
+{
+	posVec = vec3(0.0f);
+	rotVec = vec3(0.0f);
+	scaleVec = vec3(1.0f);
+
+	translateMat = mat4(1.0f);
+	rotateXMat = mat4(1.0f);
+	rotateYMat = mat4(1.0f);
+	rotateZMat = mat4(1.0f);
+	scaleMat = mat4(1.0f);
+	TRS = mat4(1.0f);
+}
+
 Entity::Entity(Renderer* renderer)
 {
 	rend = renderer;
@@ -105,3 +120,9 @@ void Entity::setScale(vec3 newScale)
 	scaleMat = scale(mat4(1.0f),scaleVec);
 	UpdateTRS();
 }
+
+mat4 Entity::getTRS()
+{
+	return TRS;
+}
+

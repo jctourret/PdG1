@@ -14,7 +14,7 @@ class SABASAENGINE_API modelImporter
 {
 private:
 	string directory;
-	void processNode(aiNode* node, const aiScene* scene);
+	void processNode(aiNode* node, Model* targetParent, mat4 accTransform, const aiScene* scene,Renderer* rend);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	vector<meshTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
