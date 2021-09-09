@@ -21,6 +21,6 @@ private:
 public:
 	~modelImporter();
 	vector<Model*> models_Loaded;
-	void loadModel(string const& path, bool flipUVs, Renderer* rend);
+	Model* loadModel(string const& path, bool flipUVs, Renderer* rend);
 };
 

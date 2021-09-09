@@ -18,6 +18,11 @@ private:
 	Lightning* _lightB;
 	Lightning* _lightC;
 
+	Model* knuckles;
+	Model* gun;
+	Model* backpack;
+	Model* toonCar;
+
 	float speedX = 0;
 	float speedY = 0;
 	float speedZ = 0;

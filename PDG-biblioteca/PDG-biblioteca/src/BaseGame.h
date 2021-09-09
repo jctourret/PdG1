@@ -7,6 +7,7 @@
 #include "Shape.h"
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Model.h"
 #include "modelImporter.h"
 #include "Camera.h"
 #include "Lightning.h"

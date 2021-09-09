@@ -2,7 +2,7 @@
 
 mat4 ConvertMatrixToGLMFormat(aiMatrix4x4 from);
 
-void modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
+Model* modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
 {
 	models_Loaded.push_back(new Model(rend,false));
 	stbi_set_flip_vertically_on_load(flipUVs);
@@ -11,11 +11,16 @@ void modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
-		return;
+		return NULL;
 	}
 	directory = path.substr(0, path.find_last_of('/'));
 
+	models_Loaded.back()->name = scene->mRootNode->mName.C_Str();
 	processNode(scene->mRootNode, models_Loaded.back(), models_Loaded.back()->getTRS(), scene, rend);
+
+	Model* newModel = models_Loaded.back();
+	models_Loaded.pop_back();
+	return newModel;
 }
 
 void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTransform , const aiScene* scene, Renderer* rend)
@@ -23,34 +28,53 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 	Model* parent;
 	mat4 transform;
 
-	if (node->mNumMeshes>0)
-	{
-		Model* newModel = new Model(rend, false);
-        targetParent->AddChild(newModel);
 
-		//Copy Meshes
+	if (node->mParent == NULL)
+	{
+		parent = targetParent;
+		transform = ConvertMatrixToGLMFormat(node->mTransformation) * accTransform;
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 			targetParent->meshes.push_back(processMesh(mesh, scene));
 		}
-		
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			cout << "Processing child" << i << " of parent " << parent->name << endl;
+			processNode(node->mChildren[i], parent, transform, scene, rend);
+		}
+	}
+	else
+	{
+		Model* newModel = new Model(rend, false);
+		newModel->name = node->mName.C_Str();
+		targetParent->AddChild(newModel);
+		newModel->parent = targetParent;
+		//Copy Meshes
+		for (unsigned int i = 0; i < node->mNumMeshes; i++)
+		{
+			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			cout << "Loading mesh " << i << " of node " << node->mName.C_Str() << " into " << newModel->name << endl;
+			newModel->meshes.push_back(processMesh(mesh, scene));
+		}
+
+		//cout << "Parent is " << parent->name << endl;
 		parent = newModel;
+		cout << "Parent changed to " << parent->name << endl;
 
 		transform = mat4(0.0f);
 		transform[0][0] = 1.0f;
 		transform[1][1] = 1.0f;
 		transform[2][2] = 1.0f;
 		transform[3][3] = 1.0f;
-	}
-	else
-	{
-		parent = targetParent;
-		transform = targetParent->getTRS() * ConvertMatrixToGLMFormat(node->mTransformation);
-	}
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	{
-		processNode(node->mChildren[i], parent, transform, scene, rend);
+		
+		cout << "Node " << parent->name << " processed." << endl;
+		cout << "Processing children of " << parent->name << "." << endl;
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			cout << "Processing child" << i << " of parent " << parent->name << endl;
+			processNode(node->mChildren[i], parent, transform, scene, rend);
+		}
 	}
 }
 
@@ -150,7 +174,6 @@ vector<meshTexture> modelImporter::loadMaterialTextures(aiMaterial* mat, aiTextu
 		}
 		if (!skip)
 		{
-
 			meshTexture texture;
 			texture.id = TextureFromFile(str.C_Str(), this->directory, false);
 			texture.type = typeName;

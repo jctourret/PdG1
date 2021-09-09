@@ -34,17 +34,25 @@ void Game::initGame(Renderer* renderer)
 	_lightC->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.1f), glm::vec3(0.5f), glm::vec3(0.5f));
 	_lightC->setActiveState(false);
 
+	knuckles = importer.loadModel("res/Models/Knuckles/Knuckles.fbx", false, renderer);
+	gun = importer.loadModel("res/Models/Gun_dae/Gun.dae", false, renderer);
+	backpack = importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
+	toonCar = importer.loadModel("res/Models/CartoonCar/source/Pony_cartoon.obj", false, renderer);
 
-	importer.loadModel("res/Models/Knuckles/Knuckles.fbx", false, renderer);
-	importer.loadModel("res/Models/Gun_dae/Gun.dae", false, renderer);
-	importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
+	for (int i = 0; i < backpack->children.size(); i++)
+	{
+		cout << backpack->children[i]->meshes.size() << endl;
+		backpack->children[i]->setPosition(vec3(i,0,0));
+	}
 
-	importer.models_Loaded[0]->setPosition(vec3(0.0f, 0.0f, -8.0f));
-	importer.models_Loaded[0]->setRotation(vec3(270.0f, 0.0f, 0.0f));
-	importer.models_Loaded[1]->setPosition(vec3(-5.0f, 0.0f, -5.0f));
-	importer.models_Loaded[1]->setRotation(vec3(270.0f, 0.0f, 180.0f));
-	importer.models_Loaded[1]->setScale(vec3(5.0f, 5.0f, 5.0f));
-	importer.models_Loaded[2]->setPosition(vec3(5.0f, 0.0f, -5.0f));
+	knuckles->setPosition(vec3(0.0f, 0.0f, -8.0f));
+	knuckles->setRotation(vec3(270.0f, 0.0f, 0.0f));
+	gun->setPosition(vec3(-5.0f, 0.0f, -5.0f));
+	gun->setRotation(vec3(270.0f, 0.0f, 180.0f));
+	gun->setScale(vec3(5.0f, 5.0f, 5.0f));
+	backpack->setPosition(vec3(5.0f, 0.0f, -5.0f));
+	toonCar->setPosition(vec3(5.0f, -10.0f, -5.0f));
+	toonCar->setScale(vec3(0.01f, 0.01f, 0.01f));
 
 	//test
 	Material greenRubber;
@@ -347,9 +355,10 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	timer->updateTimer();
 
-	importer.models_Loaded[0]->Draw();
-	importer.models_Loaded[1]->Draw();
-	importer.models_Loaded[2]->Draw();
+	knuckles->Draw();
+	gun->Draw();
+	backpack->Draw();
+	toonCar->Draw();
 
 	//sprite1->updateSprite(*timer);
 
