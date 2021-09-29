@@ -17,7 +17,7 @@ protected:
 	mat4 scaleMat;
 	mat4 TRS;
 	Renderer* rend;
-	
+
 	vec3 posVec;
 	vec3 rotVec;
 	vec3 scaleVec;
@@ -35,5 +35,6 @@ public:
 	virtual void setRotation(vec3 newRot);
 	vec3 getScale();
 	virtual void setScale(vec3 newScale);
+	void setBaseMatrices(mat4 translate, mat4 rotateX, mat4 rotateY, mat4 rotateZ, mat4 scale);
 	mat4 getTRS();
 };

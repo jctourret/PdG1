@@ -1,7 +1,7 @@
 #include "modelImporter.h"
-
+#include "glm/glm.hpp"
 mat4 ConvertMatrixToGLMFormat(aiMatrix4x4 from);
-
+vec3 QuaternionsToEuler(vec4 quat);
 Model* modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
 {
 	models_Loaded.push_back(new Model(rend,false));
@@ -32,7 +32,14 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 	if (node->mParent == NULL)
 	{
 		parent = targetParent;
-		transform = ConvertMatrixToGLMFormat(node->mTransformation) * accTransform;
+
+		aiVector3D aiPos;
+		aiVector3D aiScale;
+		aiQuaternion aiRot;
+		node->mTransformation.Decompose(aiScale, aiRot, aiPos);
+
+		parent->globalPos = vec3(aiPos.x, aiPos.y, aiPos.z);
+
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -41,7 +48,7 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
 			cout << "Processing child" << i << " of parent " << parent->name << endl;
-			processNode(node->mChildren[i], parent, transform, scene, rend);
+			processNode(node->mChildren[i], parent, parent->getTRS(), scene, rend);
 		}
 	}
 	else
@@ -62,18 +69,21 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 		parent = newModel;
 		cout << "Parent changed to " << parent->name << endl;
 
-		transform = mat4(0.0f);
-		transform[0][0] = 1.0f;
-		transform[1][1] = 1.0f;
-		transform[2][2] = 1.0f;
-		transform[3][3] = 1.0f;
-		
+
+		aiVector3D aiPos;
+		aiVector3D aiScale;
+		aiQuaternion aiRot;
+		node->mTransformation.Decompose(aiScale, aiRot, aiPos);
+		cout << "AIPOSGLOBAL :" << aiPos.x << " " << aiPos.y << " " << aiPos.z << endl;
+		newModel->globalPos = vec3(aiPos.x, aiPos.y, aiPos.z);
+		newModel->setPosition(vec3(0));
+
 		cout << "Node " << parent->name << " processed." << endl;
 		cout << "Processing children of " << parent->name << "." << endl;
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
 			cout << "Processing child" << i << " of parent " << parent->name << endl;
-			processNode(node->mChildren[i], parent, transform, scene, rend);
+			processNode(node->mChildren[i], parent, parent->getTRS(), scene, rend);
 		}
 	}
 }
@@ -246,4 +256,28 @@ glm::mat4 ConvertMatrixToGLMFormat(aiMatrix4x4 from)
 	to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
 	to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
 	return to;
+}
+
+vec3 QuaternionsToEuler(vec4 q)
+{
+	vec3 angles;
+
+	// roll (x-axis rotation)
+	double sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
+	double cosr_cosp = 1 - 2 * (q.x * q.x + q.y * q.y);
+	angles.x = std::atan2(sinr_cosp, cosr_cosp);
+
+	// pitch (y-axis rotation)
+	double sinp = 2 * (q.w * q.y - q.z * q.x);
+	if (std::abs(sinp) >= 1)
+		angles.y = std::copysign(AI_MATH_HALF_PI, sinp); // use 90 degrees if out of range
+	else
+		angles.y = std::asin(sinp);
+
+	// yaw (z-axis rotation)
+	double siny_cosp = 2 * (q.w * q.z + q.x * q.y);
+	double cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z);
+	angles.z = std::atan2(siny_cosp, cosy_cosp);
+
+	return angles;
 }

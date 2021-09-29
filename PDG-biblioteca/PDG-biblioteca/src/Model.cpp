@@ -5,6 +5,15 @@ Model::Model(Renderer* rend, bool gamma) : gammaCorrection(gamma), Entity(rend)
 {
 	_rend = rend;
 	parent = NULL;
+	globalPos = vec3(0);
+}
+
+Model::~Model()
+{
+	for (int i = 0; i < children.size(); i++)
+	{
+		if (children[i]) delete children[i];
+	}
 }
 
 void Model::Draw() {
@@ -25,20 +34,14 @@ void Model::AddChild(Model* newChild)
 }
 
 void Model::setPosition(vec3 newPosition) {
-	if (parent == NULL)
-	{
-		posVec = newPosition;
-	}
-	else
-	{
-		posVec += newPosition;
-	}
+
+	posVec = newPosition;
 	translateMat = translate(mat4(1.0f), posVec);
+	UpdateTRS();
 	for (int i = 0; i < children.size(); i++)
 	{
-		children[i]->setPosition(newPosition);
+		children[i]->setPosition(children[i]->getPosition() + posVec);
 	}
-	UpdateTRS();
 }
 
 void Model::setRotation(vec3 newRot) 

@@ -37,22 +37,23 @@ void Game::initGame(Renderer* renderer)
 	knuckles = importer.loadModel("res/Models/Knuckles/Knuckles.fbx", false, renderer);
 	gun = importer.loadModel("res/Models/Gun_dae/Gun.dae", false, renderer);
 	backpack = importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
-	toonCar = importer.loadModel("res/Models/CartoonCar/source/Pony_cartoon.obj", false, renderer);
 
-	for (int i = 0; i < backpack->children.size(); i++)
-	{
-		cout << backpack->children[i]->meshes.size() << endl;
-		backpack->children[i]->setPosition(vec3(i,0,0));
-	}
 
-	knuckles->setPosition(vec3(0.0f, 0.0f, -8.0f));
-	knuckles->setRotation(vec3(270.0f, 0.0f, 0.0f));
+	//knuckles->setPosition(vec3(0.0f, 0.0f, -8.0f));
+	//knuckles->setRotation(vec3(270.0f, 0.0f, 0.0f));
+	cout << "knuckles scale: " << knuckles->getScale().x << knuckles->getScale().y << knuckles->getScale().x;
 	gun->setPosition(vec3(-5.0f, 0.0f, -5.0f));
 	gun->setRotation(vec3(270.0f, 0.0f, 180.0f));
 	gun->setScale(vec3(5.0f, 5.0f, 5.0f));
 	backpack->setPosition(vec3(5.0f, 0.0f, -5.0f));
-	toonCar->setPosition(vec3(5.0f, -10.0f, -5.0f));
-	toonCar->setScale(vec3(0.01f, 0.01f, 0.01f));
+
+	cout << endl << knuckles->children.size() << endl;
+	cout << knuckles->name;
+	for (int i = 0; i < knuckles->children.size(); i++)
+	{
+		cout << endl << knuckles->children[i]->name <<endl<< knuckles->children[i]->globalPos.x << " " << knuckles->children[i]->globalPos.y << " " << knuckles->children[i]->globalPos.z <<endl;
+	}
+
 
 	//test
 	Material greenRubber;
@@ -339,8 +340,8 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	
 	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
 	
-	vec3 newPos = shapeA->getPosition() + playerMovement;
-	shapeA->setPosition(newPos);
+	vec3 newPos = backpack->children[3]->getPosition() + playerMovement;
+	backpack->children[3]->setPosition(newPos);
 	
 	vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
 	shapeA->setScale(newScale);
@@ -358,7 +359,6 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	knuckles->Draw();
 	gun->Draw();
 	backpack->Draw();
-	toonCar->Draw();
 
 	//sprite1->updateSprite(*timer);
 
@@ -387,6 +387,9 @@ void Game::destroyGame()
 	if (cubeA) delete cubeA;
 	if (cubeB) delete cubeB;
 	if (cubeC) delete cubeC;
+	if (knuckles) delete knuckles;
+	if (gun) delete gun;
+	if (backpack) delete backpack;
 	if (sprite1) delete sprite1;
 	if (sprite2) delete sprite2;
 	if (tileMap) delete tileMap;

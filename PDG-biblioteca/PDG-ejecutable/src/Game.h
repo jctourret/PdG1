@@ -21,7 +21,6 @@ private:
 	Model* knuckles;
 	Model* gun;
 	Model* backpack;
-	Model* toonCar;
 
 	float speedX = 0;
 	float speedY = 0;

@@ -121,6 +121,16 @@ void Entity::setScale(vec3 newScale)
 	UpdateTRS();
 }
 
+void Entity::setBaseMatrices(mat4 translate, mat4 rotateX, mat4 rotateY, mat4 rotateZ, mat4 scale)
+{
+	translateMat = translate;
+	rotateXMat = rotateX;
+	rotateYMat = rotateY;
+	rotateZMat = rotateZ;
+	scaleMat = scale;
+	UpdateTRS();
+}
+
 mat4 Entity::getTRS()
 {
 	return TRS;
