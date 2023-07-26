@@ -37,23 +37,16 @@ void Game::initGame(Renderer* renderer)
 	knuckles = importer.loadModel("res/Models/Knuckles/Knuckles.fbx", false, renderer);
 	gun = importer.loadModel("res/Models/Gun_dae/Gun.dae", false, renderer);
 	backpack = importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
+	pedrito = importer.loadModel("res/Models/Pedrito/Pedrito.dae", false, renderer);
 
-
-	//knuckles->setPosition(vec3(0.0f, 0.0f, -8.0f));
-	//knuckles->setRotation(vec3(270.0f, 0.0f, 0.0f));
-	cout << "knuckles scale: " << knuckles->getScale().x << knuckles->getScale().y << knuckles->getScale().x;
+	knuckles->setRotation(vec3(-90.0f, 0.0f, 0.0f));
+	knuckles->setPosition(vec3(10.0f, 0.0f, 0.0f));
+	
 	gun->setPosition(vec3(-5.0f, 0.0f, -5.0f));
 	gun->setRotation(vec3(270.0f, 0.0f, 180.0f));
 	gun->setScale(vec3(5.0f, 5.0f, 5.0f));
 	backpack->setPosition(vec3(5.0f, 0.0f, -5.0f));
-
-	cout << endl << knuckles->children.size() << endl;
-	cout << knuckles->name;
-	for (int i = 0; i < knuckles->children.size(); i++)
-	{
-		cout << endl << knuckles->children[i]->name <<endl<< knuckles->children[i]->globalPos.x << " " << knuckles->children[i]->globalPos.y << " " << knuckles->children[i]->globalPos.z <<endl;
-	}
-
+	pedrito->setPosition(vec3(5.0f, 0.0f, -10.0f));
 
 	//test
 	Material greenRubber;
@@ -80,18 +73,14 @@ void Game::initGame(Renderer* renderer)
 	cubeC = new Shape(ShapeTypes::cube, emerald, renderer);
 	cubeC->setPosition(glm::vec3(1.0f, 1.0f, 0.0f));
 	
-	//sprite1 = new Sprite(renderer, "res/spriteSheet.png",true);
-	//sprite2 = new Sprite(renderer, "res/Choclo.png", true);
-	//tileMap = new TileMap(renderer, 16, 16, "res/MasterSimple.png", 256, 256, 1.0f, 1.0f);
 	_camera = new Camera(renderer);
 
 	//automatizar, en vez de pasar id pasar una coordenada
-	vector<int> tilemapLayout = /*{ 0,1,2,3,4,5,6,7,8,9,10,11,12 }; //*/{ 0,1,1,1,2,16,17,17,8 + 16 * 4,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
+	vector<int> tilemapLayout = { 0,1,1,1,2,16,17,17,8 + 16 * 4,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
 	//automatizar, en vez de pasar id pasar una coordenada
 	vector<bool> tilemapWalkable = { true,true, true, true, true, true, true, true, true, true, 
 									true,true, true, true, true, true, true, true, true, true,
 									true,true, true, true, true, true, true, true, true, true};
-	//tileMap->setTileMap(5,5,tilemapLayout,tilemapWalkable);
 	animation = new Animation(); //spriteSheet 308 x 178
 	
 	//hacer un metodo que corte automaticamente 
@@ -110,21 +99,6 @@ void Game::initGame(Renderer* renderer)
 	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
 	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
 	shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
-	//
-	//
-	//sprite1->setPosition(vec3(0.7f, -0.3f, 0.0f));
-	//sprite2->setPosition(vec3(-0.75, 1, 0.0f));
-	//sprite2->setScale(vec3(1, 2, 1));
-
-	//hacer una animacion de fuego que freene el paso, un puzzle en el que empujas algo
-	//y entra en un trigger y mientras esta en el trigger se apaga el fuego y podes pasar
-	//si pasas hay un trigger que te muestra que ganaste
-
-
-	//las collisiones no funcionan porque estan hechas con las medidas viejas
-	//cuanddo arreglo lo de las medidas con la view se rompen los sprites, la animacion
-	//mas que nada (opcion, cambiar el aspect ratio)
-
 }
 
 void Game::mouse_callback(Window window, Camera camera) {
@@ -340,32 +314,40 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	
 	vec3 playerMovement = vec3(speedX, speedY, speedZ) * timer->getDT();
 	
-	vec3 newPos = backpack->children[3]->getPosition() + playerMovement;
-	backpack->children[3]->setPosition(newPos);
+	vec3 newPos = pedrito->getPosition() + playerMovement*5.0f;
+	pedrito->setPosition(newPos);
 	
-	vec3 newScale = shapeA->getScale() + vec3(growSpeed, growSpeed, growSpeed)*timer->getDT();
-	shapeA->setScale(newScale);
+	// Prueba de punto especifico en le frustum
+	if (input->isKeyDown(GLFW_KEY_P)) {
+		cout << endl << "PEDRITO MIN: " << "X:" << pedrito->collectiveBBox->GetMinVector().x << "  Y:" << pedrito->collectiveBBox->GetMinVector().y << "  Z:" << pedrito->collectiveBBox->GetMinVector().z;
+		cout << endl << "PEDRITO MAX: " << "X:" << pedrito->collectiveBBox->GetMaxVector().x << "  Y:" << pedrito->collectiveBBox->GetMaxVector().y << "  Z:" << pedrito->collectiveBBox->GetMaxVector().z << endl;
+		cout << "Point Position:" << endl << " x:" << pedrito->getPosition().x <<
+			" y:" << pedrito->getPosition().y << " z:" << pedrito->getPosition().z << endl;
+		if (pedrito->collectiveBBox->isOnFrustum(_camera->_frustum,pedrito))
+		{
+			cout << "InFrustum" << endl;
+		}
+		else
+		{
+			cout << "OutOfFrustum" << endl;
+		}
+	}
+
 	
-	vec3 newRot = shapeA->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*timer->getDT();
-	shapeA->setRotation(newRot);
-	
-	//if (collManager.CheckCollision(shapeA, sprite2)) cout << "Trigger!" << endl;
-	//collManager.CheckCollisionAgainstStatic(shapeA, sprite1, playerMovement);
-	//
-	//tileMap->checkCollisionWithTileMap(shapeA, playerMovement);
+
+	vec3 newScale = pedrito->children[0]->children[0]->children[1]->getScale() + vec3(growSpeed,growSpeed,growSpeed) * timer->getDT();
+	pedrito->children[0]->children[0]->children[1]->setScale(newScale); 
+
+	vec3 newRot = pedrito->children[0]->children[0]->children[1]->getRotation() + vec3(rotXSpeed, rotYSpeed, rotZSpeed)*10.0f * timer->getDT();
+	pedrito->children[0]->children[0]->children[1]->setRotation(newRot);
 
 	timer->updateTimer();
 
 	knuckles->Draw();
-	gun->Draw();
-	backpack->Draw();
+	//gun->Draw();
+	//backpack->Draw();
+	pedrito->Draw();
 
-	//sprite1->updateSprite(*timer);
-
-	//draw
-	//tileMap->drawTileMap();
-
-	//cube->setRotationX(cube->getRotation().x + 5* timer->getDT());
 	_lightA->setPos(_camera->getPosition());
 	_lightA->setDir(_camera->getFront());
 
@@ -377,8 +359,6 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	cubeB->draw();
 	cubeC->draw();
 
-	//sprite1->draw();
-	//sprite2->draw();
 }
 void Game::destroyGame()
 {
@@ -389,6 +369,7 @@ void Game::destroyGame()
 	if (cubeC) delete cubeC;
 	if (knuckles) delete knuckles;
 	if (gun) delete gun;
+	if (pedrito) delete pedrito;
 	if (backpack) delete backpack;
 	if (sprite1) delete sprite1;
 	if (sprite2) delete sprite2;

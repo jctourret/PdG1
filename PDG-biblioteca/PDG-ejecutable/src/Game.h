@@ -21,6 +21,7 @@ private:
 	Model* knuckles;
 	Model* gun;
 	Model* backpack;
+	Model* pedrito;
 
 	float speedX = 0;
 	float speedY = 0;

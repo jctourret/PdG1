@@ -4,8 +4,14 @@
 Camera::Camera(Renderer* rend)
 {
 	_renderer = rend;
-	_position = glm::vec3(-1.0f, 0.0f, 0.0f);
+	_position = glm::vec3(0.0f, 0.0f, 10.0f);
 	_target = glm::vec3(0.0f, 0.0f, 0.0f);
+	_direction = glm::normalize(_target-_position);
+	_front = _direction;
+	_up = glm::vec3(0.0f, 1.0f, 0.0f);
+	_right = glm::normalize(glm::cross(_up,_front));
+	_up = glm::normalize(glm::cross(_right, _front));
+	_frustum = new Frustum(this, 2.0f, 45.0f, 0.1f, 100.0f);
 }
 
 Camera::~Camera(){
@@ -13,7 +19,7 @@ Camera::~Camera(){
 }
 
 void Camera::setTransform(){
-	_renderer->updateView(_position,_front,up);
+	_renderer->updateView(_position,_front,_up);
 }
 
 void Camera::setPosition(glm::vec3 position) {
@@ -41,6 +47,14 @@ glm::vec3 Camera::getFront() {
 	return _front;
 }
 
+glm::vec3 Camera::getUp() {
+	return _up;
+}
+
+glm::vec3 Camera::getSide() {
+	return _right;
+}
+
 void Camera::moveOnWorld(glm::vec3 movement)
 {
 	_position += movement;
@@ -49,7 +63,7 @@ void Camera::moveOnWorld(glm::vec3 movement)
 
 void Camera::moveOnLocal(glm::vec3 movement)
 {
-	glm::vec3 dir = (movement.x * side) + (movement.y * _front) + (movement.z * up);
+	glm::vec3 dir = (movement.x * _right) + (movement.y * _front) + (movement.z * _up);
 
 	_position += dir;
 	setTransform();
@@ -66,11 +80,11 @@ void Camera::rotate(glm::vec3 movement)
 	_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	_front = glm::normalize(_front);
 	
-	up.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch + 90.0f));
-	up.y = sin(glm::radians(pitch + 90.0f));
-	up.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch + 90.0f));
+	_up.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch + 90.0f));
+	_up.y = sin(glm::radians(pitch + 90.0f));
+	_up.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch + 90.0f));
 
-	side = glm::cross(_front, up);
+	_right = glm::cross(_front, _up);
 
 	setTransform();
 }

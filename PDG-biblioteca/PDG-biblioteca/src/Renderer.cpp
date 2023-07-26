@@ -343,6 +343,7 @@ void Renderer::initShaderProgram() {
 	glValidateProgram(_shaderProgram);
 	glUseProgram(_shaderProgram);
 	setVP();
+	// Crear Frustum con la data de la camara.
 }
 
 void Renderer::creatoVAO(unsigned int &vao)
@@ -475,7 +476,8 @@ void Renderer::setVP(){
 	mat4 proj = mat4(1.0f);
 	mat4 view = mat4(1.0f);
 	view = lookAt(vec3(0.0, 0.0f, 1.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-	proj = /*glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */perspective(45.0f, 2.0f, 0.1f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
+  /*Ortografica: glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */
+	proj = perspective(45.0f, 2.0f, 0.1f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(proj));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 }

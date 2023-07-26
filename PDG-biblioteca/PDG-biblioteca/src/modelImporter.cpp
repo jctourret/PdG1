@@ -1,7 +1,9 @@
 #include "modelImporter.h"
 #include "glm/glm.hpp"
+
 mat4 ConvertMatrixToGLMFormat(aiMatrix4x4 from);
 vec3 QuaternionsToEuler(vec4 quat);
+
 Model* modelImporter::loadModel(string const& path, bool flipUVs, Renderer* rend)
 {
 	models_Loaded.push_back(new Model(rend,false));
@@ -47,7 +49,7 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 		}
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
-			cout << "Processing child" << i << " of parent " << parent->name << endl;
+			cout << "Processing child " << i << " of parent " << parent->name << endl;
 			processNode(node->mChildren[i], parent, parent->getTRS(), scene, rend);
 		}
 	}
@@ -61,7 +63,7 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			cout << "Loading mesh " << i << " of node " << node->mName.C_Str() << " into " << newModel->name << endl;
+			//cout << "Loading mesh " << i << " of node " << node->mName.C_Str() << " into " << newModel->name << endl;
 			newModel->meshes.push_back(processMesh(mesh, scene));
 		}
 
@@ -74,7 +76,7 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 		aiVector3D aiScale;
 		aiQuaternion aiRot;
 		node->mTransformation.Decompose(aiScale, aiRot, aiPos);
-		cout << "AIPOSGLOBAL :" << aiPos.x << " " << aiPos.y << " " << aiPos.z << endl;
+		//cout << "AIPOSGLOBAL :" << aiPos.x << " " << aiPos.y << " " << aiPos.z << endl;
 		newModel->globalPos = vec3(aiPos.x, aiPos.y, aiPos.z);
 		newModel->setPosition(vec3(0));
 
@@ -86,6 +88,7 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 			processNode(node->mChildren[i], parent, parent->getTRS(), scene, rend);
 		}
 	}
+	parent->collectiveBBox = new BoundingBox(parent, true);
 }
 
 Mesh modelImporter::processMesh(aiMesh* mesh, const aiScene* scene)

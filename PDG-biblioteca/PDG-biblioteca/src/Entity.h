@@ -15,15 +15,15 @@ protected:
 	mat4 rotateYMat;
 	mat4 rotateZMat;
 	mat4 scaleMat;
-	mat4 TRS;
 	Renderer* rend;
 
 	vec3 posVec;
 	vec3 rotVec;
 	vec3 scaleVec;
 
-	void UpdateTRS();
 public:
+	mat4 TRS;
+	virtual void UpdateTRS();
 	Entity();
 	Entity(Renderer* renderer);
 	vec3 getPosition();
@@ -33,6 +33,10 @@ public:
 	virtual void setRotationY(float y);	//todas las rotaciones juntas
 	virtual void setRotationZ(float z);
 	virtual void setRotation(vec3 newRot);
+	vec3 getRight();
+	vec3 getUp();
+	vec3 getBackward();
+	vec3 getForward();
 	vec3 getScale();
 	virtual void setScale(vec3 newScale);
 	void setBaseMatrices(mat4 translate, mat4 rotateX, mat4 rotateY, mat4 rotateZ, mat4 scale);

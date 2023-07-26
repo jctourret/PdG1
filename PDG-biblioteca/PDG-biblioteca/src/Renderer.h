@@ -7,7 +7,6 @@
 #include <vector>
 #include "Material.h"
 
-
 class SABASAENGINE_API Renderer
 {
 private:

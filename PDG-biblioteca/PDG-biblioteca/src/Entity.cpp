@@ -31,6 +31,37 @@ Entity::Entity(Renderer* renderer)
 	scaleMat = mat4(1.0f);
 	TRS = mat4(1.0f);
 }
+vec3 Entity::getRight()
+{
+	return TRS[0];
+}
+
+vec3 Entity::getUp()
+{
+	return TRS[1];
+}
+
+vec3 Entity::getBackward()
+{
+	return TRS[2];
+}
+
+vec3 Entity::getForward()
+{
+	return -TRS[2];
+}
+// 1) UpdateTRS parameter at the draw function - Done
+/* function()
+	{
+		TRS = translateMat * rotateXMat * rotateYMat * rotateZMat * scaleMat;
+		If (parent)
+		{
+			TRS = parent.TRS *TRS;
+		}
+	}
+*/
+// 2) Should take parent's trs and multiply input - Done
+// 3) Calculate the matrices on the fly. - Ask
 
 void Entity::UpdateTRS()
 {
