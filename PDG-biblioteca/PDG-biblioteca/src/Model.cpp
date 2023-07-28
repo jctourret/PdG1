@@ -27,18 +27,23 @@ void Model::UpdateTRS()
 	}
 }
 
-void Model::Draw() {
+void Model::Draw(Frustum* frustum /*frustum = nullptr*/)
+{
 	// Se updatea el TRS aca por motivos de optimizacion.
 	UpdateTRS();
 	rend->updateProgram(TRS);
 	
-	for ( /*IsOnFrustrum(thisVolume) && */ unsigned int i = 0; i < meshes.size(); i++)
+	if (!frustum || collectiveBBox->isOnFrustum(frustum, this))
 	{
-		meshes[i].Draw();
-	}
-	for (int i = 0; i < children.size(); i++)
-	{
-		children[i]->Draw();
+		for ( /*IsOnFrustrum(thisVolume) && */ unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
+		{
+			meshes[i].Draw();
+		}
+		Frustum* frustumForChildren = reactsToBSP? frustum : nullptr;
+		for (int i = 0; i < children.size(); i++)
+		{
+			children[i]->Draw(frustumForChildren);
+		}
 	}
 }
 
@@ -82,4 +87,13 @@ void Model::setScale(vec3 newScale)
 {
 	scaleVec = newScale;
 	scaleMat = scale(mat4(1.0f), scaleVec);
+}
+
+void Model::setRenderingOptions(bool _reactsToBSP)
+{
+	reactsToBSP = _reactsToBSP;
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->setRenderingOptions(_reactsToBSP);
+	}
 }

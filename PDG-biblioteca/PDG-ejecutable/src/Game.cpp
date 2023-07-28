@@ -38,7 +38,7 @@ void Game::initGame(Renderer* renderer)
 	gun = importer.loadModel("res/Models/Gun_dae/Gun.dae", false, renderer);
 	backpack = importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
 	pedrito = importer.loadModel("res/Models/Pedrito/Pedrito.dae", false, renderer);
-
+	pedrito->setRenderingOptions(true);
 	knuckles->setRotation(vec3(-90.0f, 0.0f, 0.0f));
 	knuckles->setPosition(vec3(10.0f, 0.0f, 0.0f));
 	
@@ -346,7 +346,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	knuckles->Draw();
 	//gun->Draw();
 	//backpack->Draw();
-	pedrito->Draw();
+	pedrito->Draw(_camera->_frustum);
 
 	_lightA->setPos(_camera->getPosition());
 	_lightA->setDir(_camera->getFront());

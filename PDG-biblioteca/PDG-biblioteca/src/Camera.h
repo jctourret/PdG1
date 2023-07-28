@@ -21,9 +21,9 @@ protected:
 	float roll = 0.0f;
 	Renderer* _renderer;
 public:
-	Frustum* _frustum;
 	Camera(Renderer* rend);
 	~Camera();
+	Frustum* _frustum;
 	void setTransform();
 	void setPosition(glm::vec3 position);
 	void setFront(glm::vec3 front);
