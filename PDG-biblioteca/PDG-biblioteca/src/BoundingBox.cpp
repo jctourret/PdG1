@@ -149,13 +149,13 @@ bool BoundingBox::isOutOfFrustum(vector<Plane*> planes, Entity* inEntity)
 
 	BoundingBox* globalBoundingBox = new BoundingBox(globalCenter, newIi, newIj, newIk);
 
-	bool offFrustum = true;
+	bool offFrustum = false;
 
 	for (int i = 0; i < planes.size(); i++)
 	{
 		if (!globalBoundingBox->isOnOrBackwardsPlane(planes[i]))
 		{
-			offFrustum = false;
+			offFrustum = true;
 		}
 	}
 

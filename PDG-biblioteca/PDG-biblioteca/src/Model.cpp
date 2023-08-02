@@ -35,12 +35,16 @@ void Model::Draw(vector<Plane*> planes) // Si recibe solo planos, es frustrum.
 	
 	if (!planes.empty() && collectiveBBox->isOnFrustum(planes, this))
 	{
-		for ( /*IsOnFrustrum(thisVolume) && */ unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
+		if (individualBBox->isOnFrustum(planes, this))
 		{
-			meshes[i].Draw();
+			for ( /*IsOnFrustrum(thisVolume) && */ unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
+			{
+				meshes[i].Draw();
+			}
 		}
 		vector<Plane*> planesForChildren;
-		if (reactsToBSP) {
+		if (reactsToBSP)
+		{
 			planesForChildren = planes;
 		}
 		for (int i = 0; i < children.size(); i++)
@@ -68,14 +72,16 @@ void Model::Draw(vector<Plane*> planes, Camera* cam) // Si recibe planos y Camar
 	{
 		if (!planes.empty())
 		{
-			if (individualBBox->isOnFrustum(planes, this)) {
+			if (individualBBox->isOnFrustum(planes, this))
+			{
 				for (unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
 				{
 					meshes[i].Draw();
 				}
 			}
 			vector<Plane*> planesForChildren;
-			if (reactsToBSP) {
+			if (reactsToBSP)
+			{
 				planesForChildren = planes;
 			}
 			for (int i = 0; i < children.size(); i++)
@@ -84,18 +90,20 @@ void Model::Draw(vector<Plane*> planes, Camera* cam) // Si recibe planos y Camar
 			}
 		}
 	}
-	if (!cameraInBounds && !collectiveBBox->isOutOfFrustum(planes, this))
+	if (!cameraInBounds && collectiveBBox->isOutOfFrustum(planes, this))
 	{
 		if (!planes.empty())
 		{
-			if (!individualBBox->isOutOfFrustum(planes, this)) {
+			if (individualBBox->isOutOfFrustum(planes, this))
+			{
 				for (unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
 				{
 					meshes[i].Draw();
 				}
 			}
 			vector<Plane*> planesForChildren;
-			if (reactsToBSP) {
+			if (reactsToBSP)
+			{
 				planesForChildren = planes;
 			}
 			for (int i = 0; i < children.size(); i++)

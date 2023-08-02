@@ -372,9 +372,9 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	
 	
 	//Dibujado con BSP.
-	pedrito->Draw(planes,_camera);
+	//pedrito->Draw(planes,_camera);
 	//Dibujado con Frustum.
-	//pedrito->Draw(_camera->getFrustum()->getPlanes());
+	pedrito->Draw(_camera->getFrustum()->getPlanes());
 
 	_lightA->setPos(_camera->getPosition());
 	_lightA->setDir(_camera->getFront());
