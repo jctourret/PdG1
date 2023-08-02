@@ -477,7 +477,7 @@ void Renderer::setVP(){
 	mat4 view = mat4(1.0f);
 	view = lookAt(vec3(0.0, 0.0f, 1.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
   /*Ortografica: glm::ortho(-4.0f,4.0f,-2.0f,2.0f,-100.0f,100.0f); */
-	proj = perspective(45.0f, 2.0f, 0.1f, 100.0f);//el aspect esta mal pero queda bien porque cambie las medidas de los cuadrados
+	proj = perspective(45.0f, 2.0f, 0.1f, 100.0f);
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(proj));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(view));
 }

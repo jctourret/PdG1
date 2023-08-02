@@ -49,19 +49,14 @@ void Model::Draw(vector<Plane*> planes) // Si recibe solo planos, es frustrum.
 	{
 		if (individualBBox->isOnFrustum(planes, this))
 		{
-			for ( /*IsOnFrustrum(thisVolume) && */ unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
+			for ( unsigned int i = 0; i < meshes.size(); i++)
 			{
 				meshes[i].Draw();
 			}
 		}
-		vector<Plane*> planesForChildren;
-		if (reactsToBSP)
-		{
-			planesForChildren = planes;
-		}
 		for (int i = 0; i < children.size(); i++)
 		{
-			children[i]->Draw(planesForChildren);
+			children[i]->Draw(planes);
 		}
 	}
 }
@@ -86,19 +81,14 @@ void Model::Draw(vector<Plane*> planes, Camera* cam) // Si recibe planos y Camar
 		{
 			if (individualBBox->isOnFrustum(planes, this))
 			{
-				for (unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
+				for (unsigned int i = 0; i < meshes.size(); i++)
 				{
 					meshes[i].Draw();
 				}
 			}
-			vector<Plane*> planesForChildren;
-			if (reactsToBSP)
-			{
-				planesForChildren = planes;
-			}
 			for (int i = 0; i < children.size(); i++)
 			{
-				children[i]->Draw(planesForChildren,cam);
+				children[i]->Draw(planes,cam);
 			}
 		}
 	}
@@ -113,14 +103,9 @@ void Model::Draw(vector<Plane*> planes, Camera* cam) // Si recibe planos y Camar
 					meshes[i].Draw();
 				}
 			}
-			vector<Plane*> planesForChildren;
-			if (reactsToBSP)
-			{
-				planesForChildren = planes;
-			}
 			for (int i = 0; i < children.size(); i++)
 			{
-				children[i]->Draw(planesForChildren, cam);
+				children[i]->Draw(planes, cam);
 			}
 		}
 	}
@@ -166,13 +151,4 @@ void Model::setScale(vec3 newScale)
 {
 	scaleVec = newScale;
 	scaleMat = scale(mat4(1.0f), scaleVec);
-}
-
-void Model::setRenderingOptions(bool _reactsToBSP)
-{
-	reactsToBSP = _reactsToBSP;
-	for (int i = 0; i < children.size(); i++)
-	{
-		children[i]->setRenderingOptions(_reactsToBSP);
-	}
 }

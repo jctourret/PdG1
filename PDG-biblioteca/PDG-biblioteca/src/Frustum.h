@@ -14,14 +14,6 @@ public:
 	bool pointInFrustum(glm::vec3 position);
 	~Frustum();
 	std::vector<Plane*> getPlanes();
-	//Plane topFace;
-	//Plane bottomFace;
-	//
-	//Plane rightFace;
-	//Plane leftFace;
-	//
-	//Plane farFace;
-	//Plane nearFace;
 private:
 	std::vector<Plane*> planes;
 };

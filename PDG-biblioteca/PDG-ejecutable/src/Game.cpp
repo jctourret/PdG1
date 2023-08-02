@@ -38,7 +38,6 @@ void Game::initGame(Renderer* renderer)
 	gun = new Model("res/Models/Gun_dae/Gun.dae", renderer, false);
 	backpack = new Model("res/Models/backpack/backpack.obj", renderer, true);
 	pedrito = new Model("res/Models/Pedrito/Pedrito.dae", renderer, false);
-	pedrito->setRenderingOptions(true);
 	
 	//Right Plane
 	planes.push_back(new Plane(glm::vec3(8,0,-5),glm::vec3(-1,0,0)));
@@ -365,9 +364,9 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	timer->updateTimer();
 
-	knuckles->Draw();
-	gun->Draw();
-	backpack->Draw();
+	knuckles->Draw(_camera->getFrustum()->getPlanes());
+	gun->Draw(_camera->getFrustum()->getPlanes());
+	backpack->Draw(_camera->getFrustum()->getPlanes());
 
 	_lightA->setPos(_camera->getPosition());
 	_lightA->setDir(_camera->getFront());
@@ -382,7 +381,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 
 	//testing bsp
-	pedrito->Draw(_camera->_frustum);
+	pedrito->Draw(planes,_camera);
 }
 void Game::destroyGame()
 {

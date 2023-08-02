@@ -27,10 +27,8 @@ public:
 	virtual void setPosition(vec3 newPosition);
 	virtual void setRotation(vec3 newRot);
 	virtual void setScale(vec3 newScale);
-	void setRenderingOptions(bool _reactsToBSP);
 	BoundingBox* collectiveBBox;
 	BoundingBox* individualBBox;
 private:
-	bool reactsToBSP = true;
 };
 

@@ -164,10 +164,6 @@ bool BoundingBox::isOutOfFrustum(vector<Plane*> planes, Entity* inEntity)
 	return offFrustum;
 }
 
-void BoundingBox::UpdateModel()
-{
-
-}
 
 vec3 BoundingBox::GetMaxVector()
 {
