@@ -21,13 +21,15 @@ private:
 
 public:
 	BoundingBox();
+	bool isOutOfFrustum(vector<Plane*> planes, Entity* inEntity);
 	BoundingBox(const vec3& min, const vec3& max);
 	BoundingBox(const Model* model, bool includeChildren);
 	//Sending this parameters as 3 floats because we already have a 2 vec3 constructor
 	BoundingBox(const vec3 inCenter, float inExtentX, float inExtentY, float inExtentZ);
 	
-	bool isOnOrForwardPlane(Plane plane);
-	bool isOnFrustum(Frustum* camFrustum, Entity* inEntity);
+	bool isOnOrForwardPlane(Plane* plane);
+	bool isOnOrBackwardsPlane(Plane* plane);
+	bool isOnFrustum(vector<Plane*> planes,Entity* inEntity);
 	const array<vec3, BOX_VERTEX> getVertice();
 	
 	void UpdateModel(); //?

@@ -47,6 +47,11 @@ glm::vec3 Camera::getFront() {
 	return _front;
 }
 
+Frustum* Camera::getFrustum()
+{
+	return _frustum;
+}
+
 glm::vec3 Camera::getUp() {
 	return _up;
 }

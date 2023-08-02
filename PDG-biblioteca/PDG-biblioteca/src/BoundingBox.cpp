@@ -68,16 +68,16 @@ const array<vec3, BOX_VERTEX> BoundingBox::getVertice()
 	return vertice;
 }
 
-bool BoundingBox::isOnOrForwardPlane(Plane plane)
+bool BoundingBox::isOnOrForwardPlane(Plane* plane)
 {
 	// Compute the projection interval radius of b onto L(t) = b.c + t * p.n
-	float r = extents.x * std::abs(plane.normal.x) + extents.y * std::abs(plane.normal.y) +
-			extents.z * std::abs(plane.normal.z);
+	float r = extents.x * std::abs(plane->normal.x) + extents.y * std::abs(plane->normal.y) +
+			extents.z * std::abs(plane->normal.z);
 
-	return (-r <= plane.getSignedDistanceToPlane(center));
+	return (-r <= plane->getSignedDistanceToPlane(center));
 }
 
-bool BoundingBox::isOnFrustum(Frustum* camFrustum, Entity* inEntity)
+bool BoundingBox::isOnFrustum(vector<Plane*> planes, Entity* inEntity)
 {
 	//Get global scale thanks to our transform
 	vec3 globalCenter = vec3(inEntity->getTRS() * glm::vec4(center, 1.f));
@@ -101,17 +101,67 @@ bool BoundingBox::isOnFrustum(Frustum* camFrustum, Entity* inEntity)
 
 	BoundingBox* globalBoundingBox = new BoundingBox(globalCenter, newIi, newIj, newIk);
 
-	bool onFrustum = 
-		(globalBoundingBox->isOnOrForwardPlane(camFrustum->leftFace) &&
-		globalBoundingBox->isOnOrForwardPlane(camFrustum->rightFace) &&
-		globalBoundingBox->isOnOrForwardPlane(camFrustum->topFace) &&
-		globalBoundingBox->isOnOrForwardPlane(camFrustum->bottomFace) &&
-		globalBoundingBox->isOnOrForwardPlane(camFrustum->nearFace) &&
-		globalBoundingBox->isOnOrForwardPlane(camFrustum->farFace));
+	bool onFrustum = true;
+
+	for (int i = 0; i < planes.size(); i++)
+	{
+		if (!globalBoundingBox->isOnOrForwardPlane(planes[i]))
+		{
+			onFrustum = false;
+		}
+	}
 
 	delete globalBoundingBox;
 
 	return onFrustum;
+}
+
+bool BoundingBox::isOnOrBackwardsPlane(Plane* plane)
+{
+	// Compute the projection interval radius of b onto L(t) = b.c + t * p.n
+	float r = -extents.x * std::abs(plane->normal.x) + -extents.y * std::abs(plane->normal.y) +
+		-extents.z * std::abs(plane->normal.z);
+
+	return (-r <= plane->getSignedDistanceToPlane(center));
+}
+
+bool BoundingBox::isOutOfFrustum(vector<Plane*> planes, Entity* inEntity)
+{
+	//Get global scale thanks to our transform
+	vec3 globalCenter = vec3(inEntity->getTRS() * glm::vec4(center, 1.f));
+
+	// Scaled orientation
+	glm::vec3 right = inEntity->getRight() * extents.x;
+	glm::vec3 up = inEntity->getUp() * extents.y;
+	glm::vec3 forward = inEntity->getForward() * extents.z;
+
+	float newIi = std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, forward));
+
+	float newIj = std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, forward));
+
+	float newIk = std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, forward));
+
+	BoundingBox* globalBoundingBox = new BoundingBox(globalCenter, newIi, newIj, newIk);
+
+	bool offFrustum = true;
+
+	for (int i = 0; i < planes.size(); i++)
+	{
+		if (!globalBoundingBox->isOnOrBackwardsPlane(planes[i]))
+		{
+			offFrustum = false;
+		}
+	}
+
+	delete globalBoundingBox;
+
+	return offFrustum;
 }
 
 void BoundingBox::UpdateModel()

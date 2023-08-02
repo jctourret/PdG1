@@ -30,7 +30,6 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 	Model* parent;
 	mat4 transform;
 
-
 	if (node->mParent == NULL)
 	{
 		parent = targetParent;
@@ -88,6 +87,7 @@ void modelImporter::processNode(aiNode* node, Model* targetParent, mat4 accTrans
 			processNode(node->mChildren[i], parent, parent->getTRS(), scene, rend);
 		}
 	}
+	parent->individualBBox = new BoundingBox(parent, false);
 	parent->collectiveBBox = new BoundingBox(parent, true);
 }
 

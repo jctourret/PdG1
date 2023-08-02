@@ -20,14 +20,15 @@ protected:
 	float yaw = -90.0f;
 	float roll = 0.0f;
 	Renderer* _renderer;
+	Frustum* _frustum;
 public:
 	Camera(Renderer* rend);
 	~Camera();
-	Frustum* _frustum;
 	void setTransform();
 	void setPosition(glm::vec3 position);
 	void setFront(glm::vec3 front);
 	void setTarget(glm::vec3 position);
+	Frustum* getFrustum();
 	glm::vec3 getPosition();
 	glm::vec3 getFront();
 	glm::vec3 getUp();

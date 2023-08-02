@@ -23,6 +23,8 @@ private:
 	Model* backpack;
 	Model* pedrito;
 
+	vector<Plane*> planes;
+
 	float speedX = 0;
 	float speedY = 0;
 	float speedZ = 0;

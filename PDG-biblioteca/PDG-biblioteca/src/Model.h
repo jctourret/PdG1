@@ -21,7 +21,8 @@ public:
 	bool hasSpecularMaps;
 	Model(Renderer* rend, bool gamma);
 	~Model();
-	void Draw(Frustum* frustum = nullptr);
+	void Draw(vector<Plane*> planes);
+	void Draw(vector<Plane*> planes, Camera* cam);
 	void UpdateTRS() override;
 	void AddChild(Model* newChild);
 	virtual void setPosition(vec3 newPosition);

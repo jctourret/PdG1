@@ -39,6 +39,20 @@ void Game::initGame(Renderer* renderer)
 	backpack = importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
 	pedrito = importer.loadModel("res/Models/Pedrito/Pedrito.dae", false, renderer);
 	pedrito->setRenderingOptions(true);
+	
+	//Right Plane
+	planes.push_back(new Plane(glm::vec3(8,0,-5),glm::vec3(-1,0,0)));
+	//Left Plane
+	planes.push_back(new Plane(glm::vec3(-8, 0, -5), glm::vec3(1, 0, 0)));
+	//Top Plane
+	planes.push_back(new Plane(glm::vec3(0, 8, -5), glm::vec3(0, -1, 0)));
+	//Bottom Plane
+	planes.push_back(new Plane(glm::vec3(0, -8, -5), glm::vec3(0, 1, 0)));
+	//Far Plane
+	planes.push_back(new Plane(glm::vec3(0, 0, -15), glm::vec3(0, 0, 1)));
+	//Near Plane
+	planes.push_back(new Plane(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1)));
+
 	knuckles->setRotation(vec3(-90.0f, 0.0f, 0.0f));
 	knuckles->setPosition(vec3(10.0f, 0.0f, 0.0f));
 	
@@ -46,7 +60,7 @@ void Game::initGame(Renderer* renderer)
 	gun->setRotation(vec3(270.0f, 0.0f, 180.0f));
 	gun->setScale(vec3(5.0f, 5.0f, 5.0f));
 	backpack->setPosition(vec3(5.0f, 0.0f, -5.0f));
-	pedrito->setPosition(vec3(5.0f, 0.0f, -10.0f));
+	pedrito->setPosition(vec3(0.0f, 0.0f, -5.0f));
 
 	//test
 	Material greenRubber;
@@ -323,7 +337,7 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 		cout << endl << "PEDRITO MAX: " << "X:" << pedrito->collectiveBBox->GetMaxVector().x << "  Y:" << pedrito->collectiveBBox->GetMaxVector().y << "  Z:" << pedrito->collectiveBBox->GetMaxVector().z << endl;
 		cout << "Point Position:" << endl << " x:" << pedrito->getPosition().x <<
 			" y:" << pedrito->getPosition().y << " z:" << pedrito->getPosition().z << endl;
-		if (pedrito->collectiveBBox->isOnFrustum(_camera->_frustum,pedrito))
+		if (pedrito->collectiveBBox->isOnFrustum(_camera->getFrustum()->getPlanes(),pedrito))
 		{
 			cout << "InFrustum" << endl;
 		}
@@ -331,9 +345,18 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 		{
 			cout << "OutOfFrustum" << endl;
 		}
-	}
 
-	
+		cout << "Point Position:" << endl << " x:" << pedrito->getPosition().x <<
+			" y:" << pedrito->getPosition().y << " z:" << pedrito->getPosition().z << endl;
+		if (pedrito->collectiveBBox->isOnFrustum(planes, pedrito))
+		{
+			cout << "InBox" << endl;
+		}
+		else
+		{
+			cout << "OutOfBox" << endl;
+		}
+	}
 
 	vec3 newScale = pedrito->children[0]->children[0]->children[1]->getScale() + vec3(growSpeed,growSpeed,growSpeed) * timer->getDT();
 	pedrito->children[0]->children[0]->children[1]->setScale(newScale); 
@@ -343,10 +366,15 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 
 	timer->updateTimer();
 
-	knuckles->Draw();
+	//knuckles->Draw();
 	//gun->Draw();
 	//backpack->Draw();
-	pedrito->Draw(_camera->_frustum);
+	
+	
+	//Dibujado con BSP.
+	pedrito->Draw(planes,_camera);
+	//Dibujado con Frustum.
+	//pedrito->Draw(_camera->getFrustum()->getPlanes());
 
 	_lightA->setPos(_camera->getPosition());
 	_lightA->setDir(_camera->getFront());
@@ -358,7 +386,6 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	cubeA->draw();
 	cubeB->draw();
 	cubeC->draw();
-
 }
 void Game::destroyGame()
 {

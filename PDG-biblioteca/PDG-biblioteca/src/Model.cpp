@@ -27,22 +27,81 @@ void Model::UpdateTRS()
 	}
 }
 
-void Model::Draw(Frustum* frustum /*frustum = nullptr*/)
+void Model::Draw(vector<Plane*> planes) // Si recibe solo planos, es frustrum.
 {
 	// Se updatea el TRS aca por motivos de optimizacion.
 	UpdateTRS();
 	rend->updateProgram(TRS);
 	
-	if (!frustum || collectiveBBox->isOnFrustum(frustum, this))
+	if (!planes.empty() && collectiveBBox->isOnFrustum(planes, this))
 	{
 		for ( /*IsOnFrustrum(thisVolume) && */ unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
 		{
 			meshes[i].Draw();
 		}
-		Frustum* frustumForChildren = reactsToBSP? frustum : nullptr;
+		vector<Plane*> planesForChildren;
+		if (reactsToBSP) {
+			planesForChildren = planes;
+		}
 		for (int i = 0; i < children.size(); i++)
 		{
-			children[i]->Draw(frustumForChildren);
+			children[i]->Draw(planesForChildren);
+		}
+	}
+}
+
+void Model::Draw(vector<Plane*> planes, Camera* cam) // Si recibe planos y Camara, es BSP
+{
+	// Se updatea el TRS aca por motivos de optimizacion.
+	UpdateTRS();
+	rend->updateProgram(TRS);
+
+	bool cameraInBounds = true;
+	for (int i = 0; i < planes.size(); i++)
+	{
+		if (!planes[i]->IsOnPositiveNormal(cam->getPosition()))
+		{
+			cameraInBounds = false;
+		}
+	}
+	if (cameraInBounds && collectiveBBox->isOnFrustum(planes, this))
+	{
+		if (!planes.empty())
+		{
+			if (individualBBox->isOnFrustum(planes, this)) {
+				for (unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
+				{
+					meshes[i].Draw();
+				}
+			}
+			vector<Plane*> planesForChildren;
+			if (reactsToBSP) {
+				planesForChildren = planes;
+			}
+			for (int i = 0; i < children.size(); i++)
+			{
+				children[i]->Draw(planesForChildren,cam);
+			}
+		}
+	}
+	if (!cameraInBounds && !collectiveBBox->isOutOfFrustum(planes, this))
+	{
+		if (!planes.empty())
+		{
+			if (!individualBBox->isOutOfFrustum(planes, this)) {
+				for (unsigned int i = 0; i < meshes.size(); i++) //here we would check the individual bb
+				{
+					meshes[i].Draw();
+				}
+			}
+			vector<Plane*> planesForChildren;
+			if (reactsToBSP) {
+				planesForChildren = planes;
+			}
+			for (int i = 0; i < children.size(); i++)
+			{
+				children[i]->Draw(planesForChildren, cam);
+			}
 		}
 	}
 }
