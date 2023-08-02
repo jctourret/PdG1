@@ -13,14 +13,11 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
 class SABASAENGINE_API modelImporter
 {
 private:
-	string directory;
-	void processNode(aiNode* node, Model* targetParent, mat4 accTransform, const aiScene* scene,Renderer* rend);
-	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-	vector<meshTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
+	static void processNode(aiNode* node, Model* targetParent, mat4 accTransform, const aiScene* scene,Renderer* rend);
+	static Mesh processMesh(Model* model, aiMesh* mesh, const aiScene* scene);
+	static vector<meshTexture> loadModelMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
 public:
-	~modelImporter();
-	vector<Model*> models_Loaded;
-	Model* loadModel(string const& path, bool flipUVs, Renderer* rend);
+	static void loadModel(Model* model, string const& path, Renderer* rend, bool flipUVs);
 };
 

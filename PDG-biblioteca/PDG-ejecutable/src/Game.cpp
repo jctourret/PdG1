@@ -34,10 +34,10 @@ void Game::initGame(Renderer* renderer)
 	_lightC->initializeDirectional(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.1f), glm::vec3(0.5f), glm::vec3(0.5f));
 	_lightC->setActiveState(false);
 
-	knuckles = importer.loadModel("res/Models/Knuckles/Knuckles.fbx", false, renderer);
-	gun = importer.loadModel("res/Models/Gun_dae/Gun.dae", false, renderer);
-	backpack = importer.loadModel("res/Models/backpack/backpack.obj", true, renderer);
-	pedrito = importer.loadModel("res/Models/Pedrito/Pedrito.dae", false, renderer);
+	knuckles = new Model("res/Models/Knuckles/Knuckles.fbx", renderer, false);
+	gun = new Model("res/Models/Gun_dae/Gun.dae", renderer, false);
+	backpack = new Model("res/Models/backpack/backpack.obj", renderer, true);
+	pedrito = new Model("res/Models/Pedrito/Pedrito.dae", renderer, false);
 	pedrito->setRenderingOptions(true);
 	knuckles->setRotation(vec3(-90.0f, 0.0f, 0.0f));
 	knuckles->setPosition(vec3(10.0f, 0.0f, 0.0f));
@@ -96,7 +96,6 @@ void Game::initGame(Renderer* renderer)
 
 
 	_camera->setPosition(glm::vec3(0.0f, 0.0f, 10.0f));
-	//HACER QUE SE SETEE VIEW Y PROJECTION Y ARREGLAR ESO DE QUE SE ROTAN MAL LAS COSAS Y ESO
 	shapeA->setPosition(vec3(-1.0f, -1.0f, 0.5f));//shapeA->getPosition().x + shapeA->getScale().x * shapeA->width, 0.5f, 0.0f));
 	shapeA->setRotation(vec3(0.0f, 0.0f, 0.0f));
 }
@@ -344,9 +343,8 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	timer->updateTimer();
 
 	knuckles->Draw();
-	//gun->Draw();
-	//backpack->Draw();
-	pedrito->Draw(_camera->_frustum);
+	gun->Draw();
+	backpack->Draw();
 
 	_lightA->setPos(_camera->getPosition());
 	_lightA->setDir(_camera->getFront());
@@ -359,6 +357,9 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	cubeB->draw();
 	cubeC->draw();
 
+
+	//testing bsp
+	pedrito->Draw(_camera->_frustum);
 }
 void Game::destroyGame()
 {

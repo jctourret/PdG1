@@ -114,11 +114,6 @@ bool BoundingBox::isOnFrustum(Frustum* camFrustum, Entity* inEntity)
 	return onFrustum;
 }
 
-void BoundingBox::UpdateModel()
-{
-
-}
-
 vec3 BoundingBox::GetMaxVector()
 {
 	return vec3(center+extents);

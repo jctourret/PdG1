@@ -19,6 +19,7 @@ public:
 		distance = glm::dot(normal, p1);
 		std::cout << "Normal: " << normal.x << " " << normal.y << " " << normal.z << std::endl;
 	};
+	Plane GetReversedPlane();
 
 	float getSignedDistanceToPlane(const glm::vec3& point)
 	{
