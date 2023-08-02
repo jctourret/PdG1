@@ -24,6 +24,7 @@ private:
 	Model* pedrito;
 
 	vector<Plane*> planes;
+	vector<Shape*> cornerCube;
 
 	float speedX = 0;
 	float speedY = 0;

@@ -88,6 +88,32 @@ void Game::initGame(Renderer* renderer)
 	
 	_camera = new Camera(renderer);
 
+	//BottomRightFar
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[0]->setPosition(glm::vec3(8, -8, -15));
+	//TopRightFar
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[1]->setPosition(glm::vec3(8, 8, -15));
+	//BottomLeftFar
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[2]->setPosition(glm::vec3(-8, -8, -15));
+	//TopLeftFar
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[3]->setPosition(glm::vec3(-8, 8, -15));
+
+	//BottomRightNear
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[4]->setPosition(glm::vec3(8, -8, 5));
+	//TopRightNear
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[5]->setPosition(glm::vec3(8, 8, 5));
+	//BottomLeftNear
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[6]->setPosition(glm::vec3(-8, -8, 5));
+	//TopLeftNear
+	cornerCube.push_back(new Shape(ShapeTypes::cube, greenRubber, renderer));
+	cornerCube[7]->setPosition(glm::vec3(-8, 8, 5));
+
 	//automatizar, en vez de pasar id pasar una coordenada
 	vector<int> tilemapLayout = { 0,1,1,1,2,16,17,17,8 + 16 * 4,18,16,17,17,17,18,16,17,17,17,18,64,65,65,65,66};
 	//automatizar, en vez de pasar id pasar una coordenada
@@ -379,6 +405,10 @@ void Game::updateGame(CollisionManager collManager, Input* input)
 	cubeB->draw();
 	cubeC->draw();
 
+	for (int i = 0; i < cornerCube.size(); i++)
+	{
+		cornerCube[i]->draw();
+	}
 
 	//testing bsp
 	pedrito->Draw(planes,_camera);
@@ -401,4 +431,6 @@ void Game::destroyGame()
 	if (_camera) delete _camera;
 	if (_lightB) delete _lightB;
 	if (_lightA) delete _lightA;
+	planes.clear();
+	cornerCube.clear();
 }
