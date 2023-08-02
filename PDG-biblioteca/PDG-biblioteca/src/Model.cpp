@@ -1,7 +1,19 @@
 #include "Model.h"
+#include "modelImporter.h"
 #define STB_IMAGE_IMPLEMENTATION
 
-Model::Model(Renderer* rend, bool gamma) : gammaCorrection(gamma), Entity(rend)
+
+Model::Model(string const& path, Renderer* rend, bool flipUVs /*flipUVs = false*/) : Entity(rend)
+{
+	_rend = rend;
+	parent = NULL;
+	individualBBox = NULL;
+	collectiveBBox = NULL;
+	globalPos = vec3(0);
+	modelImporter::loadModel(this, path, rend, flipUVs);
+}
+
+Model::Model(Renderer* rend) : Entity(rend)
 {
 	_rend = rend;
 	parent = NULL;

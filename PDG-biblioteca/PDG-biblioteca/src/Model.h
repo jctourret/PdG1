@@ -13,13 +13,12 @@ public:
 	string name;
 	vec3 globalPos;
 	Model* parent;
-	vector<meshTexture> textures_loaded;
 	vector<Mesh> meshes;
 	vector<Model*> children;
 	Renderer* _rend;
-	bool gammaCorrection;
 	bool hasSpecularMaps;
-	Model(Renderer* rend, bool gamma);
+	Model(string const& path, Renderer* rend, bool flipUVs = false);
+	Model(Renderer* rend); //to be externally set
 	~Model();
 	void Draw(vector<Plane*> planes);
 	void Draw(vector<Plane*> planes, Camera* cam);
