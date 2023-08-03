@@ -18,6 +18,8 @@ void Game::play()
 
 void Game::initGame(Renderer* renderer)
 {
+	//https://youtu.be/dQw4w9WgXcQ final aprobado
+
 	timer = new Timer();
 	timer->start();
 	shapeA = new Shape(ShapeTypes::rectangle, renderer);
